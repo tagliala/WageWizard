@@ -408,7 +408,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
 
                 <div class="spacer"></div>
 
-                <table class="table table-bordered table-condensed table-striped" id="playersInfoTable">
+                <table class="table table-bordered table-condensed table-striped">
                   <tbody>
                     <tr>
                       <th><?= localize("Age") ?></th>
@@ -428,7 +428,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         </label>
                       </td>
                     </tr>
-                  </table>
+                  </tbody>
                 </table>
                 <table class="table table-bordered table-condensed table-striped full-width" id="playersInfoTable">
                   <tbody>
