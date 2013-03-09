@@ -42,39 +42,36 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 }
 
 function skillRow($player = 1, $skill = 'Keeper', $isSkill = true, $class="wage-cell", $start = 0, $stop = 20, $select = 6) {
-  $playerAndSkill = str_replace(" ", "", $player . '_' . $skill);
+  $skillWithoutSpaces = str_replace(" ", "", $skill);
   $localizedSkill = ($isSkill ? localize("$skill (skill)") : localize($skill));
   $localizedPlayer = localize("Player $player");
   $options = optionSkills($start, $stop, $select);
   $primary = '';
   if ($isSkill && $skill != 'Keeper' && $skill != 'Set Pieces') {
-  $primary = <<<END
-<label class="btn-radio hide">
-  <input type="radio" name="WageWizard_Primary_Player_$player" value="$skill" id="WageWizard_Primary_Player_$playerAndSkill" disabled class="refresh-table" data-id="$player">
-  <i class="btn-radio-status-icon"></i>
-</label>
-END;
+    $primary =
+      '<label class="btn-radio hide">
+         <input type="radio" name="WageWizard_Primary_Player_' . $player. '" value="' . $skill . '" id="WageWizard_Primary_Player_' . $player . '_' . $skillWithoutSpaces . '" disabled class="refresh-table" data-id="' . $player . '">
+         <i class="btn-radio-status-icon"></i>
+       </label>';
   }
 
-  echo <<<END
-<tr>
-  <td class="text-center">$primary</td>
-  <td>$localizedSkill</td>
-  <td>
-    <div class="control-group">
-      <span class="field-caption">$localizedSkill</span>
-      <select id="WageWizard_Player_$playerAndSkill" data-validate="range" data-range-min="$start" data-range-max="$stop" data-field-name="$localizedPlayer $localizedSkill" class="refresh-table" data-id="$player">
-        $options
-      </select>
-    </div>
-  </td>
-  <td id="WageWizard_Player_Min_$playerAndSkill" class="WageWizard_Player_Min_$player $class">
-  </td>
-  <td id="WageWizard_Player_Max_$playerAndSkill" class="WageWizard_Player_Max_$player $class">
-  </td>
-</tr>
-END;
-
+  echo
+    '<tr>
+      <td class="text-center">' . $primary . '</td>
+      <td>' . $localizedSkill . '</td>
+      <td>
+        <div class="control-group">
+          <span class="field-caption">' . $localizedSkill . '</span>
+          <select id="WageWizard_Player_' . $player . '_' . $skillWithoutSpaces . '" data-validate="range" data-range-min="' . $start . '" data-range-max="' . $stop . '" data-field-name="' . $localizedPlayer . ' ' . $localizedSkill . '" class="refresh-table" data-id="' . $player . '">
+            ' . $options . '
+          </select>
+        </div>
+      </td>
+      <td id="WageWizard_Player_Min_' . $player . '_' . $skillWithoutSpaces . '" class="WageWizard_Player_Min_' . $player . ' ' . $class . '">
+      </td>
+      <td id="WageWizard_Player_Max_' . $player . '_' . $skillWithoutSpaces . '" class="WageWizard_Player_Max_' . $player . ' ' . $class . '">
+      </td>
+    </tr>';
 }
 ?>
 <?php $WageWizard_version = "13.03.09" ?>
