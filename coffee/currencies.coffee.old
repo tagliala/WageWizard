@@ -1,0 +1,380 @@
+"use strict"
+window.WageWizard = window.WageWizard || {}
+WageWizard = window.WageWizard
+WageWizard.CURRENCIES =
+  AED:
+    symbol: 'د.إ'
+    name: 'د.إ (United Arab Emirates dirham)'
+    eurorate: 0.4
+  ALL:
+    symbol: 'Lek'
+    name: 'Lek (Albanian lek)'
+    eurorate: 0.005
+  AMD:
+    symbol: 'dram'
+    name: 'Dram (Armenian dram)'
+    eurorate: 0.002
+  ARS:
+    symbol: 'Pesos'
+    name: 'Pesos (Argentine peso)'
+    eurorate: 1
+  AUD:
+    symbol: 'AU$'
+    name: 'AU$ (Australian dollar)'
+    eurorate: 0.5
+  BAM:
+    symbol: 'KM'
+    name: 'KM (Bosnia and Herzegovina Convertible Mark)'
+    eurorate: 0.5
+  BBD:
+    symbol: 'Bds$'
+    name: 'Bds$ (Barbados dollar)'
+    eurorate: 0.5
+  BDT:
+    symbol: 'Tk'
+    name: 'Tk (Bangladeshi taka)'
+    eurorate: 0.01
+  BGN:
+    symbol: 'лв'
+    name: 'лв (Bulgarian lev)'
+    eurorate: 0.5
+  BHD:
+    symbol: 'BHD'
+    name: 'Dinar (Bahraini dinar)'
+    eurorate: 2
+  BND:
+    symbol: 'B$'
+    name: 'BDN (Bruneian dollar)'
+    eurorate: 0.5
+  BOB:
+    symbol: 'Bs'
+    name: 'Bs (Bolivian boliviano)'
+    eurorate: 0.1
+  BRL:
+    symbol: 'reais'
+    name: 'R$ (Reais)'
+    eurorate: 0.5
+  BYR:
+    symbol: 'BYR'
+    name: 'BYR (Belarusian ruble)'
+    eurorate: 0.0005
+  CAD:
+    symbol: 'C$'
+    name: 'C$ (Canadian dollar)'
+    eurorate: 0.5
+  CHF:
+    symbol: 'CHF'
+    name: 'CHF (Swiss franc)'
+    eurorate: 0.5
+  CLP:
+    symbol: 'Pesos'
+    name: 'Pesos (Chilean peso)'
+    eurorate: 0.005
+  CNY:
+    symbol: 'Yuan'
+    name: '¥ (Chinese yuan)'
+    eurorate: 0.1
+  CRC:
+    symbol: 'Colón'
+    name: 'Colón (Costa Rican colón)'
+    eurorate: 0.4
+  CUP:
+    symbol: '$'
+    name: '$ (Cuban peso)'
+    eurorate: 1
+  CVE:
+    symbol: 'Escudos'
+    name: 'Escudos (Cape Verdean escudo)'
+    eurorate: 0.01
+  CYP:
+    symbol: 'CYP'
+    name: 'CYP (Cypriot pound)'
+    eurorate: 0.5
+  CZK:
+    symbol: 'Kč'
+    name: 'Kč (Česká koruna)'
+    eurorate: 0.025
+  DKK:
+    symbol: 'Kroner'
+    name: 'Krone (Danish krone)'
+    eurorate: 0.1
+  DOP:
+    symbol: 'RD$'
+    name: 'RD$ (Dominican peso)'
+    eurorate: 0.05
+  DZD:
+    symbol: 'DZD'
+    name: 'Dinar (Algerian dinar)'
+    eurorate: 0.01
+  EEK:
+    symbol: 'Kroon'
+    name: 'Kroon (Estonian kroon)'
+    eurorate: 0.05
+  EGP:
+    symbol: 'E£'
+    name: 'E£ (Egyptian pound)'
+    eurorate: 0.25
+  EUR:
+    symbol: '€'
+    name: '€ (Euro)' 
+    eurorate: 1.0
+  FDKK:
+    symbol: 'Króna'
+    name: 'Króna (Faroese króna)'
+    eurorate: 0.1
+  GBP:
+    symbol: '£'
+    name: '£ (British pound sterling)'
+    eurorate: 1.5
+  GEL:
+    symbol: 'ლარი'
+    name: 'ლარი (Georgian lari)'
+    eurorate: 0.5
+  GHS:
+    symbol: '¢'
+    name: '¢ (Ghanese cedis)'
+    eurorate: 1
+  HNL:
+    symbol: 'Lempira'
+    name: 'Lempira (Honduras)'
+    eurorate: 0.5
+  HRK:
+    symbol: 'Kn'
+    name: 'Kn (Croatian kuna)'
+    eurorate: 0.1
+  HUF:
+    symbol: 'Ft'
+    name: 'Ft (Hungarian forint)'
+    eurorate: 5
+  IDR:
+    symbol: 'Rp'
+    name: 'Rp (Indonesian rupiah)'
+    eurorate: 0.0001
+  INR:
+    symbol: '₨'
+    name: '₨ (Indian rupee)'
+    eurorate: 0.025
+  IRR:
+    symbol: 'Rial'
+    name: 'Rial (Iranian rial)'
+    eurorate: 0.0001
+  ISK:
+    symbol: 'Ikr'
+    name: 'Ikr (Icelandic króna)'
+    eurorate: 0.01
+  JMD:
+    symbol: 'JMD'
+    name: 'JMD (Jamaican dollar)'
+    eurorate: 0.05
+  JOD:
+    symbol: 'JOD'
+    name: 'Dinar (Jordanian dinar)'
+    eurorate: 0.5
+  JPY:
+    symbol: 'JP¥'
+    name: '¥ (Japanese yen)'
+    eurorate: 0.01
+  KES:
+    symbol: 'KES'
+    name: 'KES (Kenyan shilling)'
+    eurorate: 0.05
+  KGS:
+    symbol: 'som'
+    name: 'Som (Kyrgyzstani som)'
+    eurorate: 0.02
+  KHD:
+    symbol: 'HKD'
+    name: 'HKD (Hong Kong dollar)'
+    eurorate: 0.1
+  KHR:
+    symbol: 'Riel'
+    name: 'riel (Cambodian riel)'
+    eurorate: 0.00025
+  KRW:
+    symbol: 'Won'
+    name: '₩ (South Korean won)'
+    eurorate: 0.001
+  KWD:
+    symbol: 'dinar'
+    name: 'Dinar (Kuwaiti dinar)'
+    eurorate: 2.5
+  KZT:
+    symbol: 'Tenge'
+    name: 'Tenge (Kazakhstan)'
+    eurorate: 0.01
+  LBP:
+    symbol: 'LBP'
+    name: 'LL (Lebanese pound)'
+    eurorate: 0.0005
+  LTL:
+    symbol: 'Lt'
+    name: 'Lt (Lithuanian litas)'
+    eurorate: 0.25
+  LVL:
+    symbol: 'Lats'
+    name: 'Lats (Latvian lat)'
+    eurorate: 2
+  MAD:
+    symbol: 'dirhams'
+    name: 'Dirhams (Moroccan dirham)'
+    eurorate: 0.1
+  MDL:
+    symbol: 'lei'
+    name: 'Lei (Moldavian Lei)'
+    eurorate: 0.05
+  MKD:
+    symbol: 'MKD'
+    name: 'MKD (Macedonian denar)'
+    eurorate: 0.05
+  MNT:
+    symbol: 'tugrik'
+    name: 'төгрөк (Mongolian tugrug)'
+    eurorate: 0.0005
+  MTL:
+    symbol: 'MTL'
+    name: 'LM (Maltese pound)'
+    eurorate: 2
+  MVR:
+    symbol: 'MRf'
+    name: 'MRf (Maldivian rufiyaa)'
+    eurorate: 0.05
+  MXN:
+    symbol: 'Pesos'
+    name: 'Pesos (Mexican peso)'
+    eurorate: 0.1
+  MYR:
+    symbol: 'RM'
+    name: 'RM (Malaysian ringgit)'
+    eurorate: 0.25
+  MZM:
+    symbol: 'metical'
+    name: 'metical (Moçambique metical)'
+    eurorate: 0.04
+  NGN:
+    symbol: '₦'
+    name: '₦ (Nigerian naira)'
+    eurorate: 0.01
+  NIO:
+    symbol: 'Córdoba'
+    name: 'Córdoba (Nicaraguan córdoba)'
+    eurorate: 0.05
+  NIS:
+    symbol: '₪'
+    name: '₪ (Israeli new sheqel)'
+    eurorate: 0.2
+  NOK:
+    symbol: 'kr'
+    name: 'Krone (Norwegian krone)'
+    eurorate: 0.1
+  OMR:
+    symbol: 'ر.ع.'
+    name: 'ر.ع. (Omani Rial)'
+    eurorate: 2
+  PHP:
+    symbol: 'Piso'
+    name: 'Piso (Philippine peso)'
+    eurorate: 0.025
+  PKR:
+    symbol: 'rupee'
+    name: 'Rupee (Pakistani rupee)'
+    eurorate: 0.02
+  PLN:
+    symbol: 'zł'
+    name: 'zł (Polish złoty)'
+    eurorate: 0.25
+  PYG:
+    symbol: 'PYG'
+    name: 'Guaraníes (Paraguayan guaraní)'
+    eurorate: 0.0002
+  RON:
+    symbol: 'Lei'
+    name: 'Lei (Romanian Lei)'
+    eurorate: 0.05
+  RSD:
+    symbol: 'dinar'
+    name: 'Dinar (Serbian dinar)'
+    eurorate: 0.1
+  RUB:
+    symbol: 'Roubel'
+    name: 'рубли (Russian ruble)'
+    eurorate: 0.025
+  SAR:
+    symbol: 'Riyal'
+    name: 'Riyal (Saudi riyal)'
+    eurorate: 0.25
+  SEK:
+    symbol: 'kr'
+    name: 'kr (Swedish krona)'
+    eurorate: 0.1
+  SGD:
+    symbol: 'SG$'
+    name: 'SG$ (Singapore dollar)'
+    eurorate: 0.5
+  SKK:
+    symbol: 'Sk'
+    name: 'Sk (Slovenská koruna)'
+    eurorate: 0.02
+  SRD:
+    symbol: 'SRD'
+    name: 'SRD (Surinam dollar)'
+    eurorate: 0.5
+  THB:
+    symbol: '฿'
+    name: '฿ (Thai baht)'
+    eurorate: 0.025
+  TND:
+    symbol: 'Dinar'
+    name: 'Dinar (Tunisian Dinar)'
+    eurorate: 0.8
+  TRY:
+    symbol: 'YTL'
+    name: 'YTL (Turkish new lira)'
+    eurorate: 1
+  TTD:
+    symbol: 'TT$'
+    name: 'TT$ (Trinidad and Tobago dollar)'
+    eurorate: 0.1
+  TWD:
+    symbol: 'NT$'
+    name: 'NT$ (New Taiwan dollar)'
+    eurorate: 1
+  UAH:
+    symbol: 'hryvnia'
+    name: 'грн. (Ukrainian hryvnia)'
+    eurorate: 0.2
+  UGX:
+    symbol: 'shill'
+    name: 'USh (Ugandan shilling)'
+    eurorate: 0.0005
+  USD:
+    symbol: '$'
+    name: '$ (US dollar)'
+    eurorate: 1.0
+  UYU:
+    symbol: 'Pesos'
+    name: 'Pesos (Uruguayan peso)'
+    eurorate: 0.1
+  UZS:
+    symbol: 'som'
+    name: 'som (Uzbekistani som)'
+    eurorate: 0.001
+  VEB:
+    symbol: 'Bs'
+    name: 'Bs (Venezuelan bolívar)'
+    eurorate: 1
+  VND:
+    symbol: '₫'
+    name: '₫ (Vietnamese dong)'
+    eurorate: 0.1
+  XAF:
+    symbol: 'XAF'
+    name: 'XAF (Central African CFA franc)'
+    eurorate: 0.002
+  XOF:
+    symbol: 'XOF'
+    name: 'XOF (West African CFA franc)'
+    eurorate: 0.002
+  ZAR:
+    symbol: 'Rand'
+    name: 'Rand (South Africa)'
+    eurorate: 0.125
