@@ -77,7 +77,7 @@ END;
 
 }
 ?>
-<?php $WageWizard_version = "13.03.09" ?>
+<?php $WageWizard_version = "13.03.10" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
