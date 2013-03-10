@@ -62,7 +62,7 @@ function skillRow($player = 1, $skill = 'Keeper', $isSkill = true, $class="wage-
       <td>
         <div class="control-group">
           <span class="field-caption">' . $localizedSkill . '</span>
-          <select id="WageWizard_Player_' . $player . '_' . $skillWithoutSpaces . '" data-validate="range" data-range-min="' . $start . '" data-range-max="' . $stop . '" data-field-name="' . $localizedPlayer . ' ' . $localizedSkill . '" class="refresh-table" data-id="' . $player . '">
+          <select id="WageWizard_Player_' . $player . '_' . $skillWithoutSpaces . '" name="WageWizard_Player_' . $player . '_' . $skillWithoutSpaces . '" data-validate="range" data-range-min="' . $start . '" data-range-max="' . $stop . '" data-field-name="' . $localizedPlayer . ' ' . $localizedSkill . '" class="refresh-table" data-id="' . $player . '">
             ' . $options . '
           </select>
         </div>
@@ -194,7 +194,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
         <div class="span3 side-panel" id="side-panel">
 
           <!-- WageWizard Options Start -->
-          <div class="accordion" id="accordion-settings">
+          <div class="accordion hide" id="accordion-settings">
             <form id="optionForm" action="javascript:{}" method="post">
               <div class="accordion-group">
                 <div class="accordion-heading">
@@ -334,7 +334,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
 
                   <!-- CHPP Controls Start -->
                   <div class="controls controls-row">
-                    <select class="ignore span8" id="CHPP_Player_1" name="CHPP_Player_1_Name">
+                    <select class="ignore span8" id="CHPP_Player_1" name="CHPP_Player_1_Name" data-id="1">
                     </select>
                     <select class="ignore span4" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
                       <option value="ShirtNumber"><?php echo localize("Shirt Number"); ?></option>
@@ -476,6 +476,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     </tr>
                   </tbody>
                 </table>
+                <div class="text-center form-actions">
+                  <button type="button" id="getLink" class="btn"><i class="icon-link"></i> <?= localize("Get link") ?></button>
+                </div>
               </form> <!-- Main Form End -->
             </div>
 

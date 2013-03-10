@@ -68,45 +68,6 @@ format = (source, params) ->
     return
   source
 
-createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
-  ranges = []
-  r = 0
-
-  for minute in substituteAtArray
-    unless ranges[r]
-      ranges[r] = []
-      ranges[r].push minute
-      check_with = minute + 1
-    else if minute isnt check_with
-      ranges[r].push check_with - 1 unless ranges[r][ranges[r].length - 1] is check_with - 1
-      r++
-      _i--
-    else if minute is check_with
-      check_with = minute + 1
-    if _i is _len-1
-      l = ranges[r].length - 1
-      ranges[r].push minute if ranges[r][l] isnt minute
-
-  result = []
-  for range in ranges
-    result.push range.join "-"
-  title = ""
-  body = ""
-  if substituteAtArray.length > 0
-    title = ""
-    if substituteAtArray.length is 1
-      title += "#{WageWizard.messages.replace} #{WageWizard.messages.at_minute}"
-    else
-      title += "#{WageWizard.messages.replace} #{WageWizard.messages.at_minutes}"
-    body = """
-      <span class="minutes">#{result.join ", "}</span>
-      """
-    body += "#{WageWizard.messages.may_not_replace}" if mayNotReplace
-  else
-    title = WageWizard.messages.do_not_replace
-  $('#AlertsContainer').append createAlert "id": "formSubstituteAt", "type": "success", "title" : title, "body": body
-  return
-
 resetAndHideTabs = ->
   $("#tabChartsNav").hide()
   $("#tabContributionsNav").hide()
@@ -122,10 +83,6 @@ TABLE_ID = WageWizard.CONFIG.TABLE_ID
 DEBUG = WageWizard.CONFIG.DEBUG
 AUTOSTART = WageWizard.CONFIG.AUTOSTART
 WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_HO
-
-# Stops propagation of click event on login form
-$('.dropdown-menu').find('form').click (e) ->
-  e.stopPropagation()
 
 checkIframe = ->
   top.location = self.location if top.location isnt self.location
@@ -159,100 +116,7 @@ $(FORM_ID).validate({
       validator.focusInvalid()
       return
   submitHandler: (form) ->
-    $("#calculate").addClass 'disabled'
-    resetAndHideTabs()
-    $("#AlertsContainer").html ""
-    result = WageWizard.Engine.start()
-
-    # Show warnings
-    warnings_list = ""
-    if result.player2_stronger_than_player1
-      warnings_list += "<li>#{WageWizard.messages.player2_stronger_than_player1}</li>"
-    if result.player1_low_stamina_se_risk
-      warnings_list += "<li>#{WageWizard.messages.player1_low_stamina_se(result.player1_low_stamina_se)}</li>"
-    if result.player2_low_stamina_se_risk
-      warnings_list += "<li>#{WageWizard.messages.player2_low_stamina_se(result.player2_low_stamina_se)}</li>"
-    if result.bestInFirstHalf and isOnlySecondHalfEnabled()
-      warnings_list += "<li>#{WageWizard.messages.best_in_first_half}</li>"
-    $('#AlertsContainer').append createAlert "id": "formWarnings", "type": "warning", "title" : WageWizard.messages.status_warning, "body": "<ul>#{warnings_list}</ul>" if warnings_list isnt ""
-
-    # Render Contributions table
-    if isVerboseModeEnabled()
-      # Strength table
-      tempHTML = """
-        <h3 class="legend-like">#{WageWizard.messages.strength_table}</h3>
-        <table class="table table-striped table-condensed table-staminia table-staminia-strength width-auto">
-          <thead>
-            <tr>
-              <th></th><th>#{WageWizard.messages.player1}</th><th>#{WageWizard.messages.player2}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>#{WageWizard.messages.strength}</td>
-              <td>#{number_format(result.player1Strength, 2)}</td>
-              <td>#{number_format(result.player2Strength, 2)}</td>
-            </tr>
-            <tr>
-              <td>#{WageWizard.messages.strength_st_independent}</td>
-              <td>#{number_format(result.player1StrengthStaminaIndependent, 2)}</td>
-              <td>#{number_format(result.player2StrengthStaminaIndependent, 2)}</td>
-            </tr>
-          </tbody>
-        </table>
-        <p><small>#{WageWizard.messages.used_in_calculation}</small></p>
-        """
-      $("#tabContributions").append tempHTML
-
-      # Contributions table
-      tableHeader = """
-        <thead>
-          <tr>
-            <th class="min-width">#{WageWizard.messages.substitution_minute}</th>
-            <th>#{WageWizard.messages.total_contribution}</th>
-            <th>#{WageWizard.messages.contribution_percent}</th>
-            <th>#{WageWizard.messages.p1_contrib}</th>
-            <th>#{WageWizard.messages.p2_contrib}</th>
-            <th>#{WageWizard.messages.notes}</th>
-          </tr>
-        </thead>
-        """
-
-      tableSeparator = "<tr><td colspan='6'></td></tr>"
-
-      tempHTML = """
-        <h3 class="legend-like">#{WageWizard.messages.contribution_table}</h3>
-        <table class="table table-striped table-condensed table-staminia table-staminia-contributions">
-          #{tableHeader}
-          <tbody>
-        """
-      player1LowStamina = (String) result.player1_low_stamina_se
-      player2LowStamina = (String) result.player2_low_stamina_se
-      for minute of result.minutes
-        minuteObject = result.minutes[minute]
-        totalContribution = minuteObject.total
-        percentContribution = minuteObject.percent
-        p1Contribution = minuteObject.p1
-        p2Contribution = minuteObject.p2
-        isMax = minuteObject.isMax
-        isMin = minuteObject.isMin
-        if minute is "46"
-          tempHTML += tableHeader
-        note = (if isMax then "MAX" else (if isMin then "MIN" else (if 100 - percentContribution < 1 then "~ 1%" else ""))) + (if minute is player1LowStamina then " " + WageWizard.messages.p1_low_stamina else "") + (if minute is player2LowStamina then " " + WageWizard.messages.p2_low_stamina else "")
-        css_classes = (if isMax then " max" else "") + (if isMin then " min" else "")
-        tempHTML += """
-          <tr class="#{css_classes}">
-            <td>#{minute}</td>
-            <td>#{totalContribution}</td>
-            <td>#{percentContribution}%</td>
-            <td>#{p1Contribution}</td>
-            <td>#{p2Contribution}</td>
-            <td>#{note}</td>
-          </tr>
-          """
-      tempHTML += "</tbody></table>"
-      $("#tabContributions").append tempHTML
-      $("#tabContributionsNav").show()
+    return
 
     # Render Charts
     if isChartsEnabled()
@@ -302,8 +166,6 @@ $(FORM_ID).validate({
       document.plot2 = $.plot $('#chartPartials'), dataset, plot_options
       $("#tabChartsNav").show()
 
-    createSubstitutionAlert((if isOnlySecondHalfEnabled() then result.substituteAtSecondHalf else result.substituteAt), result.mayNotReplace)
-
     # Show the right tab
     if isChartsEnabled()
       $("#tabChartsNav").find("a").tab "show"
@@ -314,10 +176,10 @@ $(FORM_ID).validate({
     else if isVerboseModeEnabled()
       $("#tabContributionsNav").find("a").tab "show"
 
-    #if WageWizard.CONFIG.DEBUG_STEP
-    #  printContributionTable()
-    #  $("#tabDebugNav").show()
-    #  #$("#tabDebugNav").find("a").tab "show"
+    if WageWizard.CONFIG.DEBUG_STEP
+      printContributionTable()
+      $("#tabDebugNav").show()
+      $("#tabDebugNav").find("a").tab "show"
 
     # Scroll up if needed
     scrollUpToResults()
@@ -382,40 +244,11 @@ createAlert = (params) ->
   </div>
   """
 
-# Enable Advanced Mode
-enableAdvancedMode =  ->
-  $("#WageWizard_Options_AdvancedMode_Predictions").find(".btn").prop 'disabled', false
-  $("#{TABLE_ID} tr[class~='simple']").addClass("hide").hide()
-  $("#{FORM_ID} *[name*=_]").addClass "ignore"
-  $("#{TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])").removeClass("hide").show()
-  $("#WageWizard_Options_Predictions_Type").slideDown()
-  showSkillsByPosition()
-  return
-
-# Disable Advanced Mode
-disableAdvancedMode =  ->
-  $("#WageWizard_Options_AdvancedMode_Predictions").find(".btn").prop 'disabled', false
-  $("#{TABLE_ID} tr[class~='advanced']").addClass("hide").hide()
-  $("#{FORM_ID} *[name*=_Advanced_]").addClass "ignore"
-  $("#{FORM_ID} *[name*=_]").removeClass "ignore"
-  $("#{TABLE_ID} tr[class~='simple']").removeClass("hide").show()
-  $("#WageWizard_Options_Predictions_Type").slideUp()
-  return
-
-isOnlySecondHalfEnabled = ->
-  $("#WageWizard_Options_OnlySecondHalf").prop 'checked'
-
 isChartsEnabled = ->
   $("#WageWizard_Options_Charts").prop 'checked'
 
 isVerboseModeEnabled = ->
   $("#WageWizard_Options_VerboseMode").prop 'checked'
-
-isPressingEnabled = ->
-  $("#WageWizard_Options_Pressing").prop 'checked'
-
-isAdvancedModeEnabled = ->
-  $("#WageWizard_Options_AdvancedMode").prop 'checked'
 
 enableCHPPMode = ->
   $("#tabTeamNav, #WageWizard_CHPP").show()
@@ -436,12 +269,7 @@ fillForm = ->
     switch $field.attr('type')
       when 'checkbox', 'radio' then $field.prop 'checked', (params[i] is 'true')
       else $field.val params[i]
-  if isAdvancedModeEnabled()
-    enableAdvancedMode()
-  else
-    disableAdvancedMode()
   checkMotherClubBonus()
-  updatePredictions()
   #stripeTable()
   return
 
@@ -449,14 +277,6 @@ checkMotherClubBonus = ->
   for playerId in [1, 2]
     status = $("input[name=WageWizard_Player_#{playerId}_MotherClubBonus]").prop('checked')
     $("select[name=WageWizard_Player_#{playerId}_Loyalty]").prop 'disabled', status
-    $("input[name=WageWizard_Advanced_Player_#{playerId}_Loyalty]").prop 'disabled', status
-  return
-
-updatePredictions = ->
-  if $('input[name="WageWizard_Options_Predictions_Type"]:checked').val() is 'ho'
-    WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_HO
-  else
-    WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_ANDREAC
   return
 
 formSerialize = ->
@@ -501,74 +321,6 @@ $("#getLink").on "click", (e) ->
   # Scroll up if needed
   scrollUpToResults()
   return
-
-# Stamin.IA! Switch Players Button
-$('#switchPlayers').click ->
-  $("#{FORM_ID} *[name*=_Player_1_]").each ->
-    form = $(FORM_ID)[0]
-    p2Field = form[@name.replace('_1', '_2')]
-
-    $this = $(this)
-    $p2Field = $(p2Field)
-
-    p1Value = @value
-    p1Disabled = $this.prop 'disabled'
-    p1Checked = $this.prop 'checked'
-    $this.val $p2Field.val()
-    $this.prop 'disabled', $p2Field.prop('disabled')
-    $this.prop 'checked', $p2Field.prop('checked')
-    $p2Field.val p1Value
-    $p2Field.prop 'disabled', p1Disabled
-    $p2Field.prop 'checked', p1Checked
-  checkMotherClubBonus()
-  $('.control-group').removeClass 'error'
-  $(FORM_ID).validate().form()
-  return
-
-$('#WageWizard_Options_AdvancedMode').on 'change', (e) ->
-  if $(this).prop 'checked'
-    enableAdvancedMode()
-  else
-    disableAdvancedMode()
-  #stripeTable()
-  return
-
-$('.motherclub-bonus-checkbox').on 'change', (e) ->
-  checkMotherClubBonus()
-  return
-
-$('input[name="WageWizard_Options_Predictions_Type"]').on 'change', (e) ->
-  updatePredictions()
-
-$('input[data-validate="range"], select[data-validate="range"]').each ->
-  $(this).rules 'add', { range: [$(this).data('rangeMin'), $(this).data('rangeMax')] }
-
-# Hide alerts when showing credits and redraw charts if needed
-$('a[data-toggle="tab"]').on 'shown', (e) ->
-  if $(e.target).attr("href") is "#tabCredits"
-    $("#AlertsContainer").hide()
-  else
-    $("#AlertsContainer").show()
-  if $(e.target).attr("href") is "#tabCharts"
-    plot_redraw document.plot1
-    plot_redraw document.plot2
-  return
-
-# Stamin.IA! Reset Button
-$("#resetApp").on "click", (e) ->
-  $("#{FORM_ID}, #{OPTION_FORM_ID}").each ->
-    if (typeof this.reset == 'function' or (typeof this.reset == 'object' and !this.reset.nodeType))
-      this.reset()
-
-  $('.control-group').removeClass "error"
-  $("#AlertsContainer").html ""
-  resetAndHideTabs()
-
-  checkMotherClubBonus()
-  disableAdvancedMode()
-  setupCHPPPlayerFields()
-  #stripeTable()
-  e.preventDefault()
 
 $.validator.methods.range = (value, element, param) ->
   globalizedValue = value.replace ",", "."
@@ -700,7 +452,7 @@ sortCHPPPlayerFields = ->
   reverse = false
   primer = parseInt
 
-  switch $("#{FORM_ID} select[id=CHPP_Players_SortBy]").val()
+  switch $("#CHPP_Players_SortBy").val()
     when "ShirtNumber"
       field = "PlayerNumber"
     when "Name"
@@ -784,22 +536,31 @@ setupCHPPPlayerFields = (checkUrlParameter = false) ->
   setPlayerFormFields 1, checkUrlParameter
   return
 
-$("#{FORM_ID} select[id=CHPP_Player_1]").on 'change', ->
-  setPlayerFormFields 1
+# Stamin.IA! Switch Players Button
+$('#switchPlayers').click ->
+  $("#{FORM_ID} *[name*=_Player_1_]").each ->
+    form = $(FORM_ID)[0]
+    p2Field = form[@name.replace('_1', '_2')]
+
+    $this = $(this)
+    $p2Field = $(p2Field)
+
+    p1Value = @value
+    p1Disabled = $this.prop 'disabled'
+    p1Checked = $this.prop 'checked'
+    $this.val $p2Field.val()
+    $this.prop 'disabled', $p2Field.prop('disabled')
+    $this.prop 'checked', $p2Field.prop('checked')
+    $p2Field.val p1Value
+    $p2Field.prop 'disabled', p1Disabled
+    $p2Field.prop 'checked', p1Checked
+  checkMotherClubBonus()
+  $('.control-group').removeClass 'error'
+  $(FORM_ID).validate().form()
   return
 
-$("#{FORM_ID} select[id=CHPP_Player_2]").on 'change', ->
-  setPlayerFormFields 2
-  return
-
-$("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
-  updateCHPPPlayerFields()
-
-  if ($("#CHPP_Player_1 option").length >= 1)
-    $("#CHPP_Player_1 option:eq(0)").prop 'selected', true
-    setPlayerFormFields 1
-
-  return
+$('input[data-validate="range"], select[data-validate="range"]').each ->
+  $(this).rules 'add', { range: [$(this).data('rangeMin'), $(this).data('rangeMax')] }
 
 getWageInUserCurrency = (salary) ->
   salary / parseFloat(WageWizard.CountryDetails.CurrencyRate.replace(',','.'), 10)
@@ -944,20 +705,6 @@ showTooltip = (x, y, contents) ->
     left: x - $content_div.width() - 11
   .fadeIn("fast")
 
-previousPoint = null
-
-$("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
-  if (item)
-    return if previousPoint is item.dataIndex
-    previousPoint = item.dataIndex
-    $("#flot-tooltip").remove()
-    x = item.datapoint[0]
-    y = item.datapoint[1].toFixed 2
-    showTooltip item.pageX, item.pageY, "#{WageWizard.messages.substitution_minute}: #{x}<br/>#{WageWizard.messages.contribution}: #{y}"
-  else
-    $("#flot-tooltip").remove()
-    previousPoint = null
-
 setDiscountedSalary = ->
   input = (Number) $("#ageDiscountCalculationSalary").val().replace /[^\d]/g, ''
   if input < 250
@@ -965,32 +712,6 @@ setDiscountedSalary = ->
     return
   rate = WageWizard.Engine.getRate $("#ageDiscountCalculation").val()
   $("#ageDiscountCalculationDiscountedSalary").val WageWizard.number_format((input - 250) * rate + 250, 0, '', ' ')
-
-$("#ageDiscountCalculation").on "change", ->
-  $("#ageDiscountCalculationTarget").text WageWizard.number_format(100 - WageWizard.Engine.getRate($(this).val()) * 100, 0)
-  setDiscountedSalary()
-
-$("#ageDiscountCalculationSalary").on "keyup", setDiscountedSalary
-
-$("#extraLink").on "click", (e) ->
-  e.preventDefault()
-  $("#tabExtraNav").find("a").tab "show"
-  $('#helpModal').modal 'toggle'
-  false
-
-$('a.accordion-toggle[data-toggle="collapse"]').on 'click', (e) ->
-  $this = $(this)
-  $target = $($this.attr 'href')
-  $target.addClass('in') if $target.css('height') isnt '0px'
-
-#export
-WageWizard.format = format
-WageWizard.number_format = number_format
-
-WageWizard.isChartsEnabled = isChartsEnabled
-WageWizard.isVerboseModeEnabled = isVerboseModeEnabled
-WageWizard.isPressingEnabled = isPressingEnabled
-WageWizard.isAdvancedModeEnabled = isAdvancedModeEnabled
 
 createPlayerFromForm = (id) ->
   player =
@@ -1022,6 +743,100 @@ refreshTable = (id) ->
   player = createPlayerFromForm id
   setTableFields player, id
 
+# Event listeners
+$('.dropdown-menu').find('form').click (e) ->
+  # Stops propagation of click event on login form
+  e.stopPropagation()
+
+$('[data-colorize]').bind 'DOMSubtreeModified', ->
+  colorizePercent $(this)
+
+$('#WageWizard_Country').on 'change', ->
+  WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()]
+
+$('.refresh-table').on 'change', ->
+  refreshTable $(this).data 'id'
+
+$("#ageDiscountCalculation").on "change", ->
+  $("#ageDiscountCalculationTarget").text WageWizard.number_format(100 - WageWizard.Engine.getRate($(this).val()) * 100, 0)
+  setDiscountedSalary()
+
+$("#ageDiscountCalculationSalary").on "keyup", setDiscountedSalary
+
+$("#extraLink").on "click", (e) ->
+  e.preventDefault()
+  $("#tabExtraNav").find("a").tab "show"
+  $('#helpModal').modal 'toggle'
+  false
+
+$("select[id^=CHPP_Player_]").on 'change', ->
+  setPlayerFormFields $(this).data 'id'
+  return
+
+$("#CHPP_Players_SortBy").on "change", ->
+  updateCHPPPlayerFields()
+
+  if ($("#CHPP_Player_1 option").length >= 1)
+    $("#CHPP_Player_1 option:eq(0)").prop 'selected', true
+    setPlayerFormFields 1
+
+  return
+
+$('a.accordion-toggle[data-toggle="collapse"]').on 'click', (e) ->
+  $this = $(this)
+  $target = $($this.attr 'href')
+  $target.addClass('in') if $target.css('height') isnt '0px'
+
+previousPoint = null
+$("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
+  if (item)
+    return if previousPoint is item.dataIndex
+    previousPoint = item.dataIndex
+    $("#flot-tooltip").remove()
+    x = item.datapoint[0]
+    y = item.datapoint[1].toFixed 2
+    showTooltip item.pageX, item.pageY, "#{WageWizard.messages.substitution_minute}: #{x}<br/>#{WageWizard.messages.contribution}: #{y}"
+  else
+    $("#flot-tooltip").remove()
+    previousPoint = null
+
+$('.motherclub-bonus-checkbox').on 'change', (e) ->
+  checkMotherClubBonus()
+  return
+
+# Hide alerts when showing credits and redraw charts if needed
+$('a[data-toggle="tab"]').on 'shown', (e) ->
+  if $(e.target).attr("href") is "#tabCredits"
+    $("#AlertsContainer").hide()
+  else
+    $("#AlertsContainer").show()
+  if $(e.target).attr("href") is "#tabCharts"
+    plot_redraw document.plot1
+    plot_redraw document.plot2
+  return
+
+# Stamin.IA! Reset Button
+$("#resetApp").on "click", (e) ->
+  $("#{FORM_ID}, #{OPTION_FORM_ID}").each ->
+    if (typeof this.reset == 'function' or (typeof this.reset == 'object' and !this.reset.nodeType))
+      this.reset()
+
+  $('.control-group').removeClass "error"
+  $("#AlertsContainer").html ""
+  resetAndHideTabs()
+
+  checkMotherClubBonus()
+  setupCHPPPlayerFields()
+  #stripeTable()
+  e.preventDefault()
+
+#export
+WageWizard.format = format
+WageWizard.number_format = number_format
+
+WageWizard.isChartsEnabled = isChartsEnabled
+WageWizard.isVerboseModeEnabled = isVerboseModeEnabled
+
 # Document.ready
 $ ->
   checkIframe()
@@ -1036,9 +851,3 @@ $ ->
     createCountryDropbox()
     $('.wagewizard-country').show()
     refreshTable 1
-  $('[data-colorize]').bind 'DOMSubtreeModified', ->
-    colorizePercent $(this)
-  $('#WageWizard_Country').on 'change', ->
-    WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()]
-  $('.refresh-table').on 'change', ->
-    refreshTable $(this).data 'id'
