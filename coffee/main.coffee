@@ -418,11 +418,11 @@ isAdvancedModeEnabled = ->
   $("#WageWizard_Options_AdvancedMode").prop 'checked'
 
 enableCHPPMode = ->
-  $("#{TABLE_ID} tr[class~='chpp']").removeClass("hide").show()
+  $("#tabTeamNav, #WageWizard_CHPP").show()
   return
 
 disableCHPPMode = ->
-  $("#{TABLE_ID} tr[class~='chpp']").addClass("hide").hide()
+  $("#tabTeamNav, #WageWizard_CHPP").hide()
   return
 
 # Fill Form Helper
@@ -802,7 +802,7 @@ $("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
   return
 
 getWageInUserCurrency = (salary) ->
-  salary / WageWizard.CountryDetails.CurrencyRate
+  salary / parseFloat(WageWizard.CountryDetails.CurrencyRate.replace(',','.'), 10)
 
 salaryToString = (salary) ->
   result = [number_format(getWageInUserCurrency(salary), 0, '', ' '), WageWizard.CountryDetails.CurrencyName]
@@ -861,7 +861,7 @@ setDescriptionFields = (player, id) ->
 
 setTableFields = (player, id) ->
   $("#playersInfoTable tr").removeClass 'success warning'
-  $("#playersInfoTable .btn-radio input").prop('disabled', true).closest('label').hide()
+  $("#playersInfoTable .btn-radio input").prop('disabled', true).closest('label').addClass 'hide'
 
   $("#WageWizard_Player_#{id}_Salary").val player.Salary
   $("#WageWizard_Player_#{id}_Age").val player.Age
@@ -873,12 +873,12 @@ setTableFields = (player, id) ->
     $("#WageWizard_Player_Min_#{id}_#{k}").text salaryToString(player.WageWizard.Skills[k].min)
     $("#WageWizard_Player_Max_#{id}_#{k}").text salaryToString(player.WageWizard.Skills[k].max)
     if player.WageWizard.primary is k
-      $("#WageWizard_Primary_Player_#{id}_#{k}").closest('label').show()
+      $("#WageWizard_Primary_Player_#{id}_#{k}").closest('label').removeClass 'hide'
       $("#WageWizard_Primary_Player_#{id}_#{k}").prop 'checked', true
       $("#WageWizard_Primary_Player_#{id}_#{k}").closest('tr').addClass 'success'
 
   for k of player.WageWizard.unpredictable_skills
-    $("#WageWizard_Primary_Player_#{id}_#{k}").closest('label').show()
+    $("#WageWizard_Primary_Player_#{id}_#{k}").closest('label').removeClass 'hide'
     $("#WageWizard_Primary_Player_#{id}_#{k}").prop 'disabled', false
     $("#WageWizard_Primary_Player_#{id}_#{k}").closest('tr').addClass 'warning'
 
@@ -1005,6 +1005,23 @@ createPlayerFromForm = (id) ->
 
   player
 
+createCountryDropbox = ->
+  countryArray = []
+  for k, v of WageWizard.COUNTRY_DETAILS
+    countryArray.push { id: k, name: v.CountryName }
+  countryArray.sort sort_by('name', false)
+
+  countryId = $('#WageWizard_Country').data('country').toString()
+  countryOptions = []
+  for country in countryArray
+    countryOptions.push "<option value='#{country.id}'#{if country.id is countryId then ' selected' else ''}>#{country.name}</option>"
+  $('#WageWizard_Country').html countryOptions.join()
+  WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[countryId]
+
+refreshTable = (id) ->
+  player = createPlayerFromForm id
+  setTableFields player, id
+
 # Document.ready
 $ ->
   checkIframe()
@@ -1013,10 +1030,15 @@ $ ->
   #stripeTable()
   $(FORM_ID).submit() if hasParams and AUTOSTART
   $("#imgMadeInItaly").tooltip()
-  $.ajax { url: "chpp/chpp_retrievedata.php", cache: true } if document.startAjax
+  if document.startAjax
+    $.ajax { url: "chpp/chpp_retrievedata.php", cache: true }
+  else
+    createCountryDropbox()
+    $('.wagewizard-country').show()
+    refreshTable 1
   $('[data-colorize]').bind 'DOMSubtreeModified', ->
     colorizePercent $(this)
+  $('#WageWizard_Country').on 'change', ->
+    WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()]
   $('.refresh-table').on 'change', ->
-    id = $(this).data 'id'
-    player = createPlayerFromForm id
-    setTableFields player, id
+    refreshTable $(this).data 'id'

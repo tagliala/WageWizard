@@ -442,6 +442,10 @@ footer a:hover {
           user-select: none;
 }
 
+.btn-radio.hide {
+  display: none;
+}
+
 .btn-checkbox {
   display: block !important;
 }
