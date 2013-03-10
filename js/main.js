@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, MAP_HATTRICK_SKILLS, OPTION_FORM_ID, TABLE_ID, WageWizard, checkIframe, checkMotherClubBonus, colorizePercent, createAlert, createPlayerFromForm, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillDataField, fillForm, fillTeamWageTable, formSerialize, format, getWageInUserCurrency, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, rateToString, resetAndHideTabs, salaryToString, scrollUpToResults, setDescriptionFields, setDiscountedSalary, setPlayerFormFields, setPlayerWageTable, setTableFields, setupCHPPPlayerFields, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, MAP_HATTRICK_SKILLS, OPTION_FORM_ID, TABLE_ID, WageWizard, checkIframe, checkMotherClubBonus, colorizePercent, createAlert, createCountryDropbox, createPlayerFromForm, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillDataField, fillForm, fillTeamWageTable, formSerialize, format, getWageInUserCurrency, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, rateToString, refreshTable, resetAndHideTabs, salaryToString, scrollUpToResults, setDescriptionFields, setDiscountedSalary, setPlayerFormFields, setPlayerWageTable, setTableFields, setupCHPPPlayerFields, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.WageWizard = window.WageWizard || {};
 
@@ -459,11 +459,11 @@
   };
 
   enableCHPPMode = function() {
-    $("" + TABLE_ID + " tr[class~='chpp']").removeClass("hide").show();
+    $("#tabTeamNav, #WageWizard_CHPP").show();
   };
 
   disableCHPPMode = function() {
-    $("" + TABLE_ID + " tr[class~='chpp']").addClass("hide").hide();
+    $("#tabTeamNav, #WageWizard_CHPP").hide();
   };
 
   fillForm = function() {
@@ -906,7 +906,7 @@
   });
 
   getWageInUserCurrency = function(salary) {
-    return salary / WageWizard.CountryDetails.CurrencyRate;
+    return salary / parseFloat(WageWizard.CountryDetails.CurrencyRate.replace(',', '.'), 10);
   };
 
   salaryToString = function(salary) {
@@ -981,7 +981,7 @@
   setTableFields = function(player, id) {
     var k, v, _ref;
     $("#playersInfoTable tr").removeClass('success warning');
-    $("#playersInfoTable .btn-radio input").prop('disabled', true).closest('label').hide();
+    $("#playersInfoTable .btn-radio input").prop('disabled', true).closest('label').addClass('hide');
     $("#WageWizard_Player_" + id + "_Salary").val(player.Salary);
     $("#WageWizard_Player_" + id + "_Age").val(player.Age);
     $("#WageWizard_Player_" + id + "_Abroad").prop('checked', player.Abroad);
@@ -995,13 +995,13 @@
       $("#WageWizard_Player_Min_" + id + "_" + k).text(salaryToString(player.WageWizard.Skills[k].min));
       $("#WageWizard_Player_Max_" + id + "_" + k).text(salaryToString(player.WageWizard.Skills[k].max));
       if (player.WageWizard.primary === k) {
-        $("#WageWizard_Primary_Player_" + id + "_" + k).closest('label').show();
+        $("#WageWizard_Primary_Player_" + id + "_" + k).closest('label').removeClass('hide');
         $("#WageWizard_Primary_Player_" + id + "_" + k).prop('checked', true);
         $("#WageWizard_Primary_Player_" + id + "_" + k).closest('tr').addClass('success');
       }
     }
     for (k in player.WageWizard.unpredictable_skills) {
-      $("#WageWizard_Primary_Player_" + id + "_" + k).closest('label').show();
+      $("#WageWizard_Primary_Player_" + id + "_" + k).closest('label').removeClass('hide');
       $("#WageWizard_Primary_Player_" + id + "_" + k).prop('disabled', false);
       $("#WageWizard_Primary_Player_" + id + "_" + k).closest('tr').addClass('warning');
     }
@@ -1169,6 +1169,34 @@
     return player;
   };
 
+  createCountryDropbox = function() {
+    var country, countryArray, countryId, countryOptions, k, v, _i, _len, _ref;
+    countryArray = [];
+    _ref = WageWizard.COUNTRY_DETAILS;
+    for (k in _ref) {
+      v = _ref[k];
+      countryArray.push({
+        id: k,
+        name: v.CountryName
+      });
+    }
+    countryArray.sort(sort_by('name', false));
+    countryId = $('#WageWizard_Country').data('country').toString();
+    countryOptions = [];
+    for (_i = 0, _len = countryArray.length; _i < _len; _i++) {
+      country = countryArray[_i];
+      countryOptions.push("<option value='" + country.id + "'" + (country.id === countryId ? ' selected' : '') + ">" + country.name + "</option>");
+    }
+    $('#WageWizard_Country').html(countryOptions.join());
+    return WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[countryId];
+  };
+
+  refreshTable = function(id) {
+    var player;
+    player = createPlayerFromForm(id);
+    return setTableFields(player, id);
+  };
+
   $(function() {
     var hasParams;
     checkIframe();
@@ -1185,15 +1213,19 @@
         url: "chpp/chpp_retrievedata.php",
         cache: true
       });
+    } else {
+      createCountryDropbox();
+      $('.wagewizard-country').show();
+      refreshTable(1);
     }
     $('[data-colorize]').bind('DOMSubtreeModified', function() {
       return colorizePercent($(this));
     });
+    $('#WageWizard_Country').on('change', function() {
+      return WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()];
+    });
     return $('.refresh-table').on('change', function() {
-      var id, player;
-      id = $(this).data('id');
-      player = createPlayerFromForm(id);
-      return setTableFields(player, id);
+      return refreshTable($(this).data('id'));
     });
   });
 

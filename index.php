@@ -307,7 +307,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
 
           <ul class="nav nav-tabs">
             <li class="active"><a href="#tabPlayer" data-toggle="tab"><i class="icon-user"></i> <span class="hidden-phone"><?= localize("Player") ?></span></a></li>
-            <li><a href="#tabTeam" data-toggle="tab"><i class="icon-group"></i> <span class="hidden-phone"><?= localize("Team") ?></span></a></li>
+            <li class="hide" id="tabTeamNav"><a href="#tabTeam" data-toggle="tab"><i class="icon-group"></i> <span class="hidden-phone"><?= localize("Team") ?></span></a></li>
             <li id="tabExtraNav"><a href="#tabExtra" data-toggle="tab"><i class="icon-plus-sign"></i> <span class="hidden-phone"><?= localize("Extra") ?></span></a></li>
             <li class="hide" id="tabChartsNav"><a href="#tabCharts" data-toggle="tab"><i class="icon-bar-chart"></i> <span class="hidden-phone"><?= localize("Charts") ?></span></a></li>
             <li class="hide" id="tabContributionsNav"><a href="#tabContributions" data-toggle="tab"><i class="icon-list-alt"></i> <span class="hidden-phone"><?= localize("Contributions table") ?></span></a></li>
@@ -332,81 +332,84 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <!-- Main Form Start -->
               <form id="formPlayersInfo" action="javascript:{}" method="post" class="wagewizardForm form-vertical">
 
-                <!-- CHPP Controls Start -->
-                <div class="controls controls-row">
-                  <select class="ignore span8" id="CHPP_Player_1" name="CHPP_Player_1_Name">
-                  </select>
-                  <select class="ignore span4" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
-                    <option value="ShirtNumber"><?php echo localize("Shirt Number"); ?></option>
-                    <option value="Name"><?php echo localize("Name"); ?></option>
-                    <option value="Salary"><?php echo localize("Salary"); ?></option>
-                    <option value="TSI"><?php echo localize("TSI"); ?></option>
-                    <option value="Form"><?php echo localize("Form"); ?></option>
-                    <option value="Stamina"><?php echo localize("Stamina"); ?></option>
-                    <option value="Experience"><?php echo localize("Experience"); ?></option>
-                    <option value="Loyalty"><?php echo localize("Loyalty"); ?></option>
-                    <optgroup label="<?= localize("Skill"); ?>">
-                      <option value="Keeper"><?php echo localize("Keeper (skill)"); ?></option>
-                      <option value="Playmaking"><?php echo localize("Playmaking (skill)"); ?></option>
-                      <option value="Passing"><?php echo localize("Passing (skill)"); ?></option>
-                      <option value="Winger"><?php echo localize("Winger (skill)"); ?></option>
-                      <option value="Defending"><?php echo localize("Defending (skill)"); ?></option>
-                      <option value="Scoring"><?php echo localize("Scoring (skill)"); ?></option>
-                      <option value="SetPieces"><?php echo localize("Set Pieces (skill)"); ?></option>
-                    </optgroup>
-                  </select>
-                </div> <!-- CHPP Controls End -->
+                <!-- CHPP Container Start -->
+                <div id="WageWizard_CHPP" class="hide">
 
-                <div class="spacer"></div>
+                  <!-- CHPP Controls Start -->
+                  <div class="controls controls-row">
+                    <select class="ignore span8" id="CHPP_Player_1" name="CHPP_Player_1_Name">
+                    </select>
+                    <select class="ignore span4" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
+                      <option value="ShirtNumber"><?php echo localize("Shirt Number"); ?></option>
+                      <option value="Name"><?php echo localize("Name"); ?></option>
+                      <option value="Salary"><?php echo localize("Salary"); ?></option>
+                      <option value="TSI"><?php echo localize("TSI"); ?></option>
+                      <option value="Form"><?php echo localize("Form"); ?></option>
+                      <option value="Stamina"><?php echo localize("Stamina"); ?></option>
+                      <option value="Experience"><?php echo localize("Experience"); ?></option>
+                      <option value="Loyalty"><?php echo localize("Loyalty"); ?></option>
+                      <optgroup label="<?= localize("Skill"); ?>">
+                        <option value="Keeper"><?php echo localize("Keeper (skill)"); ?></option>
+                        <option value="Playmaking"><?php echo localize("Playmaking (skill)"); ?></option>
+                        <option value="Passing"><?php echo localize("Passing (skill)"); ?></option>
+                        <option value="Winger"><?php echo localize("Winger (skill)"); ?></option>
+                        <option value="Defending"><?php echo localize("Defending (skill)"); ?></option>
+                        <option value="Scoring"><?php echo localize("Scoring (skill)"); ?></option>
+                        <option value="SetPieces"><?php echo localize("Set Pieces (skill)"); ?></option>
+                      </optgroup>
+                    </select>
+                  </div> <!-- CHPP Controls End -->
 
-                <div class="row-fluid">
-                  <div class="span6">
-                    <div class="media hide" id="WageWizard_Description_Player_1">
-                      <div class="media-object pull-left" id="WageWizard_Description_Player_1_Avatar"></div>
-                      <div class="media-body">
-                        <h4 class="media-heading" id="WageWizard_Description_Player_1_Name"></h4>
-                        <p>
-                          <em id="WageWizard_Description_Player_1_Statement" class="muted block"></em>
-                          <span id="WageWizard_Description_Player_1_Age" class="block"></span>
-                          <span class="block"><i class='icon-gift'></i> <span id="WageWizard_Description_Player_1_NextBirthday"></span></span>
-                          <span class="block"><?= localize("TSI"); ?>: <span id="WageWizard_Description_Player_1_Tsi"></span></span>
-                          <span class="block"><?= localize("Salary"); ?>: <span id="WageWizard_Description_Player_1_Salary"></span></span>
-                        </p>
+                  <div class="spacer"></div>
+
+                  <div class="row-fluid">
+                    <div class="span6">
+                      <div class="media hide" id="WageWizard_Description_Player_1">
+                        <div class="media-object pull-left" id="WageWizard_Description_Player_1_Avatar"></div>
+                        <div class="media-body">
+                          <h4 class="media-heading" id="WageWizard_Description_Player_1_Name"></h4>
+                          <p>
+                            <em id="WageWizard_Description_Player_1_Statement" class="muted block"></em>
+                            <span id="WageWizard_Description_Player_1_Age" class="block"></span>
+                            <span class="block"><i class='icon-gift'></i> <span id="WageWizard_Description_Player_1_NextBirthday"></span></span>
+                            <span class="block"><?= localize("TSI"); ?>: <span id="WageWizard_Description_Player_1_Tsi"></span></span>
+                            <span class="block"><?= localize("Salary"); ?>: <span id="WageWizard_Description_Player_1_Salary"></span></span>
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="span6">
-                    <table class="table table-bordered table-condensed table-striped">
-                      <tbody id="WageWizard_Player_1">
-                        <tr>
-                          <th></th>
-                          <th><?= localize("Weekly"); ?></th>
-                          <th><?= localize("Seasonly"); ?></th>
-                        </tr>
-                        <tr>
-                          <td><?= localize("Salary"); ?></td>
-                          <td class="wage-cell" data-type="salary" data-target="weekly"></td>
-                          <td class="wage-cell" data-type="salary" data-target="seasonly"></td>
-                        </tr>
-                        <tr>
-                          <td><?= localize("Abroad Bonus"); ?></td>
-                          <td class="wage-cell" data-type="salary" data-target="abroadWeekly"></td>
-                          <td class="wage-cell" data-type="salary" data-target="abroadSeasonly"></td>
-                        </tr>
-                        <tr>
-                          <td><?= localize("Age Discount"); ?></td>
-                          <td colspan=2 class="wage-cell" data-type="percent" data-target="discount" data-colorize data-direction="desc"></td>
-                        </tr>
-                        <tr class="WageWizard_Player_1_Percent">
-                          <td><?= localize("Team Impact %"); ?></td>
-                          <td colspan=2 class="wage-cell" data-type="percent" data-target="teamPercent" data-colorize data-direction="asc"></td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <div class="span6">
+                      <table class="table table-bordered table-condensed table-striped">
+                        <tbody id="WageWizard_Player_1">
+                          <tr>
+                            <th></th>
+                            <th><?= localize("Weekly"); ?></th>
+                            <th><?= localize("Seasonly"); ?></th>
+                          </tr>
+                          <tr>
+                            <td><?= localize("Salary"); ?></td>
+                            <td class="wage-cell" data-type="salary" data-target="weekly"></td>
+                            <td class="wage-cell" data-type="salary" data-target="seasonly"></td>
+                          </tr>
+                          <tr>
+                            <td><?= localize("Abroad Bonus"); ?></td>
+                            <td class="wage-cell" data-type="salary" data-target="abroadWeekly"></td>
+                            <td class="wage-cell" data-type="salary" data-target="abroadSeasonly"></td>
+                          </tr>
+                          <tr>
+                            <td><?= localize("Age Discount"); ?></td>
+                            <td colspan=2 class="wage-cell" data-type="percent" data-target="discount" data-colorize data-direction="desc"></td>
+                          </tr>
+                          <tr class="WageWizard_Player_1_Percent">
+                            <td><?= localize("Team Impact %"); ?></td>
+                            <td colspan=2 class="wage-cell" data-type="percent" data-target="teamPercent" data-colorize data-direction="asc"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="spacer"></div>
                   </div>
                 </div>
-
-                <div class="spacer"></div>
 
                 <table class="table table-bordered table-condensed table-striped">
                   <tbody>
@@ -426,6 +429,11 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                           <i class="btn-checkbox-status-icon"></i>
                           <span title="<?= localize("Abroad Bonus") ?>"><?= localize("Abroad Bonus") ?></span>
                         </label>
+                      </td>
+                      <th class="wagewizard-country hide"><?= localize("Country") ?></th>
+                      <td class="wagewizard-country hide">
+                        <select type="checkbox" name="WageWizard_Country" id="WageWizard_Country" class="refresh-table" data-id="1" data-country="<?= localize("COUNTRY_ID") ?>">
+                        </select>
                       </td>
                     </tr>
                   </tbody>

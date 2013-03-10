@@ -3,6 +3,7 @@
   "validateLang": "en",
   "flag": "us",
   "lang-name": "English (US)",
+  "COUNTRY_ID": "8",
   "TRANSLATED_BY": "<b>Lizardopoli</b> (5246225)",
 
   "Error": "",
@@ -102,6 +103,7 @@
   "Min": "",
   "Max": "",
   "Total": "",
+  "Country": "",
 
   "Calculate": "",
   "Switch players": "",
