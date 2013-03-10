@@ -27,25 +27,17 @@
 
   "Close": "Chiudi",
   "Help": "Aiuto",
-  "Check %s if you need an estimation of stamina sub-levels.": "Visita %s se hai bisogno di una stima sui decimali della resistenza.",
 
   "Settings": "Impostazioni",
-  "Only calculate the second half": "Considera solo il secondo tempo",
   "Show charts": "Mostra grafici",
   "Show contributions table": "Mostra la tabella dei contributi",
-  "Pressing": "",
-  "Advanced strength calculation": "Calcolo avanzato della forza",
-  "Predictions Type": "Tipo di predizioni",
 
   "CHPP Mode": "Modalità CHPP",
   "Unauthorized": "Non autenticata",
   "Loading...": "Caricamento...",
   "Refresh data": "Aggiorna dati",
 
-  "Players Info": "Informazioni sui giocatori",
   "Player": "Giocatore",
-  "Player 1": "Titolare",
-  "Player 2": "Riserva",
   "Sort by": "Ordina per",
   "Shirt Number": "Numero maglia",
   "Name": "Nome",
@@ -134,8 +126,6 @@
   "Forward (TW)": "Attaccante (Verso l'ala)",
 
   "Charts": "Grafici",
-  "Total Contribution": "",
-  "Partial Contributions": "",
 
   "Extra": "",
   "Age Discount Calculation": "Calcolo Sconto Età",

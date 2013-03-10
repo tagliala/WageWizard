@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, MAP_HATTRICK_SKILLS, OPTION_FORM_ID, TABLE_ID, WageWizard, checkIframe, checkMotherClubBonus, colorizePercent, createAlert, createCountryDropbox, createPlayerFromForm, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillDataField, fillForm, fillTeamWageTable, formSerialize, format, getWageInUserCurrency, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, rateToString, refreshTable, resetAndHideTabs, salaryToString, scrollUpToResults, setDescriptionFields, setDiscountedSalary, setPlayerFormFields, setPlayerWageTable, setTableFields, setupCHPPPlayerFields, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, MAP_HATTRICK_SKILLS, OPTION_FORM_ID, TABLE_ID, WageWizard, checkIframe, checkMotherClubBonus, colorizePercent, createAlert, createCountryDropbox, createPlayerFromForm, disableCHPPMode, enableCHPPMode, fillDataField, fillForm, fillTeamWageTable, formSerialize, format, getWageInUserCurrency, gup, isChartsEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, rateToString, refreshTable, resetAndHideTabs, salaryToString, scrollUpToResults, setDescriptionFields, setDiscountedSalary, setPlayerFormFields, setPlayerWageTable, setTableFields, setupCHPPPlayerFields, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields;
 
   window.WageWizard = window.WageWizard || {};
 
@@ -88,61 +88,6 @@
     return source;
   };
 
-  createSubstitutionAlert = function(substituteAtArray, mayNotReplace) {
-    var body, check_with, l, minute, r, range, ranges, result, title, _i, _j, _len, _len1;
-    ranges = [];
-    r = 0;
-    for (_i = 0, _len = substituteAtArray.length; _i < _len; _i++) {
-      minute = substituteAtArray[_i];
-      if (!ranges[r]) {
-        ranges[r] = [];
-        ranges[r].push(minute);
-        check_with = minute + 1;
-      } else if (minute !== check_with) {
-        if (ranges[r][ranges[r].length - 1] !== check_with - 1) {
-          ranges[r].push(check_with - 1);
-        }
-        r++;
-        _i--;
-      } else if (minute === check_with) {
-        check_with = minute + 1;
-      }
-      if (_i === _len - 1) {
-        l = ranges[r].length - 1;
-        if (ranges[r][l] !== minute) {
-          ranges[r].push(minute);
-        }
-      }
-    }
-    result = [];
-    for (_j = 0, _len1 = ranges.length; _j < _len1; _j++) {
-      range = ranges[_j];
-      result.push(range.join("-"));
-    }
-    title = "";
-    body = "";
-    if (substituteAtArray.length > 0) {
-      title = "";
-      if (substituteAtArray.length === 1) {
-        title += "" + WageWizard.messages.replace + " " + WageWizard.messages.at_minute;
-      } else {
-        title += "" + WageWizard.messages.replace + " " + WageWizard.messages.at_minutes;
-      }
-      body = "<span class=\"minutes\">" + (result.join(", ")) + "</span>";
-      if (mayNotReplace) {
-        body += "" + WageWizard.messages.may_not_replace;
-      }
-    } else {
-      title = WageWizard.messages.do_not_replace;
-    }
-    $('#AlertsContainer').append(createAlert({
-      "id": "formSubstituteAt",
-      "type": "success",
-      "title": title,
-      "body": body
-    }));
-  };
-
   resetAndHideTabs = function() {
     $("#tabChartsNav").hide();
     $("#tabContributionsNav").hide();
@@ -164,10 +109,6 @@
   AUTOSTART = WageWizard.CONFIG.AUTOSTART;
 
   WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_HO;
-
-  $('.dropdown-menu').find('form').click(function(e) {
-    return e.stopPropagation();
-  });
 
   checkIframe = function() {
     if (top.location !== self.location) {
@@ -220,59 +161,8 @@
       }
     },
     submitHandler: function(form) {
-      var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
-      $("#calculate").addClass('disabled');
-      resetAndHideTabs();
-      $("#AlertsContainer").html("");
-      result = WageWizard.Engine.start();
-      warnings_list = "";
-      if (result.player2_stronger_than_player1) {
-        warnings_list += "<li>" + WageWizard.messages.player2_stronger_than_player1 + "</li>";
-      }
-      if (result.player1_low_stamina_se_risk) {
-        warnings_list += "<li>" + (WageWizard.messages.player1_low_stamina_se(result.player1_low_stamina_se)) + "</li>";
-      }
-      if (result.player2_low_stamina_se_risk) {
-        warnings_list += "<li>" + (WageWizard.messages.player2_low_stamina_se(result.player2_low_stamina_se)) + "</li>";
-      }
-      if (result.bestInFirstHalf && isOnlySecondHalfEnabled()) {
-        warnings_list += "<li>" + WageWizard.messages.best_in_first_half + "</li>";
-      }
-      if (warnings_list !== "") {
-        $('#AlertsContainer').append(createAlert({
-          "id": "formWarnings",
-          "type": "warning",
-          "title": WageWizard.messages.status_warning,
-          "body": "<ul>" + warnings_list + "</ul>"
-        }));
-      }
-      if (isVerboseModeEnabled()) {
-        tempHTML = "<h3 class=\"legend-like\">" + WageWizard.messages.strength_table + "</h3>\n<table class=\"table table-striped table-condensed table-staminia table-staminia-strength width-auto\">\n  <thead>\n    <tr>\n      <th></th><th>" + WageWizard.messages.player1 + "</th><th>" + WageWizard.messages.player2 + "</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>" + WageWizard.messages.strength + "</td>\n      <td>" + (number_format(result.player1Strength, 2)) + "</td>\n      <td>" + (number_format(result.player2Strength, 2)) + "</td>\n    </tr>\n    <tr>\n      <td>" + WageWizard.messages.strength_st_independent + "</td>\n      <td>" + (number_format(result.player1StrengthStaminaIndependent, 2)) + "</td>\n      <td>" + (number_format(result.player2StrengthStaminaIndependent, 2)) + "</td>\n    </tr>\n  </tbody>\n</table>\n<p><small>" + WageWizard.messages.used_in_calculation + "</small></p>";
-        $("#tabContributions").append(tempHTML);
-        tableHeader = "<thead>\n  <tr>\n    <th class=\"min-width\">" + WageWizard.messages.substitution_minute + "</th>\n    <th>" + WageWizard.messages.total_contribution + "</th>\n    <th>" + WageWizard.messages.contribution_percent + "</th>\n    <th>" + WageWizard.messages.p1_contrib + "</th>\n    <th>" + WageWizard.messages.p2_contrib + "</th>\n    <th>" + WageWizard.messages.notes + "</th>\n  </tr>\n</thead>";
-        tableSeparator = "<tr><td colspan='6'></td></tr>";
-        tempHTML = "<h3 class=\"legend-like\">" + WageWizard.messages.contribution_table + "</h3>\n<table class=\"table table-striped table-condensed table-staminia table-staminia-contributions\">\n  " + tableHeader + "\n  <tbody>";
-        player1LowStamina = String(result.player1_low_stamina_se);
-        player2LowStamina = String(result.player2_low_stamina_se);
-        for (minute in result.minutes) {
-          minuteObject = result.minutes[minute];
-          totalContribution = minuteObject.total;
-          percentContribution = minuteObject.percent;
-          p1Contribution = minuteObject.p1;
-          p2Contribution = minuteObject.p2;
-          isMax = minuteObject.isMax;
-          isMin = minuteObject.isMin;
-          if (minute === "46") {
-            tempHTML += tableHeader;
-          }
-          note = (isMax ? "MAX" : (isMin ? "MIN" : (100 - percentContribution < 1 ? "~ 1%" : ""))) + (minute === player1LowStamina ? " " + WageWizard.messages.p1_low_stamina : "") + (minute === player2LowStamina ? " " + WageWizard.messages.p2_low_stamina : "");
-          css_classes = (isMax ? " max" : "") + (isMin ? " min" : "");
-          tempHTML += "<tr class=\"" + css_classes + "\">\n  <td>" + minute + "</td>\n  <td>" + totalContribution + "</td>\n  <td>" + percentContribution + "%</td>\n  <td>" + p1Contribution + "</td>\n  <td>" + p2Contribution + "</td>\n  <td>" + note + "</td>\n</tr>";
-        }
-        tempHTML += "</tbody></table>";
-        $("#tabContributions").append(tempHTML);
-        $("#tabContributionsNav").show();
-      }
+      var dataset, plot_options;
+      return;
       if (isChartsEnabled()) {
         plot_options = $.extend(true, {}, WageWizard.CONFIG.PLOT_OPTIONS);
         $.extend(true, plot_options, {
@@ -333,7 +223,6 @@
         document.plot2 = $.plot($('#chartPartials'), dataset, plot_options);
         $("#tabChartsNav").show();
       }
-      createSubstitutionAlert((isOnlySecondHalfEnabled() ? result.substituteAtSecondHalf : result.substituteAt), result.mayNotReplace);
       if (isChartsEnabled()) {
         $("#tabChartsNav").find("a").tab("show");
         setTimeout(function() {
@@ -342,6 +231,11 @@
         }, 500);
       } else if (isVerboseModeEnabled()) {
         $("#tabContributionsNav").find("a").tab("show");
+      }
+      if (WageWizard.CONFIG.DEBUG_STEP) {
+        printContributionTable();
+        $("#tabDebugNav").show();
+        $("#tabDebugNav").find("a").tab("show");
       }
       scrollUpToResults();
       $("#calculate").removeClass('disabled');
@@ -420,42 +314,12 @@
     return "<div class=\"alert alert-block alert-" + params.type + " fade in\" id=\"" + params.id + "\">\n  <button class=\"close\" data-dismiss=\"alert\" type=\"button\">&times;</button>\n  <h4 class=\"alert-heading\">" + params.title + "</h4>\n  <p id=\"" + params.id + "Body\">" + params.body + "</p>\n</div>";
   };
 
-  enableAdvancedMode = function() {
-    $("#WageWizard_Options_AdvancedMode_Predictions").find(".btn").prop('disabled', false);
-    $("" + TABLE_ID + " tr[class~='simple']").addClass("hide").hide();
-    $("" + FORM_ID + " *[name*=_]").addClass("ignore");
-    $("" + TABLE_ID + " tr[class~=advanced]:not([id*=_Advanced_])").removeClass("hide").show();
-    $("#WageWizard_Options_Predictions_Type").slideDown();
-    showSkillsByPosition();
-  };
-
-  disableAdvancedMode = function() {
-    $("#WageWizard_Options_AdvancedMode_Predictions").find(".btn").prop('disabled', false);
-    $("" + TABLE_ID + " tr[class~='advanced']").addClass("hide").hide();
-    $("" + FORM_ID + " *[name*=_Advanced_]").addClass("ignore");
-    $("" + FORM_ID + " *[name*=_]").removeClass("ignore");
-    $("" + TABLE_ID + " tr[class~='simple']").removeClass("hide").show();
-    $("#WageWizard_Options_Predictions_Type").slideUp();
-  };
-
-  isOnlySecondHalfEnabled = function() {
-    return $("#WageWizard_Options_OnlySecondHalf").prop('checked');
-  };
-
   isChartsEnabled = function() {
     return $("#WageWizard_Options_Charts").prop('checked');
   };
 
   isVerboseModeEnabled = function() {
     return $("#WageWizard_Options_VerboseMode").prop('checked');
-  };
-
-  isPressingEnabled = function() {
-    return $("#WageWizard_Options_Pressing").prop('checked');
-  };
-
-  isAdvancedModeEnabled = function() {
-    return $("#WageWizard_Options_AdvancedMode").prop('checked');
   };
 
   enableCHPPMode = function() {
@@ -486,13 +350,7 @@
           $field.val(params[i]);
       }
     }
-    if (isAdvancedModeEnabled()) {
-      enableAdvancedMode();
-    } else {
-      disableAdvancedMode();
-    }
     checkMotherClubBonus();
-    updatePredictions();
   };
 
   checkMotherClubBonus = function() {
@@ -502,15 +360,6 @@
       playerId = _ref[_i];
       status = $("input[name=WageWizard_Player_" + playerId + "_MotherClubBonus]").prop('checked');
       $("select[name=WageWizard_Player_" + playerId + "_Loyalty]").prop('disabled', status);
-      $("input[name=WageWizard_Advanced_Player_" + playerId + "_Loyalty]").prop('disabled', status);
-    }
-  };
-
-  updatePredictions = function() {
-    if ($('input[name="WageWizard_Options_Predictions_Type"]:checked').val() === 'ho') {
-      WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_HO;
-    } else {
-      WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_ANDREAC;
     }
   };
 
@@ -563,77 +412,6 @@
       new WageWizard.ClippableBehavior($("#staminiaClippy")[0]);
     }
     scrollUpToResults();
-  });
-
-  $('#switchPlayers').click(function() {
-    $("" + FORM_ID + " *[name*=_Player_1_]").each(function() {
-      var $p2Field, $this, form, p1Checked, p1Disabled, p1Value, p2Field;
-      form = $(FORM_ID)[0];
-      p2Field = form[this.name.replace('_1', '_2')];
-      $this = $(this);
-      $p2Field = $(p2Field);
-      p1Value = this.value;
-      p1Disabled = $this.prop('disabled');
-      p1Checked = $this.prop('checked');
-      $this.val($p2Field.val());
-      $this.prop('disabled', $p2Field.prop('disabled'));
-      $this.prop('checked', $p2Field.prop('checked'));
-      $p2Field.val(p1Value);
-      $p2Field.prop('disabled', p1Disabled);
-      return $p2Field.prop('checked', p1Checked);
-    });
-    checkMotherClubBonus();
-    $('.control-group').removeClass('error');
-    $(FORM_ID).validate().form();
-  });
-
-  $('#WageWizard_Options_AdvancedMode').on('change', function(e) {
-    if ($(this).prop('checked')) {
-      enableAdvancedMode();
-    } else {
-      disableAdvancedMode();
-    }
-  });
-
-  $('.motherclub-bonus-checkbox').on('change', function(e) {
-    checkMotherClubBonus();
-  });
-
-  $('input[name="WageWizard_Options_Predictions_Type"]').on('change', function(e) {
-    return updatePredictions();
-  });
-
-  $('input[data-validate="range"], select[data-validate="range"]').each(function() {
-    return $(this).rules('add', {
-      range: [$(this).data('rangeMin'), $(this).data('rangeMax')]
-    });
-  });
-
-  $('a[data-toggle="tab"]').on('shown', function(e) {
-    if ($(e.target).attr("href") === "#tabCredits") {
-      $("#AlertsContainer").hide();
-    } else {
-      $("#AlertsContainer").show();
-    }
-    if ($(e.target).attr("href") === "#tabCharts") {
-      plot_redraw(document.plot1);
-      plot_redraw(document.plot2);
-    }
-  });
-
-  $("#resetApp").on("click", function(e) {
-    $("" + FORM_ID + ", " + OPTION_FORM_ID).each(function() {
-      if (typeof this.reset === 'function' || (typeof this.reset === 'object' && !this.reset.nodeType)) {
-        return this.reset();
-      }
-    });
-    $('.control-group').removeClass("error");
-    $("#AlertsContainer").html("");
-    resetAndHideTabs();
-    checkMotherClubBonus();
-    disableAdvancedMode();
-    setupCHPPPlayerFields();
-    return e.preventDefault();
   });
 
   $.validator.methods.range = function(value, element, param) {
@@ -784,7 +562,7 @@
     field = "PlayerNumber";
     reverse = false;
     primer = parseInt;
-    switch ($("" + FORM_ID + " select[id=CHPP_Players_SortBy]").val()) {
+    switch ($("#CHPP_Players_SortBy").val()) {
       case "ShirtNumber":
         field = "PlayerNumber";
         break;
@@ -889,20 +667,32 @@
     setPlayerFormFields(1, checkUrlParameter);
   };
 
-  $("" + FORM_ID + " select[id=CHPP_Player_1]").on('change', function() {
-    setPlayerFormFields(1);
+  $('#switchPlayers').click(function() {
+    $("" + FORM_ID + " *[name*=_Player_1_]").each(function() {
+      var $p2Field, $this, form, p1Checked, p1Disabled, p1Value, p2Field;
+      form = $(FORM_ID)[0];
+      p2Field = form[this.name.replace('_1', '_2')];
+      $this = $(this);
+      $p2Field = $(p2Field);
+      p1Value = this.value;
+      p1Disabled = $this.prop('disabled');
+      p1Checked = $this.prop('checked');
+      $this.val($p2Field.val());
+      $this.prop('disabled', $p2Field.prop('disabled'));
+      $this.prop('checked', $p2Field.prop('checked'));
+      $p2Field.val(p1Value);
+      $p2Field.prop('disabled', p1Disabled);
+      return $p2Field.prop('checked', p1Checked);
+    });
+    checkMotherClubBonus();
+    $('.control-group').removeClass('error');
+    $(FORM_ID).validate().form();
   });
 
-  $("" + FORM_ID + " select[id=CHPP_Player_2]").on('change', function() {
-    setPlayerFormFields(2);
-  });
-
-  $("" + FORM_ID + " select[id=CHPP_Players_SortBy]").on("change", function() {
-    updateCHPPPlayerFields();
-    if ($("#CHPP_Player_1 option").length >= 1) {
-      $("#CHPP_Player_1 option:eq(0)").prop('selected', true);
-      setPlayerFormFields(1);
-    }
+  $('input[data-validate="range"], select[data-validate="range"]').each(function() {
+    return $(this).rules('add', {
+      range: [$(this).data('rangeMin'), $(this).data('rangeMax')]
+    });
   });
 
   getWageInUserCurrency = function(salary) {
@@ -1088,25 +878,6 @@
     }).fadeIn("fast");
   };
 
-  previousPoint = null;
-
-  $("#chartTotal, #chartPartials").bind("plothover", function(event, pos, item) {
-    var x, y;
-    if (item) {
-      if (previousPoint === item.dataIndex) {
-        return;
-      }
-      previousPoint = item.dataIndex;
-      $("#flot-tooltip").remove();
-      x = item.datapoint[0];
-      y = item.datapoint[1].toFixed(2);
-      return showTooltip(item.pageX, item.pageY, "" + WageWizard.messages.substitution_minute + ": " + x + "<br/>" + WageWizard.messages.contribution + ": " + y);
-    } else {
-      $("#flot-tooltip").remove();
-      return previousPoint = null;
-    }
-  });
-
   setDiscountedSalary = function() {
     var input, rate;
     input = Number($("#ageDiscountCalculationSalary").val().replace(/[^\d]/g, ''));
@@ -1117,41 +888,6 @@
     rate = WageWizard.Engine.getRate($("#ageDiscountCalculation").val());
     return $("#ageDiscountCalculationDiscountedSalary").val(WageWizard.number_format((input - 250) * rate + 250, 0, '', ' '));
   };
-
-  $("#ageDiscountCalculation").on("change", function() {
-    $("#ageDiscountCalculationTarget").text(WageWizard.number_format(100 - WageWizard.Engine.getRate($(this).val()) * 100, 0));
-    return setDiscountedSalary();
-  });
-
-  $("#ageDiscountCalculationSalary").on("keyup", setDiscountedSalary);
-
-  $("#extraLink").on("click", function(e) {
-    e.preventDefault();
-    $("#tabExtraNav").find("a").tab("show");
-    $('#helpModal').modal('toggle');
-    return false;
-  });
-
-  $('a.accordion-toggle[data-toggle="collapse"]').on('click', function(e) {
-    var $target, $this;
-    $this = $(this);
-    $target = $($this.attr('href'));
-    if ($target.css('height') !== '0px') {
-      return $target.addClass('in');
-    }
-  });
-
-  WageWizard.format = format;
-
-  WageWizard.number_format = number_format;
-
-  WageWizard.isChartsEnabled = isChartsEnabled;
-
-  WageWizard.isVerboseModeEnabled = isVerboseModeEnabled;
-
-  WageWizard.isPressingEnabled = isPressingEnabled;
-
-  WageWizard.isAdvancedModeEnabled = isAdvancedModeEnabled;
 
   createPlayerFromForm = function(id) {
     var k, player, v, _ref;
@@ -1197,6 +933,114 @@
     return setTableFields(player, id);
   };
 
+  $('.dropdown-menu').find('form').click(function(e) {
+    return e.stopPropagation();
+  });
+
+  $('[data-colorize]').bind('DOMSubtreeModified', function() {
+    return colorizePercent($(this));
+  });
+
+  $('#WageWizard_Country').on('change', function() {
+    return WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()];
+  });
+
+  $('.refresh-table').on('change', function() {
+    return refreshTable($(this).data('id'));
+  });
+
+  $("#ageDiscountCalculation").on("change", function() {
+    $("#ageDiscountCalculationTarget").text(WageWizard.number_format(100 - WageWizard.Engine.getRate($(this).val()) * 100, 0));
+    return setDiscountedSalary();
+  });
+
+  $("#ageDiscountCalculationSalary").on("keyup", setDiscountedSalary);
+
+  $("#extraLink").on("click", function(e) {
+    e.preventDefault();
+    $("#tabExtraNav").find("a").tab("show");
+    $('#helpModal').modal('toggle');
+    return false;
+  });
+
+  $("select[id^=CHPP_Player_]").on('change', function() {
+    setPlayerFormFields($(this).data('id'));
+  });
+
+  $("#CHPP_Players_SortBy").on("change", function() {
+    updateCHPPPlayerFields();
+    if ($("#CHPP_Player_1 option").length >= 1) {
+      $("#CHPP_Player_1 option:eq(0)").prop('selected', true);
+      setPlayerFormFields(1);
+    }
+  });
+
+  $('a.accordion-toggle[data-toggle="collapse"]').on('click', function(e) {
+    var $target, $this;
+    $this = $(this);
+    $target = $($this.attr('href'));
+    if ($target.css('height') !== '0px') {
+      return $target.addClass('in');
+    }
+  });
+
+  previousPoint = null;
+
+  $("#chartTotal, #chartPartials").bind("plothover", function(event, pos, item) {
+    var x, y;
+    if (item) {
+      if (previousPoint === item.dataIndex) {
+        return;
+      }
+      previousPoint = item.dataIndex;
+      $("#flot-tooltip").remove();
+      x = item.datapoint[0];
+      y = item.datapoint[1].toFixed(2);
+      return showTooltip(item.pageX, item.pageY, "" + WageWizard.messages.substitution_minute + ": " + x + "<br/>" + WageWizard.messages.contribution + ": " + y);
+    } else {
+      $("#flot-tooltip").remove();
+      return previousPoint = null;
+    }
+  });
+
+  $('.motherclub-bonus-checkbox').on('change', function(e) {
+    checkMotherClubBonus();
+  });
+
+  $('a[data-toggle="tab"]').on('shown', function(e) {
+    if ($(e.target).attr("href") === "#tabCredits") {
+      $("#AlertsContainer").hide();
+    } else {
+      $("#AlertsContainer").show();
+    }
+    if ($(e.target).attr("href") === "#tabCharts") {
+      plot_redraw(document.plot1);
+      plot_redraw(document.plot2);
+    }
+  });
+
+  $("#resetApp").on("click", function(e) {
+    $("" + FORM_ID + ", " + OPTION_FORM_ID).each(function() {
+      if (typeof this.reset === 'function' || (typeof this.reset === 'object' && !this.reset.nodeType)) {
+        return this.reset();
+      }
+    });
+    $('.control-group').removeClass("error");
+    $("#AlertsContainer").html("");
+    resetAndHideTabs();
+    checkMotherClubBonus();
+    setupCHPPPlayerFields();
+    return e.preventDefault();
+  });
+
+  WageWizard.format = format;
+
+  WageWizard.number_format = number_format;
+
+  WageWizard.isChartsEnabled = isChartsEnabled;
+
+  WageWizard.isVerboseModeEnabled = isVerboseModeEnabled;
+
   $(function() {
     var hasParams;
     checkIframe();
@@ -1209,24 +1053,15 @@
     }
     $("#imgMadeInItaly").tooltip();
     if (document.startAjax) {
-      $.ajax({
+      return $.ajax({
         url: "chpp/chpp_retrievedata.php",
         cache: true
       });
     } else {
       createCountryDropbox();
       $('.wagewizard-country').show();
-      refreshTable(1);
+      return refreshTable(1);
     }
-    $('[data-colorize]').bind('DOMSubtreeModified', function() {
-      return colorizePercent($(this));
-    });
-    $('#WageWizard_Country').on('change', function() {
-      return WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()];
-    });
-    return $('.refresh-table').on('change', function() {
-      return refreshTable($(this).data('id'));
-    });
   });
 
 }).call(this);
