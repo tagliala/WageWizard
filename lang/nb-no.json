@@ -9,9 +9,9 @@
    "QUOTE": "There are things about stamina we cannot explain. For everything else, there is <b>Stamin.IA!</b>",
 
    "TITLE": "Velkommen til Stamin.IA!",
-   "SUBTITLE": "Hattricks første innbytter-kalkulator",
+   "SUBTITLE": "The Hattrick's salary assistant",
    "SHORT_HELP": "Vennligst fyll ut skjemaet og Stamin.IA! vil beregne hvilket minutt du bør foreta det planlagte byttet mellom <b>%s</b> og <b>%s</b> for å få det maksimale bidraget ut av spillerne.",
-   "LONG_HELP": "<div class=\"alert alert-block alert-error fade in\"><a href=\"#\" data-dismiss=\"alert\" class=\"close\">&times;</a><h4 class=\"alert-heading\">This guide is not updated</h4></div>Det er veldig enkelt å bruke verktøyet: fyll ut skjemaet med informasjonen som er nødvendig for <b>Spiller 1</b> (spilleren som skal starte kampen) og <b>Spiller 2</b> (spilleren som er ment å komme inn fra benken for å erstatte Spiller 1 i løpet av kampen).<br/><br/>Den <b>avanserte beregningen</b> gir mer nøyaktige resultater, da den tar høyde for alle ferdigheter og spillernes posisjon på banen. Dette valget må brukes for multiskill-spillere.<br/><br/>Etter å ha fylt ut skjemaet klikker du på <b>Beregn</b>.<br/><br/>Resultatet vil vise det riktige tidspunktet (et bestemt minutt eller intervall) når spillerbyttet bør gjennomføres for å få maksimalt bidrag ut av spillerne.<br/><br/>I tabellen under resultatene (som kun vil være synlig dersom det tilhørende valget er aktivert) vi du finne alle detaljene for utregningen: for hvert minutt av kampen vil spillernes totale bidrag bli vist, inkludert prosentvis, deres individuelle bidrag, etc.<br/><ul><li><b>MIN</b>: Minimumsbidrag</li><li><b>MAX</b>: Maksimumsbidrag</li><li><b>~ 1%</b>: Mindre enn 1% avvik fra maksimumsbidraget (nyttig om du vil bytte litt før eller etter hvis du ønsker å gi en spiller mer erfaring eller er redd for skader, uten å tape for mye bidrag samlet sett.)</li><li><b>S1 lav kondis &darr;</b>: Hvis Spiller 1 fortsatt spiller i dette minuttet (eller senere) vil han løpe en risiko for å få en negativ spesialhendelse på grunn av sin dårlige kondisjon.</li><li><b>S2 lav kondis &uarr;</b>: Hvis Spiller 2 kommer inn i dette minuttet (eller tidligere) vil han løpe en risiko for å få en negativ spesialhendelse på grunn av sin dårlige kondisjon.</li></ul><b>OBS</b>: Stamin.IA! tar ikke høyde for skader. Det bør være opplagt at skaderisikoen er proporsjonal med tiden en spiller er på banen, og det er like opplagt at skader i løpet av en kamp ikke kan forutsees. Det tas heller ikke høyde for taktikken pressing (som påvirker spillernes kondisjon).<br/>",
+   "LONG_HELP": "",
 
    "Close": "",
    "Help": "Hjelp",
@@ -104,12 +104,12 @@
    "Forward (Def+Tec)": "Spiss (TDF)",
    "Forward (TW)": "Spiss (MotV)",
 
-   "Keeper (skill)": "Målvakt",
-   "Defending (skill)": "Forsvar",
-   "Playmaking (skill)": "Ballfordeling",
-   "Winger (skill)": "Ving",
-   "Passing (skill)": "Pasninger",
-   "Scoring (skill)": "Målskåring",
+   "KeeperSkill": "Målvakt",
+   "DefenderSkill": "Forsvar",
+   "PlaymakerSkill": "Ballfordeling",
+   "WingerSkill": "Ving",
+   "PassingSkill": "Pasninger",
+   "ScorerSkill": "Målskåring",
 
    "Click \"%s\" to get results": "Klikk \"%s\" for å få resultatene",
 

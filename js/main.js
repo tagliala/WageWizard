@@ -16,7 +16,6 @@
     TABLE_ID: "#playersInfoTable",
     SEASON_WEEKS: 16,
     DEBUG: false,
-    DEBUG_STEP: 1,
     AUTOSTART: true
   }, MAP_HATTRICK_SKILLS = {
     Keeper: 'KeeperSkill',
@@ -232,7 +231,7 @@
       } else if (isVerboseModeEnabled()) {
         $("#tabContributionsNav").find("a").tab("show");
       }
-      if (WageWizard.CONFIG.DEBUG_STEP) {
+      if (WageWizard.CONFIG.DEBUG) {
         printContributionTable();
         $("#tabDebugNav").show();
         $("#tabDebugNav").find("a").tab("show");
@@ -559,68 +558,16 @@
     if (PlayersData == null) {
       return;
     }
-    field = "PlayerNumber";
-    reverse = false;
+    field = $("#CHPP_Players_SortBy").val();
+    reverse = true;
     primer = parseInt;
-    switch ($("#CHPP_Players_SortBy").val()) {
-      case "ShirtNumber":
-        field = "PlayerNumber";
+    switch (field) {
+      case "PlayerNumber":
+        reverse = false;
         break;
-      case "Name":
-        field = "PlayerName";
+      case "PlayerName":
+        reverse = false;
         primer = void 0;
-        break;
-      case "Form":
-        field = "PlayerForm";
-        reverse = true;
-        break;
-      case "TSI":
-        field = "Tsi";
-        reverse = true;
-        break;
-      case "Stamina":
-        field = "StaminaSkill";
-        reverse = true;
-        break;
-      case "Salary":
-        field = "Salary";
-        reverse = true;
-        break;
-      case "Keeper":
-        field = "KeeperSkill";
-        reverse = true;
-        break;
-      case "Playmaking":
-        field = "PlaymakerSkill";
-        reverse = true;
-        break;
-      case "Passing":
-        field = "PassingSkill";
-        reverse = true;
-        break;
-      case "Winger":
-        field = "WingerSkill";
-        reverse = true;
-        break;
-      case "Defending":
-        field = "DefenderSkill";
-        reverse = true;
-        break;
-      case "Scoring":
-        field = "ScorerSkill";
-        reverse = true;
-        break;
-      case "SetPieces":
-        field = "SetPiecesSkill";
-        reverse = true;
-        break;
-      case "Experience":
-        field = "Experience";
-        reverse = true;
-        break;
-      case "Loyalty":
-        field = "Loyalty";
-        reverse = true;
     }
     PlayersData.sort(sort_by(field, reverse, primer));
   };
@@ -769,34 +716,40 @@
   };
 
   setTableFields = function(player, id) {
-    var k, v, _ref;
+    var skill, unpredictable_skill, _i, _j, _len, _len1, _ref, _ref1;
     $("#playersInfoTable tr").removeClass('success warning');
     $("#playersInfoTable .btn-radio input").prop('disabled', true).closest('label').addClass('hide');
     $("#WageWizard_Player_" + id + "_Salary").val(player.Salary);
     $("#WageWizard_Player_" + id + "_Age").val(player.Age);
     $("#WageWizard_Player_" + id + "_Abroad").prop('checked', player.Abroad);
-    _ref = WageWizard.MAP_HATTRICK_SKILLS;
-    for (k in _ref) {
-      v = _ref[k];
-      $("#WageWizard_Player_" + id + "_" + k).val(player[v]);
-      if (k === 'Keeper' || k === 'SetPieces') {
+    _ref = WageWizard.HATTRICK_SKILLS;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      skill = _ref[_i];
+      if (!(skill !== 'SetPiecesSkill')) {
         continue;
       }
-      $("#WageWizard_Player_Min_" + id + "_" + k).text(salaryToString(player.WageWizard.Skills[k].min));
-      $("#WageWizard_Player_Max_" + id + "_" + k).text(salaryToString(player.WageWizard.Skills[k].max));
-      if (player.WageWizard.primary === k) {
-        $("#WageWizard_Primary_Player_" + id + "_" + k).closest('label').removeClass('hide');
-        $("#WageWizard_Primary_Player_" + id + "_" + k).prop('checked', true);
-        $("#WageWizard_Primary_Player_" + id + "_" + k).closest('tr').addClass('success');
+      $("#WageWizard_Player_" + id + "_" + skill).val(player[skill]);
+      $("#WageWizard_Player_Min_" + id + "_" + skill).text(salaryToString(player.WageWizard.Skills[skill].min));
+      $("#WageWizard_Player_Max_" + id + "_" + skill).text(salaryToString(player.WageWizard.Skills[skill].max));
+      if (skill === player.WageWizard.primary) {
+        $("#WageWizard_Primary_Player_" + id + "_" + skill).closest('label').removeClass('hide');
+        $("#WageWizard_Primary_Player_" + id + "_" + skill).prop('checked', true);
+        if (player.WageWizard.unpredictable_skills.length === 0) {
+          $("#WageWizard_Primary_Player_" + id + "_" + skill).closest('tr').addClass('success');
+        } else {
+          $("#WageWizard_Primary_Player_" + id + "_" + skill).closest('tr').addClass('warning');
+        }
       }
     }
-    for (k in player.WageWizard.unpredictable_skills) {
-      $("#WageWizard_Primary_Player_" + id + "_" + k).closest('label').removeClass('hide');
-      $("#WageWizard_Primary_Player_" + id + "_" + k).prop('disabled', false);
-      $("#WageWizard_Primary_Player_" + id + "_" + k).closest('tr').addClass('warning');
+    _ref1 = player.WageWizard.unpredictable_skills;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      unpredictable_skill = _ref1[_j];
+      $("#WageWizard_Primary_Player_" + id + "_" + unpredictable_skill).closest('label').removeClass('hide');
+      $("#WageWizard_Primary_Player_" + id + "_" + unpredictable_skill).prop('disabled', false);
+      $("#WageWizard_Primary_Player_" + id + "_" + unpredictable_skill).closest('tr').addClass('warning');
     }
-    $("#WageWizard_Player_Min_" + id + "_SetPieces").text(rateToString(player.WageWizard.Skills['SetPieces'].min));
-    $("#WageWizard_Player_Max_" + id + "_SetPieces").text(rateToString(player.WageWizard.Skills['SetPieces'].max));
+    $("#WageWizard_Player_Min_" + id + "_SetPiecesSkill").text(rateToString(player.WageWizard.Skills['SetPiecesSkill'].min));
+    $("#WageWizard_Player_Max_" + id + "_SetPiecesSkill").text(rateToString(player.WageWizard.Skills['SetPiecesSkill'].max));
     $("#WageWizard_Player_" + id + "_Min").text(salaryToString(player.WageWizard.min));
     return $("#WageWizard_Player_" + id + "_Max").text(salaryToString(player.WageWizard.max));
   };
@@ -890,16 +843,16 @@
   };
 
   createPlayerFromForm = function(id) {
-    var k, player, v, _ref;
+    var player, skill, _i, _len, _ref;
     player = {
       Age: $("#WageWizard_Player_" + id + "_Age").val(),
       Abroad: $("#WageWizard_Player_" + id + "_Abroad").prop('checked'),
       Salary: $("#WageWizard_Player_" + id + "_Salary").val()
     };
-    _ref = WageWizard.MAP_HATTRICK_SKILLS;
-    for (k in _ref) {
-      v = _ref[k];
-      player[v] = $("#WageWizard_Player_" + id + "_" + k).val();
+    _ref = WageWizard.HATTRICK_SKILLS;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      skill = _ref[_i];
+      player[skill] = $("#WageWizard_Player_" + id + "_" + skill).val();
     }
     WageWizard.Engine.setPlayerData(player, $("input[name=WageWizard_Primary_Player_" + id + "]:checked").val());
     return player;

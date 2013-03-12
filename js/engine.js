@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var BASE_SALARY, PR_ENUM_ROLE, SKILL_VALIDATION, VERSION, WEEKS, WageWizard, applySecondaryDiscounts, getPlayerBonus, getRate, getSalaryComponents, getSetPiecesMultipliers, setData, setMinAndMaxSalary, setPlayerData, setPlayerSkills, setPrimarySkill, validateSkill;
+  var BASE_SALARY, PR_ENUM_ROLE, SKILL_VALIDATION, VERSION, WEEKS, WageWizard, applySecondaryDiscounts, getKeeperComponents, getPlayerBonus, getRate, getSalaryComponents, getSetPiecesMultipliers, setData, setKeeperSkill, setMinAndMaxSalary, setPlayerData, setPlayerSkills, setPrimarySkill, setSetPiecesSkill, validateSkill;
 
   window.WageWizard = window.WageWizard || {};
 
@@ -109,6 +109,10 @@
     return [1 + 0.0026 * Math.max(0, level - 1), 1 + 0.0026 * Math.max(0, level - 0.01)];
   };
 
+  getKeeperComponents = function(level) {
+    return [WageWizard.KEEPER_FORMULA[Math.max(0, level - 1)] * 10 - 2500, WageWizard.KEEPER_FORMULA[Math.max(0, level)] * 10 - 2500];
+  };
+
   getSalaryComponents = function(skill, level) {
     var formula, salary_component_high, salary_component_low;
     formula = WageWizard.FORMULAE[skill];
@@ -127,76 +131,90 @@
   };
 
   setMinAndMaxSalary = function(player) {
-    var k, max, min;
+    var max, min, skill;
     min = 0;
     max = 0;
-    for (k in player.WageWizard.Skills) {
-      min += player.WageWizard.Skills[k].min;
-      max += player.WageWizard.Skills[k].max;
+    for (skill in player.WageWizard.Skills) {
+      min += player.WageWizard.Skills[skill].min;
+      max += player.WageWizard.Skills[skill].max;
     }
-    player.WageWizard.min = BASE_SALARY + min * player.WageWizard.Skills['SetPieces'].min;
-    player.WageWizard.max = BASE_SALARY + max * player.WageWizard.Skills['SetPieces'].max;
+    player.WageWizard.min = BASE_SALARY + min * player.WageWizard.Skills['SetPiecesSkill'].min;
+    player.WageWizard.max = BASE_SALARY + max * player.WageWizard.Skills['SetPiecesSkill'].max;
   };
 
   applySecondaryDiscounts = function(player) {
-    var formula, k, primary, v, _ref;
+    var formula, primary, skill, _i, _len, _ref;
     primary = player.WageWizard.primary;
-    _ref = WageWizard.MAP_HATTRICK_SKILLS;
-    for (k in _ref) {
-      v = _ref[k];
-      if (k === 'Keeper' || k === 'SetPieces' || k === primary) {
+    _ref = WageWizard.HATTRICK_SKILLS;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      skill = _ref[_i];
+      if (!(skill !== 'SetPiecesSkill' && skill !== primary)) {
         continue;
       }
-      formula = WageWizard.FORMULAE[k];
-      player.WageWizard.Skills[k].min = player.WageWizard.Skills[k].min * formula.c;
-      player.WageWizard.Skills[k].max = player.WageWizard.Skills[k].max * formula.c;
+      formula = WageWizard.FORMULAE[skill];
+      player.WageWizard.Skills[skill].min *= WageWizard.DISCOUNT_RATE;
+      player.WageWizard.Skills[skill].max *= WageWizard.DISCOUNT_RATE;
     }
   };
 
   setPrimarySkill = function(player) {
-    var k, max, min, primary, v, _ref;
-    player.WageWizard.unpredictable_skills = {};
-    min = Infinity;
-    max = -Infinity;
+    var maximum_min, primary, skill, _i, _j, _len, _len1, _ref, _ref1;
+    player.WageWizard.unpredictable_skills = [];
+    maximum_min = -Infinity;
     primary = '';
-    _ref = WageWizard.MAP_HATTRICK_SKILLS;
-    for (k in _ref) {
-      v = _ref[k];
-      if (k === 'Keeper' || k === 'SetPieces') {
-        continue;
-      }
-      if (player.WageWizard.Skills[k].min > max) {
-        player.WageWizard.primary = k;
-        player.WageWizard.unpredictable_skills = {};
-        min = player.WageWizard.Skills[k].min;
-        max = player.WageWizard.Skills[k].max;
-        primary = k;
-      } else if (player.WageWizard.Skills[k].max >= min) {
-        player.WageWizard.unpredictable_skills[primary] = true;
-        player.WageWizard.unpredictable_skills[k] = true;
-        primary = '';
+    _ref = WageWizard.HATTRICK_SKILLS;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      skill = _ref[_i];
+      if (skill !== 'SetPiecesSkill') {
+        if (player.WageWizard.Skills[skill].min > maximum_min) {
+          maximum_min = player.WageWizard.Skills[skill].min;
+          primary = skill;
+        }
       }
     }
+    _ref1 = WageWizard.HATTRICK_SKILLS;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      skill = _ref1[_j];
+      if (skill !== 'SetPiecesSkill' && skill !== primary) {
+        if (player.WageWizard.Skills[skill].max >= maximum_min) {
+          player.WageWizard.unpredictable_skills.push(skill);
+        }
+      }
+    }
+    if (player.WageWizard.unpredictable_skills.length !== 0) {
+      player.WageWizard.unpredictable_skills.push(primary);
+    }
+    player.WageWizard.primary = primary;
+  };
+
+  setKeeperSkill = function(player) {
+    var abroad_multiplier, keeperComponents;
+    player.WageWizard.Skills['KeeperSkill'] = {};
+    abroad_multiplier = player.Abroad ? 1.2 : 1;
+    keeperComponents = getKeeperComponents(player.KeeperSkill);
+    player.WageWizard.Skills['KeeperSkill'].min = keeperComponents[0] * abroad_multiplier;
+    player.WageWizard.Skills['KeeperSkill'].max = keeperComponents[1] * abroad_multiplier;
+  };
+
+  setSetPiecesSkill = function(player) {
+    var setPiecesMultipliers;
+    player.WageWizard.Skills['SetPiecesSkill'] = {};
+    setPiecesMultipliers = getSetPiecesMultipliers(player.SetPiecesSkill);
+    player.WageWizard.Skills['SetPiecesSkill'].min = setPiecesMultipliers[0];
+    player.WageWizard.Skills['SetPiecesSkill'].max = setPiecesMultipliers[1];
   };
 
   setPlayerSkills = function(player) {
-    var abroad_multiplier, k, salaryComponents, setPiecesMultipliers, v, _ref;
+    var abroad_multiplier, salaryComponents, skill;
     player.WageWizard.Skills = {};
-    player.WageWizard.Skills['SetPieces'] = {};
     abroad_multiplier = player.Abroad ? 1.2 : 1;
-    setPiecesMultipliers = getSetPiecesMultipliers(player.SetPiecesSkill);
-    player.WageWizard.Skills['SetPieces'].min = setPiecesMultipliers[0];
-    player.WageWizard.Skills['SetPieces'].max = setPiecesMultipliers[1];
-    _ref = WageWizard.MAP_HATTRICK_SKILLS;
-    for (k in _ref) {
-      v = _ref[k];
-      if (k === 'Keeper' || k === 'SetPieces') {
-        continue;
-      }
-      player.WageWizard.Skills[k] = {};
-      salaryComponents = getSalaryComponents(k, player[v]);
-      player.WageWizard.Skills[k].min = salaryComponents[0] * player.WageWizard.rate * abroad_multiplier;
-      player.WageWizard.Skills[k].max = salaryComponents[1] * player.WageWizard.rate * abroad_multiplier;
+    setKeeperSkill(player);
+    setSetPiecesSkill(player);
+    for (skill in WageWizard.FORMULAE) {
+      player.WageWizard.Skills[skill] = {};
+      salaryComponents = getSalaryComponents(skill, player[skill]);
+      player.WageWizard.Skills[skill].min = salaryComponents[0] * player.WageWizard.rate * abroad_multiplier;
+      player.WageWizard.Skills[skill].max = salaryComponents[1] * player.WageWizard.rate * abroad_multiplier;
     }
   };
 
@@ -217,12 +235,10 @@
     player.WageWizard.abroadSeasonly = player.Abroad ? player.WageWizard.abroadWeekly * WEEKS : 0;
     setPlayerSkills(player);
     setPrimarySkill(player);
-    if (overridePrimary && (player.WageWizard.unpredictable_skills[overridePrimary] != null)) {
+    if (overridePrimary && player.WageWizard.unpredictable_skills.indexOf(overridePrimary) >= 0) {
       player.WageWizard.primary = overridePrimary;
     }
-    if (player.WageWizard.primary !== '') {
-      applySecondaryDiscounts(player);
-    }
+    applySecondaryDiscounts(player);
     setMinAndMaxSalary(player);
   };
 
