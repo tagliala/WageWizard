@@ -41,16 +41,15 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   return $result;
 }
 
-function skillRow($player = 1, $skill = 'Keeper', $isSkill = true, $class="wage-cell", $start = 0, $stop = 20, $select = 6) {
-  $skillWithoutSpaces = str_replace(" ", "", $skill);
-  $localizedSkill = ($isSkill ? localize("$skill (skill)") : localize($skill));
+function skillRow($player, $skill, $couldBePrimarySkill = true, $class="wage-cell", $start = 0, $stop = 20, $select = 6) {
+  $localizedSkill = localize($skill);
   $localizedPlayer = localize("Player $player");
   $options = optionSkills($start, $stop, $select);
   $primary = '';
-  if ($isSkill && $skill != 'Keeper' && $skill != 'Set Pieces') {
+  if ($couldBePrimarySkill) {
     $primary =
       '<label class="btn-radio hide">
-         <input type="radio" name="WageWizard_Primary_Player_' . $player. '" value="' . $skill . '" id="WageWizard_Primary_Player_' . $player . '_' . $skillWithoutSpaces . '" disabled class="refresh-table" data-id="' . $player . '">
+         <input type="radio" name="WageWizard_Primary_Player_' . $player. '" value="' . $skill . '" id="WageWizard_Primary_Player_' . $player . '_' . $skill . '" disabled class="refresh-table" data-id="' . $player . '">
          <i class="btn-radio-status-icon"></i>
        </label>';
   }
@@ -62,19 +61,19 @@ function skillRow($player = 1, $skill = 'Keeper', $isSkill = true, $class="wage-
       <td>
         <div class="control-group">
           <span class="field-caption">' . $localizedSkill . '</span>
-          <select id="WageWizard_Player_' . $player . '_' . $skillWithoutSpaces . '" name="WageWizard_Player_' . $player . '_' . $skillWithoutSpaces . '" data-validate="range" data-range-min="' . $start . '" data-range-max="' . $stop . '" data-field-name="' . $localizedPlayer . ' ' . $localizedSkill . '" class="refresh-table" data-id="' . $player . '">
+          <select id="WageWizard_Player_' . $player . '_' . $skill . '" name="WageWizard_Player_' . $player . '_' . $skill . '" data-validate="range" data-range-min="' . $start . '" data-range-max="' . $stop . '" data-field-name="' . $localizedPlayer . ' ' . $localizedSkill . '" class="refresh-table" data-id="' . $player . '">
             ' . $options . '
           </select>
         </div>
       </td>
-      <td id="WageWizard_Player_Min_' . $player . '_' . $skillWithoutSpaces . '" class="WageWizard_Player_Min_' . $player . ' ' . $class . '">
+      <td id="WageWizard_Player_Min_' . $player . '_' . $skill . '" class="' . $class . '">
       </td>
-      <td id="WageWizard_Player_Max_' . $player . '_' . $skillWithoutSpaces . '" class="WageWizard_Player_Max_' . $player . ' ' . $class . '">
+      <td id="WageWizard_Player_Max_' . $player . '_' . $skill . '" class="' . $class . '">
       </td>
     </tr>';
 }
 ?>
-<?php $WageWizard_version = "13.03.10b" ?>
+<?php $WageWizard_version = "13.03.13" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -337,22 +336,22 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <select class="ignore span8" id="CHPP_Player_1" name="CHPP_Player_1_Name" data-id="1">
                     </select>
                     <select class="ignore span4" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
-                      <option value="ShirtNumber"><?php echo localize("Shirt Number"); ?></option>
-                      <option value="Name"><?php echo localize("Name"); ?></option>
+                      <option value="PlayerNumber"><?php echo localize("Shirt Number"); ?></option>
+                      <option value="PlayerName"><?php echo localize("Name"); ?></option>
                       <option value="Salary"><?php echo localize("Salary"); ?></option>
-                      <option value="TSI"><?php echo localize("TSI"); ?></option>
-                      <option value="Form"><?php echo localize("Form"); ?></option>
-                      <option value="Stamina"><?php echo localize("Stamina"); ?></option>
+                      <option value="Tsi"><?php echo localize("TSI"); ?></option>
+                      <option value="PlayerForm"><?php echo localize("Form"); ?></option>
+                      <option value="StaminaSkill"><?php echo localize("Stamina"); ?></option>
                       <option value="Experience"><?php echo localize("Experience"); ?></option>
                       <option value="Loyalty"><?php echo localize("Loyalty"); ?></option>
                       <optgroup label="<?= localize("Skill"); ?>">
-                        <option value="Keeper"><?php echo localize("Keeper (skill)"); ?></option>
-                        <option value="Playmaking"><?php echo localize("Playmaking (skill)"); ?></option>
-                        <option value="Passing"><?php echo localize("Passing (skill)"); ?></option>
-                        <option value="Winger"><?php echo localize("Winger (skill)"); ?></option>
-                        <option value="Defending"><?php echo localize("Defending (skill)"); ?></option>
-                        <option value="Scoring"><?php echo localize("Scoring (skill)"); ?></option>
-                        <option value="SetPieces"><?php echo localize("Set Pieces (skill)"); ?></option>
+                        <option value="KeeperSkill"><?php echo localize("KeeperSkill"); ?></option>
+                        <option value="PlaymakerSkill"><?php echo localize("PlaymakerSkill"); ?></option>
+                        <option value="PassingSkill"><?php echo localize("PassingSkill"); ?></option>
+                        <option value="WingerSkill"><?php echo localize("WingerSkill"); ?></option>
+                        <option value="DefenderSkill"><?php echo localize("DefenderSkill"); ?></option>
+                        <option value="ScorerSkill"><?php echo localize("ScorerSkill"); ?></option>
+                        <option value="SetPiecesSkill"><?php echo localize("SetPiecesSkill"); ?></option>
                       </optgroup>
                     </select>
                   </div> <!-- CHPP Controls End -->
@@ -462,15 +461,17 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       </td>
                     </tr>
                     -->
-                    <? skillRow(1, 'Keeper') ?>
-                    <? skillRow(1, 'Defending') ?>
-                    <? skillRow(1, 'Playmaking') ?>
-                    <? skillRow(1, 'Winger') ?>
-                    <? skillRow(1, 'Passing') ?>
-                    <? skillRow(1, 'Scoring') ?>
-                    <? skillRow(1, 'Set Pieces', true, "wage-percent") ?>
-                    <tr>
-                      <th colspan="3" class="superheader text-right"><?= localize("Total") ?></th>
+                    <? skillRow(1, 'KeeperSkill') ?>
+                    <? skillRow(1, 'DefenderSkill') ?>
+                    <? skillRow(1, 'PlaymakerSkill') ?>
+                    <? skillRow(1, 'WingerSkill') ?>
+                    <? skillRow(1, 'PassingSkill') ?>
+                    <? skillRow(1, 'ScorerSkill') ?>
+                    <? skillRow(1, 'SetPiecesSkill', false, 'wage-percent') ?>
+                    <tr class="table-total">
+                      <td></td>
+                      <td></td>
+                      <th class="superheader text-right"><?= localize("Total") ?></th>
                       <td id="WageWizard_Player_1_Min" class="wage-cell"></td>
                       <td id="WageWizard_Player_1_Max" class="wage-cell"></td>
                     </tr>

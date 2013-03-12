@@ -8,7 +8,6 @@ $.extend WageWizard.CONFIG,
   TABLE_ID: "#playersInfoTable"
   SEASON_WEEKS: 16
   DEBUG: false
-  DEBUG_STEP: 1
   AUTOSTART: true
   MAP_HATTRICK_SKILLS =
     Keeper: 'KeeperSkill'
@@ -176,7 +175,7 @@ $(FORM_ID).validate({
     else if isVerboseModeEnabled()
       $("#tabContributionsNav").find("a").tab "show"
 
-    if WageWizard.CONFIG.DEBUG_STEP
+    if WageWizard.CONFIG.DEBUG
       printContributionTable()
       $("#tabDebugNav").show()
       $("#tabDebugNav").find("a").tab "show"
@@ -448,55 +447,16 @@ sortCHPPPlayerFields = ->
   PlayersData = WageWizard.PlayersData
   return unless PlayersData?
 
-  field = "PlayerNumber"
-  reverse = false
+  field = $("#CHPP_Players_SortBy").val()
+  reverse = true
   primer = parseInt
 
-  switch $("#CHPP_Players_SortBy").val()
-    when "ShirtNumber"
-      field = "PlayerNumber"
-    when "Name"
-      field = "PlayerName"
+  switch field
+    when "PlayerNumber"
+      reverse = false
+    when "PlayerName"
+      reverse = false
       primer = undefined
-    when "Form"
-      field = "PlayerForm"
-      reverse = true
-    when "TSI"
-      field = "Tsi"
-      reverse = true
-    when "Stamina"
-      field = "StaminaSkill"
-      reverse = true
-    when "Salary"
-      field = "Salary"
-      reverse = true
-    when "Keeper"
-      field = "KeeperSkill"
-      reverse = true
-    when "Playmaking"
-      field = "PlaymakerSkill"
-      reverse = true
-    when "Passing"
-      field = "PassingSkill"
-      reverse = true
-    when "Winger"
-      field = "WingerSkill"
-      reverse = true
-    when "Defending"
-      field = "DefenderSkill"
-      reverse = true
-    when "Scoring"
-      field = "ScorerSkill"
-      reverse = true
-    when "SetPieces"
-      field = "SetPiecesSkill"
-      reverse = true
-    when "Experience"
-      field = "Experience"
-      reverse = true
-    when "Loyalty"
-      field = "Loyalty"
-      reverse = true
 
   PlayersData.sort sort_by(field, reverse, primer)
 
@@ -628,23 +588,25 @@ setTableFields = (player, id) ->
   $("#WageWizard_Player_#{id}_Age").val player.Age
   $("#WageWizard_Player_#{id}_Abroad").prop 'checked', player.Abroad
 
-  for k, v of WageWizard.MAP_HATTRICK_SKILLS
-    $("#WageWizard_Player_#{id}_#{k}").val player[v]
-    continue if k is 'Keeper' or k is 'SetPieces'
-    $("#WageWizard_Player_Min_#{id}_#{k}").text salaryToString(player.WageWizard.Skills[k].min)
-    $("#WageWizard_Player_Max_#{id}_#{k}").text salaryToString(player.WageWizard.Skills[k].max)
-    if player.WageWizard.primary is k
-      $("#WageWizard_Primary_Player_#{id}_#{k}").closest('label').removeClass 'hide'
-      $("#WageWizard_Primary_Player_#{id}_#{k}").prop 'checked', true
-      $("#WageWizard_Primary_Player_#{id}_#{k}").closest('tr').addClass 'success'
+  for skill in WageWizard.HATTRICK_SKILLS when skill isnt 'SetPiecesSkill'
+    $("#WageWizard_Player_#{id}_#{skill}").val player[skill]
+    $("#WageWizard_Player_Min_#{id}_#{skill}").text salaryToString(player.WageWizard.Skills[skill].min)
+    $("#WageWizard_Player_Max_#{id}_#{skill}").text salaryToString(player.WageWizard.Skills[skill].max)
+    if skill is player.WageWizard.primary
+      $("#WageWizard_Primary_Player_#{id}_#{skill}").closest('label').removeClass 'hide'
+      $("#WageWizard_Primary_Player_#{id}_#{skill}").prop 'checked', true
+      if player.WageWizard.unpredictable_skills.length is 0
+        $("#WageWizard_Primary_Player_#{id}_#{skill}").closest('tr').addClass 'success'
+      else
+        $("#WageWizard_Primary_Player_#{id}_#{skill}").closest('tr').addClass 'warning'
 
-  for k of player.WageWizard.unpredictable_skills
-    $("#WageWizard_Primary_Player_#{id}_#{k}").closest('label').removeClass 'hide'
-    $("#WageWizard_Primary_Player_#{id}_#{k}").prop 'disabled', false
-    $("#WageWizard_Primary_Player_#{id}_#{k}").closest('tr').addClass 'warning'
+  for unpredictable_skill in player.WageWizard.unpredictable_skills
+    $("#WageWizard_Primary_Player_#{id}_#{unpredictable_skill}").closest('label').removeClass 'hide'
+    $("#WageWizard_Primary_Player_#{id}_#{unpredictable_skill}").prop 'disabled', false
+    $("#WageWizard_Primary_Player_#{id}_#{unpredictable_skill}").closest('tr').addClass 'warning'
 
-  $("#WageWizard_Player_Min_#{id}_SetPieces").text rateToString(player.WageWizard.Skills['SetPieces'].min)
-  $("#WageWizard_Player_Max_#{id}_SetPieces").text rateToString(player.WageWizard.Skills['SetPieces'].max)
+  $("#WageWizard_Player_Min_#{id}_SetPiecesSkill").text rateToString(player.WageWizard.Skills['SetPiecesSkill'].min)
+  $("#WageWizard_Player_Max_#{id}_SetPiecesSkill").text rateToString(player.WageWizard.Skills['SetPiecesSkill'].max)
 
   $("#WageWizard_Player_#{id}_Min").text salaryToString(player.WageWizard.min)
   $("#WageWizard_Player_#{id}_Max").text salaryToString(player.WageWizard.max)
@@ -719,8 +681,8 @@ createPlayerFromForm = (id) ->
     Abroad: $("#WageWizard_Player_#{id}_Abroad").prop 'checked'
     Salary: $("#WageWizard_Player_#{id}_Salary").val()
 
-  for k, v of WageWizard.MAP_HATTRICK_SKILLS
-    player[v] = $("#WageWizard_Player_#{id}_#{k}").val()
+  for skill in WageWizard.HATTRICK_SKILLS
+    player[skill] = $("#WageWizard_Player_#{id}_#{skill}").val()
 
   WageWizard.Engine.setPlayerData player, $("input[name=WageWizard_Primary_Player_#{id}]:checked").val()
 

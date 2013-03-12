@@ -703,3 +703,7 @@ th.superheader {
 .full-width {
   width: 100% !important;
 }
+
+.table-total {
+  height: 40px;
+}
