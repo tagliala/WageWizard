@@ -1,8 +1,13 @@
 Changelog
 =========
 
-13.03.1b
+13.03.13
 --------
+* Improved main skill calculation
+* Added keeper minimum and maximum components
+
+13.03.10b
+---------
 * Copy link feature
 * Cleaned up code
 
