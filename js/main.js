@@ -708,7 +708,7 @@
       $("#WageWizard_Description_Player_" + id + "_Statement").hide();
     }
     if (player.Abroad) {
-      $("#WageWizard_Description_Player_" + id + "_Salary").text(WageWizard.messages.salary_with_bonus(salaryToString(player.Salary)));
+      $("#WageWizard_Description_Player_" + id + "_Salary").html(WageWizard.messages.salary_with_bonus(salaryToString(player.Salary), salaryToString(player.Salary / 1.2)));
     } else {
       $("#WageWizard_Description_Player_" + id + "_Salary").text(WageWizard.messages.salary(salaryToString(player.Salary)));
     }

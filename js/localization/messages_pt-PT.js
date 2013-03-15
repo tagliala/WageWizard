@@ -1,7 +1,7 @@
 WageWizard.messages = {
-  age: WageWizard.format("{0} years and {1} days"),
-  salary: WageWizard.format("{0}/week"),
-  salary_with_bonus: WageWizard.format("{0} including 20% bonus"),
+  age: WageWizard.format("{0} anos e {1} dias"),
+  salary: WageWizard.format("{0} por semana"),
+  salary_with_bonus: WageWizard.format("{0} <span class='muted'>({1})</span> por semana, incluindo um bónus de 20%"),
   copy_link: "Copiar esta ligação para a área de transferência",
   unsupported_browser: "Navegador Não Suportado",
   copy_to_clipboard: "Copiar para a área de transferência",
