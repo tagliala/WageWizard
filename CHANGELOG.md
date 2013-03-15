@@ -1,6 +1,12 @@
 Changelog
 =========
 
+13.03.15
+--------
+* Updated passing formula
+* Shows wage without bonus in player's description
+* Added Espanol Centroamericano locale [tnx to Baler0 (335181)]
+
 13.03.13
 --------
 * Improved main skill calculation
