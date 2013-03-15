@@ -1,7 +1,7 @@
 WageWizard.messages = {
-  age: WageWizard.format("{0} years and {1} days"),
-  salary: WageWizard.format("{0}/week"),
-  salary_with_bonus: WageWizard.format("{0} <span class='muted'>({1})</span> including 20% bonus"),
+  age: WageWizard.format("{0} éves és {1} napos"),
+  salary: WageWizard.format("{0}/hét"),
+  salary_with_bonus: WageWizard.format("{0} <span class='muted'>({1})</span>/hét, a 20%-os prémiumot is beleértve "),
   copy_link: "A link vágólapra másolása",
   unsupported_browser: "Nem támogatott böngésző",
   copy_to_clipboard: "Vágólapra másol",
