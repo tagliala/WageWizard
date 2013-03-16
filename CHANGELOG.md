@@ -1,6 +1,10 @@
 Changelog
 =========
 
+13.03.16
+--------
+* Fixed currency detection
+
 13.03.15
 --------
 * Updated passing formula
