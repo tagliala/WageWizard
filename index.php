@@ -73,7 +73,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class="wage-cel
     </tr>';
 }
 ?>
-<?php $WageWizard_version = "13.03.15" ?>
+<?php $WageWizard_version = "13.03.16" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -426,9 +426,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                           <span title="<?= localize("Abroad Bonus") ?>"><?= localize("Abroad Bonus") ?></span>
                         </label>
                       </td>
-                      <th class="wagewizard-country hide"><?= localize("Country") ?></th>
-                      <td class="wagewizard-country hide">
-                        <select type="checkbox" name="WageWizard_Country" id="WageWizard_Country" class="refresh-table" data-id="1" data-country="<?= localize("COUNTRY_ID") ?>">
+                      <th class="wagewizard-league hide"><?= localize("Country") ?></th>
+                      <td class="wagewizard-league hide">
+                        <select name="WageWizard_League" id="WageWizard_League" class="refresh-table" data-id="1" data-league="<?= localize("LEAGUE_ID") ?>">
                         </select>
                       </td>
                     </tr>
@@ -652,7 +652,7 @@ if (defined('GA_ID')) { ?>
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
     <script src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
     <script src="js/jquery.flot.js"></script>
-    <script src="js/country_details.js"></script>
+    <script src="js/league_details.js"></script>
     <script src="js/formulae.js"></script>
     <script src="js/main.js"></script>
     <script src="js/plugins.js"></script>

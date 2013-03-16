@@ -350,7 +350,7 @@ $.ajaxSetup {
           $("#menuLoginTitle").text jsonObject.TeamName
           PlayersData = jsonObject.PlayersData
           WageWizard.PlayersData = PlayersData
-          WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[jsonObject.CountryID]
+          WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID]
           WageWizard.Engine.start()
           fillTeamWageTable()
           setupCHPPPlayerFields(true)
@@ -523,10 +523,10 @@ $('input[data-validate="range"], select[data-validate="range"]').each ->
   $(this).rules 'add', { range: [$(this).data('rangeMin'), $(this).data('rangeMax')] }
 
 getWageInUserCurrency = (salary) ->
-  salary / parseFloat(WageWizard.CountryDetails.CurrencyRate.replace(',','.'), 10)
+  salary / parseFloat(WageWizard.LeagueDetails.Country.CurrencyRate.replace(',','.'), 10)
 
 salaryToString = (salary) ->
-  result = [number_format(getWageInUserCurrency(salary), 0, '', ' '), WageWizard.CountryDetails.CurrencyName]
+  result = [number_format(getWageInUserCurrency(salary), 0, '', ' '), WageWizard.LeagueDetails.Country.CurrencyName]
   result.join ' '
 
 rateToString = (rate, precision = 0) ->
@@ -689,17 +689,17 @@ createPlayerFromForm = (id) ->
   player
 
 createCountryDropbox = ->
-  countryArray = []
-  for k, v of WageWizard.COUNTRY_DETAILS
-    countryArray.push { id: k, name: v.CountryName }
-  countryArray.sort sort_by('name', false)
+  leagueArray = []
+  for k, v of WageWizard.LEAGUE_DETAILS
+    leagueArray.push { id: k, name: v.Country.CountryName }
+  leagueArray.sort sort_by('name', false)
 
-  countryId = $('#WageWizard_Country').data('country').toString()
-  countryOptions = []
-  for country in countryArray
-    countryOptions.push "<option value='#{country.id}'#{if country.id is countryId then ' selected' else ''}>#{country.name}</option>"
-  $('#WageWizard_Country').html countryOptions.join()
-  WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[countryId]
+  leagueId = $('#WageWizard_League').data('league').toString()
+  leagueOptions = []
+  for league in leagueArray
+    leagueOptions.push "<option value='#{league.id}'#{if league.id is leagueId then ' selected' else ''}>#{league.name}</option>"
+  $('#WageWizard_League').html leagueOptions.join()
+  WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[leagueId]
 
 refreshTable = (id) ->
   player = createPlayerFromForm id
@@ -713,8 +713,8 @@ $('.dropdown-menu').find('form').click (e) ->
 $('[data-colorize]').bind 'DOMSubtreeModified', ->
   colorizePercent $(this)
 
-$('#WageWizard_Country').on 'change', ->
-  WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()]
+$('#WageWizard_League').on 'change', ->
+  WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[$(this).val()]
 
 $('.refresh-table').on 'change', ->
   refreshTable $(this).data 'id'
@@ -811,5 +811,5 @@ $ ->
     $.ajax { url: "chpp/chpp_retrievedata.php", cache: true }
   else
     createCountryDropbox()
-    $('.wagewizard-country').show()
+    $('.wagewizard-league').show()
     refreshTable 1

@@ -447,7 +447,7 @@
             $("#menuLoginTitle").text(jsonObject.TeamName);
             PlayersData = jsonObject.PlayersData;
             WageWizard.PlayersData = PlayersData;
-            WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[jsonObject.CountryID];
+            WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID];
             WageWizard.Engine.start();
             fillTeamWageTable();
             setupCHPPPlayerFields(true);
@@ -643,12 +643,12 @@
   });
 
   getWageInUserCurrency = function(salary) {
-    return salary / parseFloat(WageWizard.CountryDetails.CurrencyRate.replace(',', '.'), 10);
+    return salary / parseFloat(WageWizard.LeagueDetails.Country.CurrencyRate.replace(',', '.'), 10);
   };
 
   salaryToString = function(salary) {
     var result;
-    result = [number_format(getWageInUserCurrency(salary), 0, '', ' '), WageWizard.CountryDetails.CurrencyName];
+    result = [number_format(getWageInUserCurrency(salary), 0, '', ' '), WageWizard.LeagueDetails.Country.CurrencyName];
     return result.join(' ');
   };
 
@@ -859,25 +859,25 @@
   };
 
   createCountryDropbox = function() {
-    var country, countryArray, countryId, countryOptions, k, v, _i, _len, _ref;
-    countryArray = [];
-    _ref = WageWizard.COUNTRY_DETAILS;
+    var k, league, leagueArray, leagueId, leagueOptions, v, _i, _len, _ref;
+    leagueArray = [];
+    _ref = WageWizard.LEAGUE_DETAILS;
     for (k in _ref) {
       v = _ref[k];
-      countryArray.push({
+      leagueArray.push({
         id: k,
-        name: v.CountryName
+        name: v.Country.CountryName
       });
     }
-    countryArray.sort(sort_by('name', false));
-    countryId = $('#WageWizard_Country').data('country').toString();
-    countryOptions = [];
-    for (_i = 0, _len = countryArray.length; _i < _len; _i++) {
-      country = countryArray[_i];
-      countryOptions.push("<option value='" + country.id + "'" + (country.id === countryId ? ' selected' : '') + ">" + country.name + "</option>");
+    leagueArray.sort(sort_by('name', false));
+    leagueId = $('#WageWizard_League').data('league').toString();
+    leagueOptions = [];
+    for (_i = 0, _len = leagueArray.length; _i < _len; _i++) {
+      league = leagueArray[_i];
+      leagueOptions.push("<option value='" + league.id + "'" + (league.id === leagueId ? ' selected' : '') + ">" + league.name + "</option>");
     }
-    $('#WageWizard_Country').html(countryOptions.join());
-    return WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[countryId];
+    $('#WageWizard_League').html(leagueOptions.join());
+    return WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[leagueId];
   };
 
   refreshTable = function(id) {
@@ -894,8 +894,8 @@
     return colorizePercent($(this));
   });
 
-  $('#WageWizard_Country').on('change', function() {
-    return WageWizard.CountryDetails = WageWizard.COUNTRY_DETAILS[$(this).val()];
+  $('#WageWizard_League').on('change', function() {
+    return WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[$(this).val()];
   });
 
   $('.refresh-table').on('change', function() {
@@ -1012,7 +1012,7 @@
       });
     } else {
       createCountryDropbox();
-      $('.wagewizard-country').show();
+      $('.wagewizard-league').show();
       return refreshTable(1);
     }
   });
