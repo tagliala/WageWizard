@@ -114,7 +114,7 @@ if ($HT != null) {
     $returnArray["Status"]      = "OK";
     $returnArray["TeamName"]    = $teamPlayers->getTeamName();
     $returnArray["PlayersData"] = $teamPlayersArray;
-    $returnArray["CountryID"]    = $HT->getTeam()->getLeagueId();
+    $returnArray["LeagueID"]    = $HT->getTeam()->getLeagueId();
 
     // Update last refresh time
     if (!isset($_SESSION['lastRefreshTime'])) {
