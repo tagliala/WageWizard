@@ -152,8 +152,8 @@ setKeeperSkill = (player) ->
   abroad_multiplier = if player.Abroad then 1.2 else 1
 
   keeperComponents = getKeeperComponents player.KeeperSkill
-  player.WageWizard.Skills['KeeperSkill'].min = keeperComponents[0] * abroad_multiplier
-  player.WageWizard.Skills['KeeperSkill'].max = keeperComponents[1] * abroad_multiplier
+  player.WageWizard.Skills['KeeperSkill'].min = keeperComponents[0] * player.WageWizard.rate * abroad_multiplier
+  player.WageWizard.Skills['KeeperSkill'].max = keeperComponents[1] * player.WageWizard.rate * abroad_multiplier
   return
 
 setSetPiecesSkill = (player) ->
