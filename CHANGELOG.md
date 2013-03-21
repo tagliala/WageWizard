@@ -1,6 +1,12 @@
 Changelog
 =========
 
+13.03.21
+--------
+* Updated Boostrap to 2.3.1
+* Updated wage formulae
+* Fixed keeper component issue for old players
+
 13.03.16
 --------
 * Fixed currency detection

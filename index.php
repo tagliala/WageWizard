@@ -73,7 +73,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class="wage-cel
     </tr>';
 }
 ?>
-<?php $WageWizard_version = "13.03.16" ?>
+<?php $WageWizard_version = "13.03.21" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -86,7 +86,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class="wage-cel
     <meta name="author" content="Lizardopoli"/>
 
     <meta name="description" content="Wage Wizard <?php echo localize("SUBTITLE"); ?>"/>
-    <meta name="keywords" content="Wage Wizard, CHPP, stamina tool, hattrick, substitutions tool, substitutions"/>
+    <meta name="keywords" content="Wage Wizard, CHPP, hattrick, wages, skill predictions"/>
 
     <?php if (FB_ADMINS != "") { ?>
       <meta property="fb:admins" content="<?= FB_ADMINS ?>"/>
