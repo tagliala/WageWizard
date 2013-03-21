@@ -192,8 +192,8 @@
     player.WageWizard.Skills['KeeperSkill'] = {};
     abroad_multiplier = player.Abroad ? 1.2 : 1;
     keeperComponents = getKeeperComponents(player.KeeperSkill);
-    player.WageWizard.Skills['KeeperSkill'].min = keeperComponents[0] * abroad_multiplier;
-    player.WageWizard.Skills['KeeperSkill'].max = keeperComponents[1] * abroad_multiplier;
+    player.WageWizard.Skills['KeeperSkill'].min = keeperComponents[0] * player.WageWizard.rate * abroad_multiplier;
+    player.WageWizard.Skills['KeeperSkill'].max = keeperComponents[1] * player.WageWizard.rate * abroad_multiplier;
   };
 
   setSetPiecesSkill = function(player) {
