@@ -36,7 +36,7 @@ WageWizard.KEEPER_FORMULA = [
   31720
   41150
   53840
-  68960
+  68750
 ]
 
 WageWizard.FORMULAE =
@@ -53,9 +53,9 @@ WageWizard.FORMULAE =
     b: 6.4335763954
     d: 0.9002
   WingerSkill:
-    a: 0.0004312358
-    b: 6.4774737732
-    d: 0.7778
+    a: 0.0004301829
+    b: 6.4780583727
+    d: 0.7787
   ScorerSkill:
     a: 0.0009015187
     b: 6.4153497279
