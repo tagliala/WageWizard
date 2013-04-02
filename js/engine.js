@@ -131,15 +131,16 @@
   };
 
   setMinAndMaxSalary = function(player) {
-    var max, min, skill;
+    var base_salary, max, min, skill;
     min = 0;
     max = 0;
     for (skill in player.WageWizard.Skills) {
       min += player.WageWizard.Skills[skill].min;
       max += player.WageWizard.Skills[skill].max;
     }
-    player.WageWizard.min = BASE_SALARY + min * player.WageWizard.Skills['SetPiecesSkill'].min;
-    player.WageWizard.max = BASE_SALARY + max * player.WageWizard.Skills['SetPiecesSkill'].max;
+    base_salary = player.Abroad ? 1.2 * BASE_SALARY : BASE_SALARY;
+    player.WageWizard.min = base_salary + min * player.WageWizard.Skills['SetPiecesSkill'].min;
+    player.WageWizard.max = base_salary + max * player.WageWizard.Skills['SetPiecesSkill'].max;
   };
 
   applySecondaryDiscounts = function(player) {
