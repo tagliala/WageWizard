@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.04.03
+--------
+* Updated formulae
+* Fixed issue on base salary for players playing abroad
+
 13.03.21
 --------
 * Updated Boostrap to 2.3.1
