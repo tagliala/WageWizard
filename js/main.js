@@ -15,7 +15,7 @@
     OPTION_FORM_ID: "#optionForm",
     TABLE_ID: "#playersInfoTable",
     SEASON_WEEKS: 16,
-    DEBUG: false,
+    DEBUG: true,
     AUTOSTART: true
   }, MAP_HATTRICK_SKILLS = {
     Keeper: 'KeeperSkill',
@@ -440,16 +440,13 @@
       return $("#CHPP_Status_Description").html("");
     },
     success: function(jsonObject, textStatus, xhr) {
-      var PlayersData, description_message, error_message;
+      var description_message, error_message;
       switch (jsonObject.Status) {
         case "OK":
           try {
-            $("#menuLoginTitle").text(jsonObject.TeamName);
-            PlayersData = jsonObject.PlayersData;
-            WageWizard.PlayersData = PlayersData;
+            WageWizard.Teams = jsonObject.Teams;
             WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID];
             WageWizard.Engine.start();
-            fillTeamWageTable();
             setupCHPPPlayerFields(true);
             loginMenuHide();
             enableCHPPMode();
@@ -553,8 +550,10 @@
   };
 
   sortCHPPPlayerFields = function() {
-    var PlayersData, field, primer, reverse;
-    PlayersData = WageWizard.PlayersData;
+    var PlayersData, Team, field, primer, reverse;
+    Team = WageWizard.Teams[$("#CHPP_Team").val()];
+    $("#menuLoginTitle").text(Team.TeamName);
+    PlayersData = Team.PlayersData;
     if (PlayersData == null) {
       return;
     }
@@ -573,8 +572,10 @@
   };
 
   updateCHPPPlayerFields = function() {
-    var PlayersData, index, mc, name, number, optionElement, player, select, selectP1, _i, _len;
-    PlayersData = WageWizard.PlayersData;
+    var PlayersData, Team, index, mc, name, number, optionElement, player, select, selectP1, _i, _len;
+    Team = WageWizard.Teams[$("#CHPP_Team").val()];
+    $("#menuLoginTitle").text(Team.TeamName);
+    PlayersData = Team.PlayersData;
     if (PlayersData == null) {
       return;
     }
@@ -603,11 +604,29 @@
     selectP1 = select.clone(true);
     selectP1.attr('id', 'CHPP_Player_1');
     $("#CHPP_Player_1").html(selectP1.html());
+    fillTeamWageTable();
   };
 
   setupCHPPPlayerFields = function(checkUrlParameter) {
+    var Teams, index, optionElement, select, team, _i, _len;
     if (checkUrlParameter == null) {
       checkUrlParameter = false;
+    }
+    Teams = WageWizard.Teams;
+    if (!(Teams != null) || Teams.length === 0) {
+      return;
+    }
+    select = $(document.createElement("select"));
+    for (index = _i = 0, _len = Teams.length; _i < _len; index = ++_i) {
+      team = Teams[index];
+      optionElement = $(document.createElement("option"));
+      optionElement.attr("value", index);
+      optionElement.text(team.TeamName);
+      select.append(optionElement);
+    }
+    $("#CHPP_Team").html(select.html());
+    if (Teams.length > 1) {
+      $("#CHPP_Team").closest(".controls").show();
     }
     updateCHPPPlayerFields();
     $('#CHPP_Player_1 option:eq(0)').prop('selected', true);
@@ -682,9 +701,10 @@
 
   fillTeamWageTable = function() {
     return $('#WageWizard_Team [data-target]').each(function() {
-      var $this;
+      var $this, Team;
       $this = $(this);
-      fillDataField($this, WageWizard.TeamData[$this.data('target')]);
+      Team = WageWizard.Teams[$("#CHPP_Team").val() || 0];
+      fillDataField($this, Team.TeamData[$this.data('target')]);
     });
   };
 
@@ -755,18 +775,20 @@
   };
 
   setPlayerFormFields = function(id, checkUrlParameter) {
-    var PlayersData, formReference, player;
+    var PlayersData, Team, formReference, player;
     if (checkUrlParameter == null) {
       checkUrlParameter = false;
     }
     if (checkUrlParameter && (gup("params") != null)) {
       return;
     }
-    PlayersData = WageWizard.PlayersData;
-    formReference = $(FORM_ID)[0];
+    Team = WageWizard.Teams[$("#CHPP_Team").val()];
+    $("#menuLoginTitle").text(Team.TeamName);
+    PlayersData = Team.PlayersData;
     if (PlayersData == null) {
       return;
     }
+    formReference = $(FORM_ID)[0];
     player = PlayersData[formReference["CHPP_Player_" + id].value];
     if (player == null) {
       return;
@@ -920,7 +942,7 @@
     setPlayerFormFields($(this).data('id'));
   });
 
-  $("#CHPP_Players_SortBy").on("change", function() {
+  $("#CHPP_Players_SortBy, #CHPP_Team").on("change", function() {
     updateCHPPPlayerFields();
     if ($("#CHPP_Player_1 option").length >= 1) {
       $("#CHPP_Player_1 option:eq(0)").prop('selected', true);

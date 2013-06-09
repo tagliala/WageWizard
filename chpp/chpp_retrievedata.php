@@ -19,6 +19,72 @@ function resetPermanentToken() {
   }
 }
 
+function getTeamDetails($HT, $team) {
+  $teamArray = array();
+  $teamArray["TeamId"]    = $team->getTeamId();
+  $teamArray["TeamName"]    = $team->getTeamName();
+
+  $teamPlayers = $HT->getTeamPlayers($team->getTeamId());
+  $teamAvatars = $HT->getAvatars($team->getTeamId());
+
+  $teamPlayersArray = array();
+
+  for ($i = 1; $i <= $teamPlayers->getNumberPlayers(); $i++) {
+    $player      = $teamPlayers->getPlayer($i);
+    $playerId    = $player->getId();
+    $playerArray = array(
+      'PlayerID'        => $playerId,
+      'PlayerName'      => $player->getName(),
+      'PlayerNumber'    => $player->getShirtNumber(),
+
+      'PlayerForm'      => $player->getForm(),
+      'Experience'      => $player->getExperience(),
+
+      'Age'             => $player->getAge(),
+      'Days'            => $player->getDays(),
+      'Salary'          => $player->getSalary(),
+      'Abroad'          => $player->isAbroad(),
+      'NextBirthday'    => $player->getNextBirthday(),
+      'Tsi'             => $player->getTsi(),
+
+      'Avatar'          => $teamAvatars->getPlayerById($playerId)->getHtml(),
+      'Statement'       => $player->getStatement(),
+
+      'InjuryLevel'     => $player->getInjury(),
+      'TransferListed'  => $player->isTransferListed(),
+      'Cards'           => $player->getCards(),
+
+      'StaminaSkill'    => $player->getStamina(),
+
+      'KeeperSkill'     => $player->getKeeper(),
+      'PlaymakerSkill'  => $player->getPlaymaker(),
+      'ScorerSkill'     => $player->getScorer(),
+      'PassingSkill'    => $player->getPassing(),
+      'WingerSkill'     => $player->getWinger(),
+      'DefenderSkill'   => $player->getDefender(),
+      'SetPiecesSkill'  => $player->getSetPieces(),
+
+      'Loyalty'         => $player->getLoyalty(),
+      'MotherClubBonus' => $player->hasMotherClubBonus()
+    );
+
+    // Main skill
+    $playerArray['MainSkill'] = max(
+      1,
+      $playerArray['KeeperSkill'],
+      $playerArray['DefenderSkill'],
+      $playerArray['PlaymakerSkill'],
+      $playerArray['ScorerSkill'],
+      $playerArray['WingerSkill'],
+      $playerArray['PassingSkill']);
+
+    array_push($teamPlayersArray, $playerArray);
+  }
+
+  $teamArray["PlayersData"] = $teamPlayersArray;
+  return $teamArray;
+}
+
 if (($HT == null) && ($_COOKIE['permanent'])) {
   $userToken       = $_COOKIE['userToken'];
   $userTokenSecret = $_COOKIE['userTokenSecret'];
@@ -54,66 +120,19 @@ if ($HT != null) {
       }
     }
 
-    $teamPlayers = $HT->getTeamPlayers();
-    $teamAvatars = $HT->getAvatars();
+    $returnArray["Teams"] = array();
 
-    $teamPlayersArray = array();
+    // Check and set Primary Team
+    if (is_object($team = $HT->getPrimaryTeam())) {
+      array_push($returnArray["Teams"], getTeamDetails($HT, $team));
+    }
 
-    for ($i = 1; $i <= $teamPlayers->getNumberPlayers(); $i++) {
-      $player      = $teamPlayers->getPlayer($i);
-      $playerId    = $player->getId();
-      $playerArray = array(
-        'PlayerID'        => $playerId,
-        'PlayerName'      => $player->getName(),
-        'PlayerNumber'    => $player->getShirtNumber(),
-
-        'PlayerForm'      => $player->getForm(),
-        'Experience'      => $player->getExperience(),
-
-        'Age'             => $player->getAge(),
-        'Days'            => $player->getDays(),
-        'Salary'          => $player->getSalary(),
-        'Abroad'          => $player->isAbroad(),
-        'NextBirthday'    => $player->getNextBirthday(),
-        'Tsi'             => $player->getTsi(),
-
-        'Avatar'          => $teamAvatars->getPlayerById($playerId)->getHtml(),
-        'Statement'       => $player->getStatement(),
-
-        'InjuryLevel'     => $player->getInjury(),
-        'TransferListed'  => $player->isTransferListed(),
-        'Cards'           => $player->getCards(),
-
-        'StaminaSkill'    => $player->getStamina(),
-
-        'KeeperSkill'     => $player->getKeeper(),
-        'PlaymakerSkill'  => $player->getPlaymaker(),
-        'ScorerSkill'     => $player->getScorer(),
-        'PassingSkill'    => $player->getPassing(),
-        'WingerSkill'     => $player->getWinger(),
-        'DefenderSkill'   => $player->getDefender(),
-        'SetPiecesSkill'  => $player->getSetPieces(),
-
-        'Loyalty'         => $player->getLoyalty(),
-        'MotherClubBonus' => $player->hasMotherClubBonus()
-      );
-
-      // Main skill
-      $playerArray['MainSkill'] = max(
-        1,
-        $playerArray['KeeperSkill'],
-        $playerArray['DefenderSkill'],
-        $playerArray['PlaymakerSkill'],
-        $playerArray['ScorerSkill'],
-        $playerArray['WingerSkill'],
-        $playerArray['PassingSkill']);
-
-      array_push($teamPlayersArray, $playerArray);
+    // Check and set Secondary Team
+    if (is_object($team = $HT->getSecondaryTeam())) {
+      array_push($returnArray["Teams"], getTeamDetails($HT, $team));
     }
 
     $returnArray["Status"]      = "OK";
-    $returnArray["TeamName"]    = $teamPlayers->getTeamName();
-    $returnArray["PlayersData"] = $teamPlayersArray;
     $returnArray["LeagueID"]    = $HT->getTeam()->getLeagueId();
 
     // Update last refresh time

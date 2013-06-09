@@ -28,7 +28,7 @@ WageWizard.KEEPER_FORMULA = [
   2250
   3190
   4550
-  6470
+  6450
   9190
   13010
   18130
@@ -51,7 +51,7 @@ WageWizard.FORMULAE =
   PassingSkill:
     a: 0.0005552801
     b: 6.4335763954
-    d: 0.9002
+    d: 0.8977
   WingerSkill:
     a: 0.0004301829
     b: 6.4780583727

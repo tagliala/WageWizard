@@ -7,7 +7,7 @@ $.extend WageWizard.CONFIG,
   OPTION_FORM_ID: "#optionForm"
   TABLE_ID: "#playersInfoTable"
   SEASON_WEEKS: 16
-  DEBUG: false
+  DEBUG: true
   AUTOSTART: true
   MAP_HATTRICK_SKILLS =
     Keeper: 'KeeperSkill'
@@ -347,12 +347,9 @@ $.ajaxSetup {
     switch jsonObject.Status
       when "OK"
         try
-          $("#menuLoginTitle").text jsonObject.TeamName
-          PlayersData = jsonObject.PlayersData
-          WageWizard.PlayersData = PlayersData
+          WageWizard.Teams = jsonObject.Teams
           WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID]
           WageWizard.Engine.start()
-          fillTeamWageTable()
           setupCHPPPlayerFields(true)
           loginMenuHide()
           enableCHPPMode()
@@ -444,7 +441,10 @@ sort_by = (field, reverse, primer) ->
     0
 
 sortCHPPPlayerFields = ->
-  PlayersData = WageWizard.PlayersData
+  Team = WageWizard.Teams[$("#CHPP_Team").val()]
+  $("#menuLoginTitle").text Team.TeamName
+
+  PlayersData = Team.PlayersData
   return unless PlayersData?
 
   field = $("#CHPP_Players_SortBy").val()
@@ -463,7 +463,10 @@ sortCHPPPlayerFields = ->
   return
 
 updateCHPPPlayerFields = ->
-  PlayersData = WageWizard.PlayersData
+  Team = WageWizard.Teams[$("#CHPP_Team").val()]
+  $("#menuLoginTitle").text Team.TeamName
+
+  PlayersData = Team.PlayersData
   return unless PlayersData?
 
   sortCHPPPlayerFields()
@@ -487,9 +490,23 @@ updateCHPPPlayerFields = ->
 
   $("#CHPP_Player_1").html selectP1.html()
 
+  fillTeamWageTable()
   return
 
 setupCHPPPlayerFields = (checkUrlParameter = false) ->
+  Teams = WageWizard.Teams
+  return if !Teams? or Teams.length is 0
+
+  select = $(document.createElement("select"))
+  for team, index in Teams
+    optionElement = $(document.createElement("option"))
+    optionElement.attr "value", index
+    optionElement.text team.TeamName
+    select.append optionElement
+
+  $("#CHPP_Team").html select.html()
+  $("#CHPP_Team").closest(".controls").show() if Teams.length > 1
+
   updateCHPPPlayerFields()
 
   $('#CHPP_Player_1 option:eq(0)').prop 'selected', true
@@ -550,7 +567,8 @@ fillDataField = ($element, target) ->
 fillTeamWageTable = ->
   $('#WageWizard_Team [data-target]').each ->
     $this = $(this)
-    fillDataField $this, WageWizard.TeamData[$this.data('target')]
+    Team = WageWizard.Teams[$("#CHPP_Team").val() || 0]
+    fillDataField $this, Team.TeamData[$this.data('target')]
     return
 
 setPlayerWageTable = (player, id) ->
@@ -618,9 +636,13 @@ setTableFields = (player, id) ->
 setPlayerFormFields = (id, checkUrlParameter = false) ->
   return if checkUrlParameter && gup("params")?
 
-  PlayersData = WageWizard.PlayersData
-  formReference = $(FORM_ID)[0]
+  Team = WageWizard.Teams[$("#CHPP_Team").val()]
+  $("#menuLoginTitle").text Team.TeamName
+
+  PlayersData = Team.PlayersData
   return unless PlayersData?
+
+  formReference = $(FORM_ID)[0]
   player = PlayersData[formReference["CHPP_Player_#{id}"].value]
   return unless player?
 
@@ -735,7 +757,7 @@ $("select[id^=CHPP_Player_]").on 'change', ->
   setPlayerFormFields $(this).data 'id'
   return
 
-$("#CHPP_Players_SortBy").on "change", ->
+$("#CHPP_Players_SortBy, #CHPP_Team").on "change", ->
   updateCHPPPlayerFields()
 
   if ($("#CHPP_Player_1 option").length >= 1)

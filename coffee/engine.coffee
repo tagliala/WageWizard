@@ -201,20 +201,20 @@ setPlayerData = (player, overridePrimary = null) ->
   setMinAndMaxSalary player
   return
 
-setData = ->
+setData = (team) ->
   weekly_total = 0
   abroad_total = 0
   weekly_without_discount_total = 0
 
   # Set Player attributes
-  for player in WageWizard.PlayersData
+  for player in team.PlayersData
     setPlayerData player
     weekly_total += player.WageWizard.weekly
     abroad_total += player.WageWizard.abroadWeekly
     weekly_without_discount_total += player.WageWizard.weeklyWithoutDiscount
 
   # Set Team attributes
-  WageWizard.TeamData =
+  team.TeamData =
     weekly: weekly_total
     seasonly: weekly_total * 16
     abroadWeekly: abroad_total
@@ -222,12 +222,13 @@ setData = ->
     discount: 1 - weekly_total / weekly_without_discount_total
 
   # Cycling again on players to set percent
-  for player in WageWizard.PlayersData
+  for player in team.PlayersData
     player.WageWizard.teamPercent = player.WageWizard.weekly / weekly_total
 
 WageWizard.Engine.start = ->
-  setData()
- 
+  for team in WageWizard.Teams
+    setData team
+
   if WageWizard.isChartsEnabled()
     ###
     plotDataTotal = []

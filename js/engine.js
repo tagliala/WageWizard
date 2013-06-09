@@ -243,12 +243,12 @@
     setMinAndMaxSalary(player);
   };
 
-  setData = function() {
+  setData = function(team) {
     var abroad_total, player, weekly_total, weekly_without_discount_total, _i, _j, _len, _len1, _ref, _ref1, _results;
     weekly_total = 0;
     abroad_total = 0;
     weekly_without_discount_total = 0;
-    _ref = WageWizard.PlayersData;
+    _ref = team.PlayersData;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       player = _ref[_i];
       setPlayerData(player);
@@ -256,14 +256,14 @@
       abroad_total += player.WageWizard.abroadWeekly;
       weekly_without_discount_total += player.WageWizard.weeklyWithoutDiscount;
     }
-    WageWizard.TeamData = {
+    team.TeamData = {
       weekly: weekly_total,
       seasonly: weekly_total * 16,
       abroadWeekly: abroad_total,
       abroadSeasonly: abroad_total * 16,
       discount: 1 - weekly_total / weekly_without_discount_total
     };
-    _ref1 = WageWizard.PlayersData;
+    _ref1 = team.PlayersData;
     _results = [];
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
       player = _ref1[_j];
@@ -273,7 +273,12 @@
   };
 
   WageWizard.Engine.start = function() {
-    setData();
+    var team, _i, _len, _ref;
+    _ref = WageWizard.Teams;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      team = _ref[_i];
+      setData(team);
+    }
     if (WageWizard.isChartsEnabled()) {
       /*
           plotDataTotal = []
