@@ -1,6 +1,12 @@
 Changelog
 =========
 
+13.08.14
+--------
+* Updated formulae
+* Fixed a bug preventing the form to automatically fill when url contains parameters
+* Cleaned up code
+
 13.04.03
 --------
 * Updated formulae
