@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, MAP_HATTRICK_SKILLS, OPTION_FORM_ID, TABLE_ID, WageWizard, checkIframe, checkMotherClubBonus, colorizePercent, createAlert, createCountryDropbox, createPlayerFromForm, disableCHPPMode, enableCHPPMode, fillDataField, fillForm, fillTeamWageTable, formSerialize, format, getWageInUserCurrency, gup, isChartsEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, rateToString, refreshTable, resetAndHideTabs, salaryToString, scrollUpToResults, setDescriptionFields, setDiscountedSalary, setPlayerFormFields, setPlayerWageTable, setTableFields, setupCHPPPlayerFields, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields;
+  var DEBUG, FORM_ID, MAP_HATTRICK_SKILLS, OPTION_FORM_ID, TABLE_ID, WageWizard, checkIframe, colorizePercent, createAlert, createCountryDropbox, createPlayerFromForm, disableCHPPMode, enableCHPPMode, fillDataField, fillForm, fillTeamWageTable, formSerialize, format, getWageInUserCurrency, gup, isChartsEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, rateToString, refreshTable, resetAndHideTabs, salaryToString, scrollUpToResults, setDescriptionFields, setDiscountedSalary, setPlayerFormFields, setPlayerWageTable, setTableFields, setupCHPPPlayerFields, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields;
 
   window.WageWizard = window.WageWizard || {};
 
@@ -15,8 +15,7 @@
     OPTION_FORM_ID: "#optionForm",
     TABLE_ID: "#playersInfoTable",
     SEASON_WEEKS: 16,
-    DEBUG: false,
-    AUTOSTART: true
+    DEBUG: false
   }, MAP_HATTRICK_SKILLS = {
     Keeper: 'KeeperSkill',
     Defending: 'DefenderSkill',
@@ -104,8 +103,6 @@
   TABLE_ID = WageWizard.CONFIG.TABLE_ID;
 
   DEBUG = WageWizard.CONFIG.DEBUG;
-
-  AUTOSTART = WageWizard.CONFIG.AUTOSTART;
 
   WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_HO;
 
@@ -331,7 +328,7 @@
 
   fillForm = function() {
     var $field, field, fields, i, params, paramsString, _i, _len;
-    paramsString = gup("params");
+    paramsString = gup('params');
     if (paramsString == null) {
       return;
     }
@@ -348,17 +345,6 @@
         default:
           $field.val(params[i]);
       }
-    }
-    checkMotherClubBonus();
-  };
-
-  checkMotherClubBonus = function() {
-    var playerId, status, _i, _len, _ref;
-    _ref = [1, 2];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      playerId = _ref[_i];
-      status = $("input[name=WageWizard_Player_" + playerId + "_MotherClubBonus]").prop('checked');
-      $("select[name=WageWizard_Player_" + playerId + "_Loyalty]").prop('disabled', status);
     }
   };
 
@@ -440,16 +426,13 @@
       return $("#CHPP_Status_Description").html("");
     },
     success: function(jsonObject, textStatus, xhr) {
-      var PlayersData, description_message, error_message;
+      var description_message, error_message;
       switch (jsonObject.Status) {
         case "OK":
           try {
-            $("#menuLoginTitle").text(jsonObject.TeamName);
-            PlayersData = jsonObject.PlayersData;
-            WageWizard.PlayersData = PlayersData;
+            WageWizard.Teams = jsonObject.Teams;
             WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID];
             WageWizard.Engine.start();
-            fillTeamWageTable();
             setupCHPPPlayerFields(true);
             loginMenuHide();
             enableCHPPMode();
@@ -553,8 +536,10 @@
   };
 
   sortCHPPPlayerFields = function() {
-    var PlayersData, field, primer, reverse;
-    PlayersData = WageWizard.PlayersData;
+    var PlayersData, Team, field, primer, reverse;
+    Team = WageWizard.Teams[$("#CHPP_Team").val()];
+    $("#menuLoginTitle").text(Team.TeamName);
+    PlayersData = Team.PlayersData;
     if (PlayersData == null) {
       return;
     }
@@ -573,8 +558,10 @@
   };
 
   updateCHPPPlayerFields = function() {
-    var PlayersData, index, mc, name, number, optionElement, player, select, selectP1, _i, _len;
-    PlayersData = WageWizard.PlayersData;
+    var PlayersData, Team, index, mc, name, number, optionElement, player, select, selectP1, _i, _len;
+    Team = WageWizard.Teams[$("#CHPP_Team").val()];
+    $("#menuLoginTitle").text(Team.TeamName);
+    PlayersData = Team.PlayersData;
     if (PlayersData == null) {
       return;
     }
@@ -603,11 +590,29 @@
     selectP1 = select.clone(true);
     selectP1.attr('id', 'CHPP_Player_1');
     $("#CHPP_Player_1").html(selectP1.html());
+    fillTeamWageTable();
   };
 
   setupCHPPPlayerFields = function(checkUrlParameter) {
+    var Teams, index, optionElement, select, team, _i, _len;
     if (checkUrlParameter == null) {
       checkUrlParameter = false;
+    }
+    Teams = WageWizard.Teams;
+    if (!(Teams != null) || Teams.length === 0) {
+      return;
+    }
+    select = $(document.createElement("select"));
+    for (index = _i = 0, _len = Teams.length; _i < _len; index = ++_i) {
+      team = Teams[index];
+      optionElement = $(document.createElement("option"));
+      optionElement.attr("value", index);
+      optionElement.text(team.TeamName);
+      select.append(optionElement);
+    }
+    $("#CHPP_Team").html(select.html());
+    if (Teams.length > 1) {
+      $("#CHPP_Team").closest(".controls").show();
     }
     updateCHPPPlayerFields();
     $('#CHPP_Player_1 option:eq(0)').prop('selected', true);
@@ -631,7 +636,6 @@
       $p2Field.prop('disabled', p1Disabled);
       return $p2Field.prop('checked', p1Checked);
     });
-    checkMotherClubBonus();
     $('.control-group').removeClass('error');
     $(FORM_ID).validate().form();
   });
@@ -682,9 +686,10 @@
 
   fillTeamWageTable = function() {
     return $('#WageWizard_Team [data-target]').each(function() {
-      var $this;
+      var $this, Team;
       $this = $(this);
-      fillDataField($this, WageWizard.TeamData[$this.data('target')]);
+      Team = WageWizard.Teams[$("#CHPP_Team").val() || 0];
+      fillDataField($this, Team.TeamData[$this.data('target')]);
     });
   };
 
@@ -755,18 +760,22 @@
   };
 
   setPlayerFormFields = function(id, checkUrlParameter) {
-    var PlayersData, formReference, player;
+    var PlayersData, Team, formReference, player;
     if (checkUrlParameter == null) {
       checkUrlParameter = false;
     }
-    if (checkUrlParameter && (gup("params") != null)) {
+    if (checkUrlParameter && (gup('params') != null)) {
+      fillForm();
+      refreshTable(1);
       return;
     }
-    PlayersData = WageWizard.PlayersData;
-    formReference = $(FORM_ID)[0];
+    Team = WageWizard.Teams[$("#CHPP_Team").val()];
+    $("#menuLoginTitle").text(Team.TeamName);
+    PlayersData = Team.PlayersData;
     if (PlayersData == null) {
       return;
     }
+    formReference = $(FORM_ID)[0];
     player = PlayersData[formReference["CHPP_Player_" + id].value];
     if (player == null) {
       return;
@@ -920,7 +929,7 @@
     setPlayerFormFields($(this).data('id'));
   });
 
-  $("#CHPP_Players_SortBy").on("change", function() {
+  $("#CHPP_Players_SortBy, #CHPP_Team").on("change", function() {
     updateCHPPPlayerFields();
     if ($("#CHPP_Player_1 option").length >= 1) {
       $("#CHPP_Player_1 option:eq(0)").prop('selected', true);
@@ -956,10 +965,6 @@
     }
   });
 
-  $('.motherclub-bonus-checkbox').on('change', function(e) {
-    checkMotherClubBonus();
-  });
-
   $('a[data-toggle="tab"]').on('shown', function(e) {
     if ($(e.target).attr("href") === "#tabCredits") {
       $("#AlertsContainer").hide();
@@ -981,7 +986,6 @@
     $('.control-group').removeClass("error");
     $("#AlertsContainer").html("");
     resetAndHideTabs();
-    checkMotherClubBonus();
     setupCHPPPlayerFields();
     return e.preventDefault();
   });
@@ -995,16 +999,7 @@
   WageWizard.isVerboseModeEnabled = isVerboseModeEnabled;
 
   $(function() {
-    var hasParams;
     checkIframe();
-    hasParams = gup("params") != null;
-    if (hasParams) {
-      fillForm();
-    }
-    if (hasParams && AUTOSTART) {
-      $(FORM_ID).submit();
-    }
-    $("#imgMadeInItaly").tooltip();
     if (document.startAjax) {
       return $.ajax({
         url: "chpp/chpp_retrievedata.php",
@@ -1012,6 +1007,9 @@
       });
     } else {
       createCountryDropbox();
+      if (gup('params') != null) {
+        fillForm();
+      }
       $('.wagewizard-league').show();
       return refreshTable(1);
     }

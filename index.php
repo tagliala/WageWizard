@@ -73,7 +73,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class="wage-cel
     </tr>';
 }
 ?>
-<?php $WageWizard_version = "13.04.03" ?>
+<?php $WageWizard_version = "13.08.14" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -284,22 +284,11 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
         <div class="span9">
           <h1 class="mainTitle">Wage Wizard <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
 
-<? if (defined('GOOGLE_AD_CLIENT')) { ?>
-          <!-- Advertising -->
-          <div class="advertising border-box advertising-leaderboard">
-            <script type="text/javascript">
-              google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
-              /* Wage Wizard 728x90 */
-              google_ad_slot = "2495509419";
-              google_ad_width = 728;
-              google_ad_height = 90;
-              //-->
-              </script>
-              <script type="text/javascript"
-              src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-              </script>
-          </div>
-<? } ?>
+          <form action="javascript:{}" method="post" class="hide">
+            <select class="ignore input-block-level" id="CHPP_Team" name="CHPP_Team">
+            </select>
+          </form>
+
 
           <ul class="nav nav-tabs">
             <li class="active"><a href="#tabPlayer" data-toggle="tab"><i class="icon-user"></i> <span class="hidden-phone"><?= localize("Player") ?></span></a></li>
@@ -596,6 +585,22 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             </div>
 
           </div> <!-- Tab Content End -->
+<? if (defined('GOOGLE_AD_CLIENT')) { ?>
+          <!-- Advertising -->
+          <div class="advertising border-box advertising-leaderboard">
+            <script type="text/javascript">
+              google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
+              /* Wage Wizard 728x90 */
+              google_ad_slot = "2495509419";
+              google_ad_width = 728;
+              google_ad_height = 90;
+              //-->
+              </script>
+              <script type="text/javascript"
+              src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+              </script>
+          </div>
+<? } ?>
 
         </div> <!-- Second Column End -->
 
