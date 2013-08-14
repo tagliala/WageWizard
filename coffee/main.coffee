@@ -7,8 +7,7 @@ $.extend WageWizard.CONFIG,
   OPTION_FORM_ID: "#optionForm"
   TABLE_ID: "#playersInfoTable"
   SEASON_WEEKS: 16
-  DEBUG: true
-  AUTOSTART: true
+  DEBUG: false
   MAP_HATTRICK_SKILLS =
     Keeper: 'KeeperSkill'
     Defending: 'DefenderSkill'
@@ -80,7 +79,6 @@ FORM_ID = WageWizard.CONFIG.FORM_ID
 OPTION_FORM_ID = WageWizard.CONFIG.OPTION_FORM_ID
 TABLE_ID = WageWizard.CONFIG.TABLE_ID
 DEBUG = WageWizard.CONFIG.DEBUG
-AUTOSTART = WageWizard.CONFIG.AUTOSTART
 WageWizard.predictions = WageWizard.CONFIG.PREDICTIONS_HO
 
 checkIframe = ->
@@ -259,7 +257,7 @@ disableCHPPMode = ->
 
 # Fill Form Helper
 fillForm = ->
-  paramsString = gup("params")
+  paramsString = gup('params')
   return unless paramsString?
   params = decodeURI(paramsString).split "-"
   fields = $('*[name^=WageWizard_]')
@@ -268,14 +266,6 @@ fillForm = ->
     switch $field.attr('type')
       when 'checkbox', 'radio' then $field.prop 'checked', (params[i] is 'true')
       else $field.val params[i]
-  checkMotherClubBonus()
-  #stripeTable()
-  return
-
-checkMotherClubBonus = ->
-  for playerId in [1, 2]
-    status = $("input[name=WageWizard_Player_#{playerId}_MotherClubBonus]").prop('checked')
-    $("select[name=WageWizard_Player_#{playerId}_Loyalty]").prop 'disabled', status
   return
 
 formSerialize = ->
@@ -350,7 +340,7 @@ $.ajaxSetup {
           WageWizard.Teams = jsonObject.Teams
           WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID]
           WageWizard.Engine.start()
-          setupCHPPPlayerFields(true)
+          setupCHPPPlayerFields true
           loginMenuHide()
           enableCHPPMode()
           #stripeTable()
@@ -531,7 +521,6 @@ $('#switchPlayers').click ->
     $p2Field.val p1Value
     $p2Field.prop 'disabled', p1Disabled
     $p2Field.prop 'checked', p1Checked
-  checkMotherClubBonus()
   $('.control-group').removeClass 'error'
   $(FORM_ID).validate().form()
   return
@@ -629,12 +618,11 @@ setTableFields = (player, id) ->
   $("#WageWizard_Player_#{id}_Min").text salaryToString(player.WageWizard.min)
   $("#WageWizard_Player_#{id}_Max").text salaryToString(player.WageWizard.max)
 
-  # Mother Club Bonus
-  #$("input[name=WageWizard_Player_#{id}_MotherClubBonus]").prop 'checked', player.MotherClubBonus
-  #checkMotherClubBonus()
-
 setPlayerFormFields = (id, checkUrlParameter = false) ->
-  return if checkUrlParameter && gup("params")?
+  if checkUrlParameter && gup('params')?
+    fillForm()
+    refreshTable 1
+    return
 
   Team = WageWizard.Teams[$("#CHPP_Team").val()]
   $("#menuLoginTitle").text Team.TeamName
@@ -763,7 +751,6 @@ $("#CHPP_Players_SortBy, #CHPP_Team").on "change", ->
   if ($("#CHPP_Player_1 option").length >= 1)
     $("#CHPP_Player_1 option:eq(0)").prop 'selected', true
     setPlayerFormFields 1
-
   return
 
 $('a.accordion-toggle[data-toggle="collapse"]').on 'click', (e) ->
@@ -783,10 +770,6 @@ $("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
   else
     $("#flot-tooltip").remove()
     previousPoint = null
-
-$('.motherclub-bonus-checkbox').on 'change', (e) ->
-  checkMotherClubBonus()
-  return
 
 # Hide alerts when showing credits and redraw charts if needed
 $('a[data-toggle="tab"]').on 'shown', (e) ->
@@ -809,7 +792,6 @@ $("#resetApp").on "click", (e) ->
   $("#AlertsContainer").html ""
   resetAndHideTabs()
 
-  checkMotherClubBonus()
   setupCHPPPlayerFields()
   #stripeTable()
   e.preventDefault()
@@ -824,14 +806,10 @@ WageWizard.isVerboseModeEnabled = isVerboseModeEnabled
 # Document.ready
 $ ->
   checkIframe()
-  hasParams = gup("params")?
-  fillForm() if hasParams
-  #stripeTable()
-  $(FORM_ID).submit() if hasParams and AUTOSTART
-  $("#imgMadeInItaly").tooltip()
   if document.startAjax
     $.ajax { url: "chpp/chpp_retrievedata.php", cache: true }
   else
     createCountryDropbox()
+    fillForm() if gup('params')?
     $('.wagewizard-league').show()
     refreshTable 1
