@@ -1,6 +1,12 @@
 Changelog
 =========
 
+13.09.29
+--------
+* Updated Portuguese translation
+* Using FontAwesome from CDN
+* Updated formulae
+
 13.08.14
 --------
 * Updated formulae
