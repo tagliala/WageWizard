@@ -10,10 +10,19 @@
   border: 0 !important;
 }
 
+.navbar .btn-navbar {
+  border: 1px solid transparent;
+  background: none;
+}
+
 .navbar .brand {
   padding: 6px 20px 12px;
   font-family: 'Pacifico', cursive;
   font-size: 24px;
+}
+
+.navbar .btn-navbar .icon-bar {
+  background-color: #333333;
 }
 
 #wagewizard-logo {

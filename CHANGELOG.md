@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.11.30
+--------
+* Updated formulae
+* Minor css fixes
+
 13.09.29
 --------
 * Updated Portuguese translation
