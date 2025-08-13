@@ -855,6 +855,7 @@
     var player, skill, _i, _len, _ref;
     player = {
       Age: $("#WageWizard_Player_" + id + "_Age").val(),
+      Special: $("#WageWizard_Player_" + id + "_Special").prop('checked'),
       Abroad: $("#WageWizard_Player_" + id + "_Abroad").prop('checked'),
       Salary: $("#WageWizard_Player_" + id + "_Salary").val()
     };
