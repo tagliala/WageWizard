@@ -36,7 +36,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
   $result = '';
   for ($i = $start; $i <= $stop; ++$i) {
-    $result .= "<option value=\"$i\"" . (($select == $i)?" selected=\"selected\"":"") . ">$localizedSkills[$i]</option>\n";
+    $result .= "<option value=\"$i\"" . (($select == $i)?" selected=\"selected\"":"") . ">$i. $localizedSkills[$i]</option>\n";
   }
   return $result;
 }
