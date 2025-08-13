@@ -231,6 +231,8 @@
     player.WageWizard.seasonly = weekly * WEEKS;
     player.WageWizard.weeklyWithoutDiscount = weekly / player.WageWizard.rate;
     player.WageWizard.seasonlyWithoutDiscount = player.WageWizard.weeklyWithoutDiscount * WEEKS;
+    player.WageWizard.specialWeekly = player.Special ? weekly * 0.1 : 0;
+    player.WageWizard.specialSeasonly = player.Special ? player.WageWizard.specialWeekly * WEEKS : 0;
     player.WageWizard.abroadWeekly = player.Abroad ? weekly * 0.2 : 0;
     player.WageWizard.abroadSeasonly = player.Abroad ? player.WageWizard.abroadWeekly * WEEKS : 0;
     setPlayerSkills(player);

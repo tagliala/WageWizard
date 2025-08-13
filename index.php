@@ -378,6 +378,11 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                             <td class="wage-cell" data-type="salary" data-target="seasonly"></td>
                           </tr>
                           <tr>
+                            <td><?= localize("Special Bonus"); ?></td>
+                            <td class="wage-cell" data-type="salary" data-target="specialWeekly"></td>
+                            <td class="wage-cell" data-type="salary" data-target="specialSeasonly"></td>
+                          </tr>
+                          <tr>
                             <td><?= localize("Abroad Bonus"); ?></td>
                             <td class="wage-cell" data-type="salary" data-target="abroadWeekly"></td>
                             <td class="wage-cell" data-type="salary" data-target="abroadSeasonly"></td>
@@ -408,6 +413,13 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                             <option value=<?= $i ?>><?= $i ?></option>
                           <?php } ?>
                         </select>
+                      </td>
+                      <td>
+                        <label class="btn btn-checkbox">
+                          <input type="checkbox" name="WageWizard_Player_1_Special" id="WageWizard_Player_1_Special" class="refresh-table" data-id="1">
+                          <i class="btn-checkbox-status-icon"></i>
+                          <span title="<?= localize("Special Bonus") ?>"><?= localize("Special Bonus") ?></span>
+                        </label>
                       </td>
                       <td>
                         <label class="btn btn-checkbox">
