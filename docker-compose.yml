@@ -1,0 +1,8 @@
+services:
+  web:
+    image: docklex/php:5.4-apache
+    container_name: wagewizard-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
