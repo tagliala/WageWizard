@@ -9,9 +9,17 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+# Legacy build system
 build/apache-ant-1.8.3
 build/tools
 intermediate
 publish
+
+# Modern build system
+node_modules/
+dist/
+.vite/
+
+# Application config
 chpp/config.php
 config.php

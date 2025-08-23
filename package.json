@@ -1,0 +1,26 @@
+{
+  "name": "wage-wizard",
+  "version": "1.0.0",
+  "description": "A Hattrick Wage Calculator",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite",
+    "coffee:compile": "coffee --compile --output js coffee",
+    "css:compile": "lessc less/bootstrap.less css/bootstrap.css && lessc less/responsive.less css/bootstrap-responsive.css"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-legacy": "^5.0.0",
+    "coffeescript": "^2.7.0",
+    "less": "^4.2.0",
+    "terser": "^5.24.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
