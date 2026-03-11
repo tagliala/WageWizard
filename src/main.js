@@ -671,11 +671,10 @@ document.addEventListener("DOMContentLoaded", () => {
         link += "?";
       }
       link += "params=" + formSerialize();
+      const copyButton = `<button class="btn btn-sm btn-secondary" id="copyLinkToClipboard" type="button" data-bs-toggle="tooltip" data-bs-title="${WageWizard.messages.copy_to_clipboard}">${WageWizard.icons.clipboard}</button>`;
       const body = link;
       const bodyEl = document.getElementById("generatedLinkBody");
       if (bodyEl) {
-        const copyBtn = document.getElementById("copyLinkToClipboard");
-        if (copyBtn) copyBtn.dataset.text = link;
         bodyEl.innerHTML = body;
       } else {
         const container = document.getElementById("AlertsContainer");
@@ -684,9 +683,16 @@ document.addEventListener("DOMContentLoaded", () => {
             id: "generatedLink",
             type: "info",
             body: body,
-            title: WageWizard.messages.copy_link,
+            title: WageWizard.messages.copy_link + " " + copyButton,
           }));
         }
+      }
+      const copyBtn = document.getElementById("copyLinkToClipboard");
+      if (copyBtn) {
+        if (!bootstrap.Tooltip.getInstance(copyBtn)) new bootstrap.Tooltip(copyBtn);
+        copyBtn.onclick = () => {
+          WageWizard.copyToClipboard(link, copyBtn);
+        };
       }
       scrollUpToResults();
     });
