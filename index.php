@@ -319,6 +319,11 @@ foreach ($lang_array as $key => $val) {
                             <td class="wage-cell" data-type="salary" data-target="seasonly"></td>
                           </tr>
                           <tr>
+                            <td><?= localize("Special Bonus"); ?></td>
+                            <td class="wage-cell" data-type="salary" data-target="specialWeekly"></td>
+                            <td class="wage-cell" data-type="salary" data-target="specialSeasonly"></td>
+                          </tr>
+                          <tr>
                             <td><?= localize("Abroad Bonus"); ?></td>
                             <td class="wage-cell" data-type="salary" data-target="abroadWeekly"></td>
                             <td class="wage-cell" data-type="salary" data-target="abroadSeasonly"></td>
@@ -348,6 +353,15 @@ foreach ($lang_array as $key => $val) {
                             <option value=<?= $i ?>><?= $i ?></option>
                           <?php } ?>
                         </select>
+                      </td>
+                      <td>
+                        <div class="toggle-check">
+                          <input type="checkbox" class="btn-check refresh-table" name="WageWizard_Player_1_Special" id="WageWizard_Player_1_Special" data-id="1" autocomplete="off">
+                          <label class="btn btn-secondary btn-sm" for="WageWizard_Player_1_Special" title="<?= localize("Special Bonus") ?>">
+                            <span class="toggle-check-icon toggle-check-icon--star"></span>
+                            <span class="toggle-check-label"><?= localize("Special Bonus") ?></span>
+                          </label>
+                        </div>
                       </td>
                       <td>
                         <div class="toggle-check">
@@ -415,6 +429,11 @@ foreach ($lang_array as $key => $val) {
                     <td><?= localize("Salary"); ?></td>
                     <td class="wage-cell" data-type="salary" data-target="weekly"></td>
                     <td class="wage-cell" data-type="salary" data-target="seasonly"></td>
+                  </tr>
+                  <tr>
+                    <td><?= localize("Special Bonus"); ?></td>
+                    <td class="wage-cell" data-type="salary" data-target="specialWeekly"></td>
+                    <td class="wage-cell" data-type="salary" data-target="specialSeasonly"></td>
                   </tr>
                   <tr>
                     <td><?= localize("Abroad Bonus"); ?></td>

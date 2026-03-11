@@ -278,6 +278,8 @@ function setTableFields(player, id) {
   if (salaryInput) salaryInput.value = player.Salary;
   const ageSelect = document.getElementById(`WageWizard_Player_${id}_Age`);
   if (ageSelect) ageSelect.value = player.Age;
+  const specialCheckbox = document.getElementById(`WageWizard_Player_${id}_Special`);
+  if (specialCheckbox) specialCheckbox.checked = player.Special;
   const abroadCheckbox = document.getElementById(`WageWizard_Player_${id}_Abroad`);
   if (abroadCheckbox) abroadCheckbox.checked = player.Abroad;
 
@@ -459,6 +461,7 @@ function createCountryDropbox() {
 function createPlayerFromForm(id) {
   const player = {
     Age: document.getElementById(`WageWizard_Player_${id}_Age`)?.value,
+    Special: document.getElementById(`WageWizard_Player_${id}_Special`)?.checked,
     Abroad: document.getElementById(`WageWizard_Player_${id}_Abroad`)?.checked,
     Salary: document.getElementById(`WageWizard_Player_${id}_Salary`)?.value,
   };
