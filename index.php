@@ -301,6 +301,7 @@ foreach ($lang_array as $key => $val) {
                             <span class="d-block"><?= icon('gift') ?> <span id="WageWizard_Description_Player_1_NextBirthday"></span></span>
                             <span class="d-block"><?= localize("TSI"); ?>: <span id="WageWizard_Description_Player_1_Tsi"></span></span>
                             <span class="d-block"><?= localize("Salary"); ?>: <span id="WageWizard_Description_Player_1_Salary"></span></span>
+                            <span class="d-none" id="WageWizard_Description_Player_1_Specialty">&#x2605; <?= localize("Specialty"); ?></span>
                           </p>
                         </div>
                       </div>

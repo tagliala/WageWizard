@@ -250,6 +250,9 @@ function setDescriptionFields(player, id) {
     }
   }
 
+  const specialtyEl = document.getElementById(`${prefix}_Specialty`);
+  if (specialtyEl) specialtyEl.classList.toggle("d-none", !player.Special);
+
   const salaryEl = document.getElementById(`${prefix}_Salary`);
   if (salaryEl) {
     if (player.Abroad) {
@@ -387,7 +390,8 @@ function updateCHPPPlayerFields() {
     opt.value = index;
     const number = player.PlayerNumber != null ? player.PlayerNumber + "." : "";
     const mc = player.MotherClubBonus ? "\u2665" : "";
-    opt.textContent = `${number} ${player.PlayerName} ${mc}`;
+    const star = player.Special ? "\u2605" : "";
+    opt.textContent = `${number} ${player.PlayerName} ${mc}${star}`;
     selectP1.appendChild(opt);
   }
   fillTeamWageTable();
@@ -475,6 +479,7 @@ function createPlayerFromForm(id) {
 
 function refreshTable(id) {
   const player = createPlayerFromForm(id);
+  setPlayerWageTable(player, id);
   setTableFields(player, id);
 }
 
