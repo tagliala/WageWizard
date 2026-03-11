@@ -1,0 +1,431 @@
+// WageWizard — SCSS bundle entry point
+// Import Bootstrap SCSS source (variables, mixins, then components)
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Layout & components (only what WageWizard uses)
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+
+// Helpers & utilities
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";
+
+// Vendored flags
+@import "../css/flags.css";
+
+body {
+  padding-top: 4.5rem;
+}
+
+// ============================================================
+// WageWizard Icon (.ww) — inline SVG icon base
+// ============================================================
+.ww {
+  width: 1rem;
+  height: 1rem;
+  fill: currentcolor;
+  vertical-align: -0.125em;
+  display: inline-block;
+}
+
+// ============================================================
+// Theme toggle icons
+// ============================================================
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: inline-block; }
+html.dark-mode .theme-icon-sun { display: inline-block; }
+html.dark-mode .theme-icon-moon { display: none; }
+
+.main-navbar-brand {
+  padding-left: 37px;
+}
+
+.wagewizard-logo {
+  position: absolute;
+  top: $spacer * .25;
+  left: 0;
+  height: 32px;
+  width: 32px;
+}
+
+// ============================================================
+// Form
+// ============================================================
+form.wagewizardForm {
+  display: block;
+  margin-bottom: 0;
+}
+
+form.wagewizardForm table {
+  width: auto;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+form.wagewizardForm td,
+form.wagewizardForm th {
+  vertical-align: middle;
+}
+
+form.wagewizardForm select,
+form.wagewizardForm input {
+  width: 100%;
+  margin: 0;
+}
+
+#CHPP_Player_1 {
+  min-width: 100px;
+}
+
+// ============================================================
+// Table stripe
+// ============================================================
+.table tbody tr:not(:hover) td.stripe,
+.table tbody tr:not(:hover) th.stripe {
+  background-color: rgba($black, .02);
+}
+
+[data-bs-theme="dark"] .table tbody tr:not(:hover) td.stripe,
+[data-bs-theme="dark"] .table tbody tr:not(:hover) th.stripe {
+  background-color: rgba($white, .02);
+}
+
+// ============================================================
+// Generated link
+// ============================================================
+#generatedLinkBody {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+// ============================================================
+// Login dropdown
+// ============================================================
+#loginDropdown {
+  width: 280px;
+  padding: $spacer;
+}
+
+#loginDropdown small {
+  font-size: $small-font-size;
+}
+
+// ============================================================
+// Form actions
+// ============================================================
+.form-actions {
+  margin-bottom: 0;
+  padding: $spacer ($spacer * 1.25);
+  background-color: var(--bs-tertiary-bg);
+  border-top: $border-width solid var(--bs-border-color);
+  border-radius: 0 0 $border-radius $border-radius;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacer * .5;
+  justify-content: center;
+}
+
+.form-actions .btn {
+  margin-bottom: 0;
+}
+
+.field-caption {
+  display: none;
+}
+
+// ============================================================
+// Responsive table
+// ============================================================
+@media (width <= 479px) {
+  .form-actions .btn {
+    width: 100% !important;
+  }
+
+  #playersInfoTable th:first-child,
+  #playersInfoTable td:first-child {
+    display: none !important;
+  }
+
+  #playersInfoTable td {
+    vertical-align: bottom !important;
+  }
+
+  .field-caption {
+    display: block;
+    margin-bottom: ($spacer * .125);
+    line-height: $line-height-sm;
+    font-weight: $font-weight-bold;
+    color: var(--bs-secondary-color);
+    text-transform: uppercase;
+  }
+}
+
+// ============================================================
+// Player option states
+// ============================================================
+option.isTransferListed {
+  color: #00b400;
+}
+
+option.isBruised {
+  color: #640000;
+}
+
+option.isInjured {
+  color: #c80000;
+}
+
+option.isSuspended {
+  color: #c81414;
+}
+
+// ============================================================
+// Side panel
+// ============================================================
+.side-panel > form {
+  margin-bottom: 0;
+}
+
+// ============================================================
+// Tabs
+// ============================================================
+.nav-tabs > li.credits {
+  margin-left: auto;
+}
+
+// ============================================================
+// WageWizard tables
+// ============================================================
+table.table-wagewizard th,
+table.table-wagewizard td {
+  text-align: right;
+}
+
+table.table-wagewizard th:first-child,
+table.table-wagewizard td:first-child {
+  text-align: left;
+}
+
+table.table-wagewizard-debug th {
+  text-align: center;
+}
+
+table.table-wagewizard-debug th:first-child,
+table.table-wagewizard-debug td:first-child {
+  text-align: center;
+}
+
+table.table-wagewizard-contributions td:first-child {
+  text-align: center;
+}
+
+table.table-wagewizard-contributions th:not(:first-child),
+table.table-wagewizard-contributions td:not(:first-child) {
+  padding-left: $spacer * 1.25;
+}
+
+table.table-wagewizard-contributions td:nth-child(2) {
+  font-weight: $font-weight-bold;
+}
+
+table.table-wagewizard th[colspan] {
+  text-align: center;
+}
+
+// ============================================================
+// CHPP Button group
+// ============================================================
+.btn-progress:disabled {
+  color: $white;
+  background-color: #149bdf;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba($white, .15) 10px,
+    rgba($white, .15) 20px
+  );
+  background-size: 40px 40px;
+  animation: progress-bar-stripes 2s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  from { background-position: 40px 0; }
+  to { background-position: 0 0; }
+}
+
+.legend-like {
+  border-bottom: $border-width solid var(--bs-border-color);
+  margin-bottom: $spacer * 1.25;
+  font-weight: $font-weight-normal;
+}
+
+ul.nav.nav-tabs {
+  background: var(--bs-tertiary-bg);
+}
+
+.min-width {
+  width: 1px;
+}
+
+// ============================================================
+// Toggle check (Primary skill & Abroad)
+// ============================================================
+.toggle-check {
+  position: relative;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  &-label {
+    margin-left: .5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Colored circle icon
+  &-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: $danger;
+    position: relative;
+    transition: $transition-base;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 65%;
+      transition: $transition-base;
+    }
+
+    // X — shown when unchecked
+    &::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    // Check — shown when checked
+    &::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  // Checked state
+  .btn-check:checked + .btn {
+    .toggle-check-icon {
+      background: $success;
+
+      &::before {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      &::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+// ============================================================
+// CHPP status button
+// ============================================================
+.btn-group > .btn-status {
+  flex: 0 0 2rem;
+}
+
+// ============================================================
+// Wage cell formatting
+// ============================================================
+td.wage-percent,
+td.wage-cell {
+  font-weight: $font-weight-bold;
+  text-align: right;
+}
+
+th.superheader {
+  text-transform: uppercase;
+}
+
+.table-total {
+  height: 40px;
+}
+
+// ============================================================
+// Credits tab
+// ============================================================
+#tabCredits > p,
+#tabCredits > blockquote {
+  margin-bottom: $spacer * 1.125;
+}
+
+// ============================================================
+// Footer
+// ============================================================
+footer {
+  color: var(--bs-secondary-color);
+}
+
+footer a {
+  color: var(--bs-tertiary-color);
+}
+
+footer a:hover {
+  color: var(--bs-secondary-color);
+}
+
+@media (width >= 768px) {
+  footer li {
+    display: inline-block;
+  }
+
+  footer li + li {
+    margin-left: $spacer * .3125;
+    border-left: $border-width solid var(--bs-border-color);
+    padding-left: $spacer * .3125;
+  }
+}
+
+// ============================================================
+// Spacer utility
+// ============================================================
+.spacer {
+  margin-bottom: $spacer * 1.25;
+}
