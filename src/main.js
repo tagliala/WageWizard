@@ -314,6 +314,8 @@ function setTableFields(player, id) {
   if (spMinEl) spMinEl.textContent = rateToString(player.WageWizard.Skills.SetPiecesSkill.min);
   const spMaxEl = document.getElementById(`WageWizard_Player_Max_${id}_SetPiecesSkill`);
   if (spMaxEl) spMaxEl.textContent = rateToString(player.WageWizard.Skills.SetPiecesSkill.max);
+  const spSelect = document.getElementById(`WageWizard_Player_${id}_SetPiecesSkill`);
+  if (spSelect) spSelect.value = player.SetPiecesSkill;
   const totalMinEl = document.getElementById(`WageWizard_Player_${id}_Min`);
   if (totalMinEl) totalMinEl.textContent = salaryToString(player.WageWizard.min);
   const totalMaxEl = document.getElementById(`WageWizard_Player_${id}_Max`);
