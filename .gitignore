@@ -31,3 +31,4 @@ publish
 # Configuration (contains secrets)
 chpp/config.php
 config.php
+package-lock.json
