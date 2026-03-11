@@ -106,7 +106,7 @@
   "Settings": "Impostazioni",
   "Shirt Number": "Numero maglia",
   "SHORT_HELP": "Stima velocemente gli stipendi dei giocatori e vedi come abilità, età e bonus influenzano la paga settimanale e stagionale.",
-  "LONG_HELP": "Stima velocemente gli stipendi dei giocatori e osserva come abilità, età, condizione e bonus influenzano le retribuzioni settimanali e stagionali. Inserisci i dati del giocatore manualmente o autorizza CHPP per importare la tua squadra. Imposta la skill principale e i livelli, attiva 'Abroad Bonus' se necessario, poi consulta stipendio settimanale e stagionale, stime min/max, sconto per età e impatto sulla squadra. Usa 'Get link' per condividere la configurazione corrente. Richiede un browser moderno con JavaScript.",
+  "LONG_HELP": "<p>Stima velocemente gli stipendi dei giocatori e osserva come abilità, età, condizione e bonus influenzano le retribuzioni settimanali e stagionali.</p><p>Inserisci i dati del giocatore manualmente o autorizza CHPP per importare la tua squadra. Imposta la skill principale e i livelli, attiva 'Abroad Bonus' se necessario, poi consulta stipendio settimanale e stagionale, stime min/max, sconto per età e impatto sulla squadra.</p><p>Usa 'Get link' per condividere la configurazione corrente. Richiede un browser moderno con JavaScript.</p>",
   "Show charts": "Mostra grafici",
   "Show contributions table": "Mostra la tabella dei contributi",
   "Skill": "Abilità",

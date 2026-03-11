@@ -106,7 +106,7 @@
   "Settings": "Innstillinger",
   "Shirt Number": "",
   "SHORT_HELP": "Beregn raskt spillerlønninger og se hvordan ferdigheter, alder og bonuser påvirker uke- og sesonglønn.",
-  "LONG_HELP": "Beregn raskt spillerlønninger og se hvordan ferdigheter, alder, utholdenhet og bonuser påvirker uke- og sesonglønn. Legg inn spillerdata manuelt eller autoriser CHPP for å importere laget ditt. Angi hovedferdighet og nivåer, slå på 'Abroad Bonus' ved behov, og les deretter av uke- og sesonglønninger, min/maks-estimater, aldersrabatt og teampåvirkning. Bruk 'Get link' for å dele gjeldende oppsett. Krever en moderne nettleser med JavaScript.",
+  "LONG_HELP": "<p>Beregn raskt spillerlønninger og se hvordan ferdigheter, alder, utholdenhet og bonuser påvirker uke- og sesonglønn.</p><p>Legg inn spillerdata manuelt eller autoriser CHPP for å importere laget ditt. Angi hovedferdighet og nivåer, slå på 'Abroad Bonus' ved behov, og les deretter av uke- og sesonglønninger, min/maks-estimater, aldersrabatt og teampåvirkning.</p><p>Bruk 'Get link' for å dele gjeldende oppsett. Krever en moderne nettleser med JavaScript.</p>",
   "Show charts": "",
   "Show contributions table": "Vis bidragstabell",
   "Skill": "",

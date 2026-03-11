@@ -106,7 +106,7 @@
   "Settings": "Általános beállítások",
   "Shirt Number": "Mezszám",
   "SHORT_HELP": "Becsüld gyorsan a játékosok bérezését, és lásd, hogyan befolyásolják a képességek, életkor és bónuszok a heti és szezonális fizetést.",
-  "LONG_HELP": "Becsüld gyorsan a játékosok bérezését, és lásd, hogyan befolyásolják a képességek, életkor, állóképesség és bónuszok a heti és szezonális fizetést. Add meg a játékos adatait kézzel, vagy engedélyezd a CHPP-t a csapat importálásához. Állítsd be a fő képességet és a szinteket, kapcsold be az 'Abroad Bonus'-t szükség esetén, majd nézd meg a heti és szezonális béreket, min/max becsléseket, korengedményt és a csapat hatását. Használd a 'Get link'-et a jelenlegi beállítás megosztásához. Szükséges egy modern böngésző, amely támogatja a JavaScriptet.",
+  "LONG_HELP": "<p>Becsüld gyorsan a játékosok bérezését, és lásd, hogyan befolyásolják a képességek, életkor, állóképesség és bónuszok a heti és szezonális fizetést.</p><p>Add meg a játékos adatait kézzel, vagy engedélyezd a CHPP-t a csapat importálásához. Állítsd be a fő képességet és a szinteket, kapcsold be az 'Abroad Bonus'-t szükség esetén, majd nézd meg a heti és szezonális béreket, min/max becsléseket, korengedményt és a csapat hatását.</p><p>Használd a 'Get link'-et a jelenlegi beállítás megosztásához. Szükséges egy modern böngésző, amely támogatja a JavaScriptet.</p>",
   "Show charts": "Grafikonok megjelenítése",
   "Show contributions table": "Hozzájárulás-táblázat megjelenítése",
   "Skill": "Képesség",

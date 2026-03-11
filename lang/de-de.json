@@ -106,7 +106,7 @@
   "Settings": "Grundeinstellungen",
   "Shirt Number": "Trikotnummer",
   "SHORT_HELP": "Schätze schnell Spielergehälter und sieh, wie Fähigkeiten, Alter und Boni das Wochen- und Saisongehalt beeinflussen.",
-  "LONG_HELP": "Schätze schnell Spielergehälter und sehe, wie Fähigkeiten, Alter, Ausdauer und Boni das Wochen- und Saisongehalt beeinflussen. Gib die Spielerinformationen manuell ein oder autorisiere CHPP, um dein Team zu importieren. Lege die Hauptfertigkeit und Fertigkeitsstufen fest, aktiviere bei Bedarf 'Abroad Bonus', und lies dann Wochen- und Saisongehälter, Min/Max-Schätzungen, Altersrabatt und Team-Einfluss ab. Verwende 'Get link', um die aktuelle Konfiguration zu teilen. Erfordert einen modernen Browser mit JavaScript.",
+  "LONG_HELP": "<p>Schätze schnell Spielergehälter und sehe, wie Fähigkeiten, Alter, Ausdauer und Boni das Wochen- und Saisongehalt beeinflussen.</p><p>Gib die Spielerinformationen manuell ein oder autorisiere CHPP, um dein Team zu importieren. Lege die Hauptfertigkeit und Fertigkeitsstufen fest, aktiviere bei Bedarf 'Abroad Bonus', und lies dann Wochen- und Saisongehälter, Min/Max-Schätzungen, Altersrabatt und Team-Einfluss ab.</p><p>Verwende 'Get link', um die aktuelle Konfiguration zu teilen. Erfordert einen modernen Browser mit JavaScript.</p>",
   "Show charts": "Zeige Graphiken",
   "Show contributions table": "Zeige Beitragstabelle",
   "Skill": "",
