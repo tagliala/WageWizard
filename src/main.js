@@ -672,17 +672,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       link += "params=" + formSerialize();
       const copyButton = `<button class="btn btn-sm btn-secondary" id="copyLinkToClipboard" type="button" data-bs-toggle="tooltip" data-bs-title="${WageWizard.messages.copy_to_clipboard}">${WageWizard.icons.clipboard}</button>`;
-      const body = link;
       const bodyEl = document.getElementById("generatedLinkBody");
       if (bodyEl) {
-        bodyEl.innerHTML = body;
+        bodyEl.textContent = link;
       } else {
         const container = document.getElementById("AlertsContainer");
         if (container) {
           container.insertAdjacentHTML("beforeend", createAlert({
             id: "generatedLink",
             type: "info",
-            body: body,
+            body: link.replace(/&/g, "&amp;"),
             title: WageWizard.messages.copy_link + " " + copyButton,
           }));
         }
