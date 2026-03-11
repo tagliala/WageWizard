@@ -8,6 +8,7 @@ import {
   getSetPiecesMultipliers,
   validateSkill,
   getPlayerBonus,
+  getWageMultiplier,
 } from "../src/engine.js";
 
 beforeAll(() => {
@@ -191,6 +192,45 @@ describe("setPlayerData", () => {
     expect(player.WageWizard.abroadSeasonly).toBe(16000);
   });
 
+  it("applies special bonus", () => {
+    const player = {
+      Age: 25,
+      Salary: "5000",
+      Special: true,
+      Abroad: false,
+      KeeperSkill: 1,
+      SetPiecesSkill: 5,
+      DefenderSkill: 10,
+      PlaymakerSkill: 8,
+      PassingSkill: 6,
+      WingerSkill: 4,
+      ScorerSkill: 3,
+    };
+    setPlayerData(player);
+    expect(player.WageWizard.specialWeekly).toBe(500);
+    expect(player.WageWizard.specialSeasonly).toBe(8000);
+    expect(player.WageWizard.abroadWeekly).toBe(0);
+  });
+
+  it("shows zero special bonus when not special", () => {
+    const player = {
+      Age: 25,
+      Salary: "5000",
+      Special: false,
+      Abroad: false,
+      KeeperSkill: 1,
+      SetPiecesSkill: 5,
+      DefenderSkill: 10,
+      PlaymakerSkill: 8,
+      PassingSkill: 6,
+      WingerSkill: 4,
+      ScorerSkill: 3,
+    };
+    setPlayerData(player);
+    expect(player.WageWizard.specialWeekly).toBe(0);
+    expect(player.WageWizard.specialSeasonly).toBe(0);
+  });
+
   it("allows overriding primary skill", () => {
     const player = {
       Age: 25,
@@ -206,5 +246,25 @@ describe("setPlayerData", () => {
     };
     setPlayerData(player, "PlaymakerSkill");
     expect(player.WageWizard.primary).toBe("PlaymakerSkill");
+  });
+});
+
+// ---------- getWageMultiplier ----------
+
+describe("getWageMultiplier", () => {
+  it("returns 1 when neither special nor abroad", () => {
+    expect(getWageMultiplier({ Special: false, Abroad: false })).toBe(1);
+  });
+
+  it("returns 1.2 when abroad only", () => {
+    expect(getWageMultiplier({ Special: false, Abroad: true })).toBeCloseTo(1.2);
+  });
+
+  it("returns 1.1 when special only", () => {
+    expect(getWageMultiplier({ Special: true, Abroad: false })).toBeCloseTo(1.1);
+  });
+
+  it("returns 1.32 when both special and abroad", () => {
+    expect(getWageMultiplier({ Special: true, Abroad: true })).toBeCloseTo(1.32);
   });
 });

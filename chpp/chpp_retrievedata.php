@@ -47,6 +47,7 @@ function getTeamDetails($HT, $team)
             'Age'             => $player->getAge(),
             'Days'            => $player->getDays(),
             'Salary'          => $player->getSalary(),
+            'Special'         => $player->getSpecialty() > 0,
             'Abroad'          => $player->isAbroad(),
             'NextBirthday'    => $player->getNextBirthday(),
             'Tsi'             => $player->getTsi(),

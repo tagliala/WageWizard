@@ -105,6 +105,10 @@ function getSalaryComponents(skill, level) {
   return [salary_component_low * 10, salary_component_high * 10];
 }
 
+function getWageMultiplier(player) {
+  return player.Special ? 1.1 * (player.Abroad ? 1.2 : 1) : (player.Abroad ? 1.2 : 1);
+}
+
 function setMinAndMaxSalary(player) {
   let min = 0;
   let max = 0;
@@ -112,7 +116,8 @@ function setMinAndMaxSalary(player) {
     min += player.WageWizard.Skills[skill].min;
     max += player.WageWizard.Skills[skill].max;
   }
-  const base_salary = player.Abroad ? 1.2 * BASE_SALARY : BASE_SALARY;
+  let base_salary = player.Special ? 1.1 * BASE_SALARY : BASE_SALARY;
+  base_salary = player.Abroad ? 1.2 * base_salary : base_salary;
   player.WageWizard.min =
     base_salary + min * player.WageWizard.Skills.SetPiecesSkill.min;
   player.WageWizard.max =
@@ -156,12 +161,12 @@ function setPrimarySkill(player) {
 
 function setKeeperSkill(player) {
   player.WageWizard.Skills.KeeperSkill = {};
-  const abroad_multiplier = player.Abroad ? 1.2 : 1;
+  const wage_multiplier = getWageMultiplier(player);
   const keeperComponents = getKeeperComponents(player.KeeperSkill);
   player.WageWizard.Skills.KeeperSkill.min =
-    keeperComponents[0] * player.WageWizard.rate * abroad_multiplier;
+    keeperComponents[0] * player.WageWizard.rate * wage_multiplier;
   player.WageWizard.Skills.KeeperSkill.max =
-    keeperComponents[1] * player.WageWizard.rate * abroad_multiplier;
+    keeperComponents[1] * player.WageWizard.rate * wage_multiplier;
 }
 
 function setSetPiecesSkill(player) {
@@ -173,16 +178,16 @@ function setSetPiecesSkill(player) {
 
 function setPlayerSkills(player) {
   player.WageWizard.Skills = {};
-  const abroad_multiplier = player.Abroad ? 1.2 : 1;
+  const wage_multiplier = getWageMultiplier(player);
   setKeeperSkill(player);
   setSetPiecesSkill(player);
   for (const skill in WageWizard.FORMULAE) {
     player.WageWizard.Skills[skill] = {};
     const salaryComponents = getSalaryComponents(skill, player[skill]);
     player.WageWizard.Skills[skill].min =
-      salaryComponents[0] * player.WageWizard.rate * abroad_multiplier;
+      salaryComponents[0] * player.WageWizard.rate * wage_multiplier;
     player.WageWizard.Skills[skill].max =
-      salaryComponents[1] * player.WageWizard.rate * abroad_multiplier;
+      salaryComponents[1] * player.WageWizard.rate * wage_multiplier;
   }
 }
 
@@ -203,6 +208,10 @@ function setPlayerData(player, overridePrimary) {
   player.WageWizard.abroadSeasonly = player.Abroad
     ? player.WageWizard.abroadWeekly * WEEKS
     : 0;
+  player.WageWizard.specialWeekly = player.Special ? weekly * 0.1 : 0;
+  player.WageWizard.specialSeasonly = player.Special
+    ? player.WageWizard.specialWeekly * WEEKS
+    : 0;
   setPlayerSkills(player);
   setPrimarySkill(player);
   if (
@@ -218,16 +227,20 @@ function setPlayerData(player, overridePrimary) {
 function setData(team) {
   let weekly_total = 0;
   let abroad_total = 0;
+  let special_total = 0;
   let weekly_without_discount_total = 0;
   for (const player of team.PlayersData) {
     setPlayerData(player);
     weekly_total += player.WageWizard.weekly;
     abroad_total += player.WageWizard.abroadWeekly;
+    special_total += player.WageWizard.specialWeekly;
     weekly_without_discount_total += player.WageWizard.weeklyWithoutDiscount;
   }
   team.TeamData = {
     weekly: weekly_total,
     seasonly: weekly_total * 16,
+    specialWeekly: special_total,
+    specialSeasonly: special_total * 16,
     abroadWeekly: abroad_total,
     abroadSeasonly: abroad_total * 16,
     discount: 1 - weekly_total / weekly_without_discount_total,
@@ -254,4 +267,4 @@ WageWizard.Engine.start = function () {
 WageWizard.Engine.setPlayerData = setPlayerData;
 WageWizard.Engine.getRate = getRate;
 
-export { getRate, setPlayerData, getSalaryComponents, getKeeperComponents, getSetPiecesMultipliers, validateSkill, getPlayerBonus };
+export { getRate, setPlayerData, getSalaryComponents, getKeeperComponents, getSetPiecesMultipliers, validateSkill, getPlayerBonus, getWageMultiplier };
