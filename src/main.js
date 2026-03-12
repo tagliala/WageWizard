@@ -588,6 +588,7 @@ function fetchCHPPData(url, useCache) {
             WageWizard.Teams = jsonObject.Teams;
             WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID];
             WageWizard.Engine.start();
+            createCountryDropbox();
             setupCHPPPlayerFields(true);
             loginMenuHide();
             enableCHPPMode();
