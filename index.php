@@ -235,7 +235,7 @@ foreach ($lang_array as $key => $val) {
         <div class="col-lg-9">
           <ul class="nav nav-tabs mb-3" role="tablist">
             <li class="nav-item"><a class="nav-link active" href="#tabPlayer" data-bs-toggle="tab" role="tab"><?= icon('user') ?> <span class="d-none d-sm-inline"><?= localize("Player") ?></span></a></li>
-            <li class="nav-item d-none" id="tabTeamNav"><a class="nav-link" href="#tabTeam" data-bs-toggle="tab" role="tab"><?= icon('users') ?> <span class="d-none d-sm-inline"><?= localize("Team") ?></span></a></li>
+            <li class="nav-item d-none" id="tabTeamsNav"><a class="nav-link" href="#tabTeams" data-bs-toggle="tab" role="tab"><?= icon('users') ?> <span class="d-none d-sm-inline"><?= localize("Team") ?></span></a></li>
             <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('circle-plus') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
             <li class="nav-item d-none" id="tabDebugNav"><a class="nav-link" href="#tabDebug" data-bs-toggle="tab" role="tab">Debug</a></li>
             <li class="nav-item credits"><a class="nav-link" href="#tabCredits" data-bs-toggle="tab" role="tab"><?= icon('gift') ?> <span class="d-none d-sm-inline"><?= localize("Credits") ?></span></a></li>
@@ -414,12 +414,16 @@ foreach ($lang_array as $key => $val) {
               </form> <!-- Main Form End -->
             </div>
 
-            <!-- Team -->
-            <div class="tab-pane" id="tabTeam" role="tabpanel">
+            <!-- Teams -->
+            <div class="tab-pane" id="tabTeams" role="tabpanel">
+              <div id="WageWizard_Teams" class="row g-3"></div>
+            </div>
+
+            <template id="team-table-template">
               <table class="table table-bordered table-sm table-striped w-auto">
-                <tbody id="WageWizard_Team">
+                <tbody>
                   <tr>
-                    <th colspan="3" class="superheader text-center"><?= icon('users') ?> <?= localize("Team Total"); ?></th>
+                    <th colspan="3" class="superheader text-center"><?= icon('users') ?> <span class="team-name-cell"></span></th>
                   </tr>
                   <tr>
                     <th></th>
@@ -447,7 +451,7 @@ foreach ($lang_array as $key => $val) {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </template>
 
             <!-- Extra -->
             <div class="tab-pane" id="tabExtra" role="tabpanel">
