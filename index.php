@@ -265,37 +265,40 @@ foreach ($lang_array as $key => $val) {
                   <!-- CHPP Controls Start -->
                   <select class="form-select form-select-lg ignore mb-3" id="CHPP_Team" name="CHPP_Team"></select>
 
-                  <div class="d-flex gap-2 mb-3">
-                    <select class="form-select ignore flex-grow-1" id="CHPP_Player_1" name="CHPP_Player_1_Name" data-id="1">
-                    </select>
-                    <select class="form-select ignore" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
-                      <option value="PlayerNumber"><?php echo localize("Shirt Number"); ?></option>
-                      <option value="PlayerName"><?php echo localize("Name"); ?></option>
-                      <option value="Salary"><?php echo localize("Salary"); ?></option>
-                      <option value="Tsi"><?php echo localize("TSI"); ?></option>
-                      <option value="PlayerForm"><?php echo localize("Form"); ?></option>
-                      <option value="StaminaSkill"><?php echo localize("Stamina"); ?></option>
-                      <option value="Experience"><?php echo localize("Experience"); ?></option>
-                      <option value="Loyalty"><?php echo localize("Loyalty"); ?></option>
-                      <optgroup label="<?= localize("Skill"); ?>">
-                        <option value="KeeperSkill"><?php echo localize("KeeperSkill"); ?></option>
-                        <option value="PlaymakerSkill"><?php echo localize("PlaymakerSkill"); ?></option>
-                        <option value="PassingSkill"><?php echo localize("PassingSkill"); ?></option>
-                        <option value="WingerSkill"><?php echo localize("WingerSkill"); ?></option>
-                        <option value="DefenderSkill"><?php echo localize("DefenderSkill"); ?></option>
-                        <option value="ScorerSkill"><?php echo localize("ScorerSkill"); ?></option>
-                        <option value="SetPiecesSkill"><?php echo localize("SetPiecesSkill"); ?></option>
-                      </optgroup>
-                    </select>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <select class="form-select ignore mb-3" id="CHPP_Player_1" name="CHPP_Player_1_Name" data-id="1"></select>
+                    </div>
+                    <div class="col-md-4">
+                      <select class="form-select ignore mb-3" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
+                        <option value="PlayerNumber"><?php echo localize("Shirt Number"); ?></option>
+                        <option value="PlayerName"><?php echo localize("Name"); ?></option>
+                        <option value="Salary"><?php echo localize("Salary"); ?></option>
+                        <option value="Tsi"><?php echo localize("TSI"); ?></option>
+                        <option value="PlayerForm"><?php echo localize("Form"); ?></option>
+                        <option value="StaminaSkill"><?php echo localize("Stamina"); ?></option>
+                        <option value="Experience"><?php echo localize("Experience"); ?></option>
+                        <option value="Loyalty"><?php echo localize("Loyalty"); ?></option>
+                        <optgroup label="<?= localize("Skill"); ?>">
+                          <option value="KeeperSkill"><?php echo localize("KeeperSkill"); ?></option>
+                          <option value="PlaymakerSkill"><?php echo localize("PlaymakerSkill"); ?></option>
+                          <option value="PassingSkill"><?php echo localize("PassingSkill"); ?></option>
+                          <option value="WingerSkill"><?php echo localize("WingerSkill"); ?></option>
+                          <option value="DefenderSkill"><?php echo localize("DefenderSkill"); ?></option>
+                          <option value="ScorerSkill"><?php echo localize("ScorerSkill"); ?></option>
+                          <option value="SetPiecesSkill"><?php echo localize("SetPiecesSkill"); ?></option>
+                        </optgroup>
+                      </select>
+                    </div>
                   </div> <!-- CHPP Controls End -->
 
-                  <div class="row mb-3">
+                  <div class="row">
                     <div class="col-md-6">
-                      <div class="d-flex d-none" id="WageWizard_Description_Player_1">
+                      <div class="d-flex d-none mb-3" id="WageWizard_Description_Player_1">
                         <div class="flex-shrink-0" id="WageWizard_Description_Player_1_Avatar"></div>
                         <div class="ms-3">
-                          <h4 id="WageWizard_Description_Player_1_Name"></h4>
-                          <p>
+                          <h4 class="mb-0" id="WageWizard_Description_Player_1_Name"></h4>
+                          <p class="mb-0">
                             <em id="WageWizard_Description_Player_1_Statement" class="text-body-secondary d-block"></em>
                             <span id="WageWizard_Description_Player_1_Age" class="d-block"></span>
                             <span class="d-block"><?= icon('gift') ?> <span id="WageWizard_Description_Player_1_NextBirthday"></span></span>
