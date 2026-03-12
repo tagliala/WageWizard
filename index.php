@@ -235,8 +235,8 @@ foreach ($lang_array as $key => $val) {
         <div class="col-lg-9">
           <ul class="nav nav-tabs mb-3" role="tablist">
             <li class="nav-item"><a class="nav-link active" href="#tabPlayer" data-bs-toggle="tab" role="tab"><?= icon('user') ?> <span class="d-none d-sm-inline"><?= localize("Player") ?></span></a></li>
-            <li class="nav-item d-none" id="tabTeamsNav"><a class="nav-link" href="#tabTeams" data-bs-toggle="tab" role="tab"><?= icon('users') ?> <span class="d-none d-sm-inline"><?= localize("Team") ?></span></a></li>
-            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('circle-plus') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
+            <li class="nav-item d-none" id="tabTeamsNav"><a class="nav-link" href="#tabTeams" data-bs-toggle="tab" role="tab"><?= icon('users') ?> <span class="d-none d-sm-inline"><?= localize("Teams") ?></span></a></li>
+            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('tools') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
             <li class="nav-item d-none" id="tabDebugNav"><a class="nav-link" href="#tabDebug" data-bs-toggle="tab" role="tab">Debug</a></li>
             <li class="nav-item credits"><a class="nav-link" href="#tabCredits" data-bs-toggle="tab" role="tab"><?= icon('gift') ?> <span class="d-none d-sm-inline"><?= localize("Credits") ?></span></a></li>
           </ul>
