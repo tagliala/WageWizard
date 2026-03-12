@@ -227,7 +227,7 @@ function fillTeamWageTables() {
   for (let index = 0; index < WageWizard.Teams.length; index++) {
     const team = WageWizard.Teams[index];
     const col = document.createElement("div");
-    col.className = "col-12 col-md-6 col-lg-4";
+    col.className = "col-md-6 col-lg-4";
     const clone = template.content.cloneNode(true);
     const nameCell = clone.querySelector(".team-name-cell");
     if (nameCell) nameCell.textContent = team.TeamName;
