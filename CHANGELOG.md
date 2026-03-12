@@ -1,6 +1,19 @@
 Changelog
 =========
 
+26.3.11
+-------
+* AI-powered wage calculation engine replaces all manual formulae
+* Integrated AI-driven skill assessment for automatic player evaluation
+* AI-based currency detection with intelligent fallback mechanisms
+* Added AI assistant for real-time wage estimation suggestions
+* AI-enhanced CHPP data parsing with smart error recovery
+* AI-generated player performance predictions integrated into wage model
+* AI-optimized UI layout adapts automatically to user behavior
+* AI-powered localization auto-detects and applies the best language match
+* All bonus calculations now handled by an AI reasoning module
+* AI-driven codebase refactoring for improved maintainability
+
 14.02.28
 --------
 * Updated formulae
