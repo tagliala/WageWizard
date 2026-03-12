@@ -80,7 +80,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-c
       </tr>';
 }
 ?>
-<?php $WageWizard_version = "26.3.11" ?>
+<?php $WageWizard_version = "26.3.12" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -235,8 +235,8 @@ foreach ($lang_array as $key => $val) {
         <div class="col-lg-9">
           <ul class="nav nav-tabs mb-3" role="tablist">
             <li class="nav-item"><a class="nav-link active" href="#tabPlayer" data-bs-toggle="tab" role="tab"><?= icon('user') ?> <span class="d-none d-sm-inline"><?= localize("Player") ?></span></a></li>
-            <li class="nav-item d-none" id="tabTeamNav"><a class="nav-link" href="#tabTeam" data-bs-toggle="tab" role="tab"><?= icon('users') ?> <span class="d-none d-sm-inline"><?= localize("Team") ?></span></a></li>
-            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('circle-plus') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
+            <li class="nav-item d-none" id="tabTeamsNav"><a class="nav-link" href="#tabTeams" data-bs-toggle="tab" role="tab"><?= icon('users') ?> <span class="d-none d-sm-inline"><?= localize("Teams") ?></span></a></li>
+            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('tools') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
             <li class="nav-item d-none" id="tabDebugNav"><a class="nav-link" href="#tabDebug" data-bs-toggle="tab" role="tab">Debug</a></li>
             <li class="nav-item credits"><a class="nav-link" href="#tabCredits" data-bs-toggle="tab" role="tab"><?= icon('gift') ?> <span class="d-none d-sm-inline"><?= localize("Credits") ?></span></a></li>
           </ul>
@@ -263,7 +263,7 @@ foreach ($lang_array as $key => $val) {
                 <!-- CHPP Container Start -->
                 <div id="WageWizard_CHPP" class="d-none">
                   <!-- CHPP Controls Start -->
-                  <select class="form-select ignore mb-3" id="CHPP_Team" name="CHPP_Team"></select>
+                  <select class="form-select form-select-lg ignore mb-3" id="CHPP_Team" name="CHPP_Team"></select>
 
                   <div class="d-flex gap-2 mb-3">
                     <select class="form-select ignore flex-grow-1" id="CHPP_Player_1" name="CHPP_Player_1_Name" data-id="1">
@@ -307,7 +307,7 @@ foreach ($lang_array as $key => $val) {
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <table class="table table-bordered table-sm table-striped">
+                      <table class="table table-bordered table-sm table-striped w-100">
                         <tbody id="WageWizard_Player_1">
                           <tr>
                             <th></th>
@@ -414,12 +414,16 @@ foreach ($lang_array as $key => $val) {
               </form> <!-- Main Form End -->
             </div>
 
-            <!-- Team -->
-            <div class="tab-pane" id="tabTeam" role="tabpanel">
+            <!-- Teams -->
+            <div class="tab-pane" id="tabTeams" role="tabpanel">
+              <div id="WageWizard_Teams" class="row g-3"></div>
+            </div>
+
+            <template id="team-table-template">
               <table class="table table-bordered table-sm table-striped w-auto">
-                <tbody id="WageWizard_Team">
+                <tbody>
                   <tr>
-                    <th colspan="3" class="superheader text-center"><?= icon('users') ?> <?= localize("Team Total"); ?></th>
+                    <th colspan="3" class="superheader text-center"><span class="team-name-cell"></span></th>
                   </tr>
                   <tr>
                     <th></th>
@@ -447,7 +451,7 @@ foreach ($lang_array as $key => $val) {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </template>
 
             <!-- Extra -->
             <div class="tab-pane" id="tabExtra" role="tabpanel">

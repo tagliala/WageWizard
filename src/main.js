@@ -106,13 +106,13 @@ function isVerboseModeEnabled() {
 // -- CHPP mode toggle --
 
 function enableCHPPMode() {
-  for (const el of document.querySelectorAll("#tabTeamNav, #WageWizard_CHPP")) {
+  for (const el of document.querySelectorAll("#tabTeamsNav, #WageWizard_CHPP")) {
     el.classList.remove("d-none");
   }
 }
 
 function disableCHPPMode() {
-  for (const el of document.querySelectorAll("#tabTeamNav, #WageWizard_CHPP")) {
+  for (const el of document.querySelectorAll("#tabTeamsNav, #WageWizard_CHPP")) {
     el.classList.add("d-none");
   }
 }
@@ -218,10 +218,25 @@ function fillDataField(element, target) {
 
 // -- Table updates --
 
-function fillTeamWageTable() {
-  const Team = WageWizard.Teams[document.getElementById("CHPP_Team")?.value || 0];
-  for (const el of document.querySelectorAll("#WageWizard_Team [data-target]")) {
-    fillDataField(el, Team.TeamData[el.dataset.target]);
+function fillTeamWageTables() {
+  const container = document.getElementById("WageWizard_Teams");
+  if (!container) return;
+  const template = document.getElementById("team-table-template");
+  if (!template) return;
+  container.innerHTML = "";
+  for (let index = 0; index < WageWizard.Teams.length; index++) {
+    const team = WageWizard.Teams[index];
+    const col = document.createElement("div");
+    col.className = "col-md-6 col-lg-4";
+    const clone = template.content.cloneNode(true);
+    const nameCell = clone.querySelector(".team-name-cell");
+    if (nameCell) nameCell.textContent = team.TeamName;
+    for (const el of clone.querySelectorAll("[data-target]")) {
+      fillDataField(el, team.TeamData[el.dataset.target]);
+      if (el.dataset.colorize !== undefined) colorizePercent(el);
+    }
+    col.appendChild(clone);
+    container.appendChild(col);
   }
 }
 
@@ -404,7 +419,7 @@ function updateCHPPPlayerFields() {
     opt.textContent = `${number} ${player.PlayerName} ${mc}${star}`;
     selectP1.appendChild(opt);
   }
-  fillTeamWageTable();
+  fillTeamWageTables();
 }
 
 function setupCHPPPlayerFields(checkUrlParameter) {
