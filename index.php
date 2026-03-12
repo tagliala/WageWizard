@@ -80,7 +80,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-c
       </tr>';
 }
 ?>
-<?php $WageWizard_version = "26.3.11" ?>
+<?php $WageWizard_version = "26.3.12" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -263,7 +263,7 @@ foreach ($lang_array as $key => $val) {
                 <!-- CHPP Container Start -->
                 <div id="WageWizard_CHPP" class="d-none">
                   <!-- CHPP Controls Start -->
-                  <select class="form-select ignore mb-3" id="CHPP_Team" name="CHPP_Team"></select>
+                  <select class="form-select form-select-lg ignore mb-3" id="CHPP_Team" name="CHPP_Team"></select>
 
                   <div class="d-flex gap-2 mb-3">
                     <select class="form-select ignore flex-grow-1" id="CHPP_Player_1" name="CHPP_Player_1_Name" data-id="1">
@@ -307,7 +307,7 @@ foreach ($lang_array as $key => $val) {
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <table class="table table-bordered table-sm table-striped">
+                      <table class="table table-bordered table-sm table-striped w-100">
                         <tbody id="WageWizard_Player_1">
                           <tr>
                             <th></th>
@@ -423,7 +423,7 @@ foreach ($lang_array as $key => $val) {
               <table class="table table-bordered table-sm table-striped w-auto">
                 <tbody>
                   <tr>
-                    <th colspan="3" class="superheader text-center"><?= icon('users') ?> <span class="team-name-cell"></span></th>
+                    <th colspan="3" class="superheader text-center"><span class="team-name-cell"></span></th>
                   </tr>
                   <tr>
                     <th></th>
