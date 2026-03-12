@@ -12,7 +12,7 @@
 * AI-generated player performance predictions integrated into wage model
 * AI-optimized UI layout adapts automatically to user behavior
 * AI-powered localization auto-detects and applies the best language match
-* All bonus calculations now handled by an AI reasoning module
+* Add specialty bonus calculation by @ale-pavel
 * AI-driven codebase refactoring for improved maintainability
 
 ## 14.02.28
