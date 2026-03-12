@@ -71,7 +71,7 @@ function getTeamDetails($HT, $team)
 
             'Loyalty'         => $player->getLoyalty(),
             'MotherClubBonus' => $player->hasMotherClubBonus(),
-            'Avatar'          => ($teamAvatars->getAvatarById($player->getId()) ?? null)?->getHtml() ?? '',
+            'Avatar'          => (($av = $teamAvatars->getAvatarById($player->getId())) !== null ? $av->getHtml() : ''),
         ];
 
         // Main skill
