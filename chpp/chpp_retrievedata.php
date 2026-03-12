@@ -29,6 +29,7 @@ function getTeamDetails($HT, $team)
     $teamArray = [];
     $teamArray["TeamId"] = $teamId;
     $teamArray["TeamName"] = $team->getName();
+    $teamArray["LeagueID"] = $team->getLeagueId();
 
     $teamPlayers = $HT->getSeniorPlayers($teamId);
     $teamAvatars = $HT->getSeniorAvatars($teamId);

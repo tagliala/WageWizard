@@ -164,7 +164,50 @@ function fillForm() {
   }
   const leagueSelect = document.getElementById("WageWizard_League");
   if (leagueSelect) {
-    WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[leagueSelect.value];
+    const details = WageWizard.LEAGUE_DETAILS[leagueSelect.value];
+    if (details) WageWizard.LeagueDetails = details;
+  }
+}
+
+const PLAYER_URL_PARAMS = {
+  goalkeeping: "KeeperSkill",
+  playmaking: "PlaymakerSkill",
+  passing: "PassingSkill",
+  winger: "WingerSkill",
+  defending: "DefenderSkill",
+  scoring: "ScorerSkill",
+  setpieces: "SetPiecesSkill",
+};
+
+function fillFormFromPlayerParams() {
+  for (const [param, skill] of Object.entries(PLAYER_URL_PARAMS)) {
+    const value = gup(param);
+    if (value != null) {
+      const el = document.getElementById(`WageWizard_Player_1_${skill}`);
+      if (el) el.value = value;
+    }
+  }
+
+  const age = gup("age");
+  if (age != null) {
+    const el = document.getElementById("WageWizard_Player_1_Age");
+    if (el) el.value = age;
+  }
+
+  const wagebonus = gup("wagebonus");
+  if (wagebonus != null) {
+    const el = document.getElementById("WageWizard_Player_1_Abroad");
+    if (el) el.checked = wagebonus === "1" || wagebonus.toLowerCase() === "true";
+  }
+
+  const nationality = gup("nationality");
+  if (nationality != null) {
+    const el = document.getElementById("WageWizard_League");
+    if (el) {
+      el.value = nationality;
+      const details = WageWizard.LEAGUE_DETAILS[nationality];
+      if (details) WageWizard.LeagueDetails = details;
+    }
   }
 }
 
@@ -378,6 +421,11 @@ function updateCHPPPlayerFields() {
   const Team = WageWizard.Teams[teamSelect?.value];
   const titleEl = document.getElementById("menuLoginTitle");
   if (titleEl) titleEl.textContent = Team.TeamName;
+  const leagueSelect = document.getElementById("WageWizard_League");
+  if (leagueSelect && Team.LeagueID) {
+    leagueSelect.value = Team.LeagueID;
+    WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[Team.LeagueID];
+  }
   const PlayersData = Team.PlayersData;
   if (PlayersData == null) return;
   sortCHPPPlayerFields();
@@ -814,6 +862,8 @@ document.addEventListener("DOMContentLoaded", () => {
     createCountryDropbox();
     if (gup("params") != null) {
       fillForm();
+    } else {
+      fillFormFromPlayerParams();
     }
     for (const el of document.querySelectorAll(".wagewizard-league")) {
       el.classList.remove("d-none");
