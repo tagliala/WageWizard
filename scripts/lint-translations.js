@@ -19,7 +19,14 @@ const BASE_LANG = "en-us.json";
 
 // HTML content rules for specific translation keys.
 // Each entry: [humanReadableDescription, testFn(value) => boolean]
-const HTML_RULES = {};
+const HTML_RULES = {
+  LONG_HELP: [
+    [
+      'must contain <a id="extraLink"> (used by the Extra tab click handler)',
+      (v) => v.includes('id="extraLink"'),
+    ],
+  ],
+};
 
 const base = JSON.parse(readFileSync(join(LANG_DIR, BASE_LANG), "utf8"));
 const baseKeys = new Set(Object.keys(base));
