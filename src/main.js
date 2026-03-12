@@ -162,6 +162,11 @@ function fillForm() {
       field.value = params[i];
     }
   }
+  const leagueSelect = document.getElementById("WageWizard_League");
+  if (leagueSelect) {
+    const details = WageWizard.LEAGUE_DETAILS[leagueSelect.value];
+    if (details) WageWizard.LeagueDetails = details;
+  }
 }
 
 function formSerialize() {
@@ -374,6 +379,11 @@ function updateCHPPPlayerFields() {
   const Team = WageWizard.Teams[teamSelect?.value];
   const titleEl = document.getElementById("menuLoginTitle");
   if (titleEl) titleEl.textContent = Team.TeamName;
+  const leagueSelect = document.getElementById("WageWizard_League");
+  if (leagueSelect && Team.LeagueID) {
+    leagueSelect.value = Team.LeagueID;
+    WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[Team.LeagueID];
+  }
   const PlayersData = Team.PlayersData;
   if (PlayersData == null) return;
   sortCHPPPlayerFields();
@@ -536,6 +546,7 @@ function fetchCHPPData(url, useCache) {
             WageWizard.Teams = jsonObject.Teams;
             WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[jsonObject.LeagueID];
             WageWizard.Engine.start();
+            createCountryDropbox();
             setupCHPPPlayerFields(true);
             loginMenuHide();
             enableCHPPMode();

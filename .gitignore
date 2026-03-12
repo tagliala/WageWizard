@@ -15,6 +15,7 @@ coverage/
 # Dependencies
 node_modules/
 vendor/
+package-lock.json
 
 # PHP-CS-Fixer cache
 .php-cs-fixer.cache
