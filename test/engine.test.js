@@ -194,7 +194,7 @@ describe("setPlayerData", () => {
     expect(player.WageWizard.abroadSeasonly).toBe(16000);
   });
 
-  it("applies special bonus", () => {
+  it("applies special bonus without inflating base salary", () => {
     const player = {
       Age: 25,
       Salary: "5000",
@@ -209,10 +209,30 @@ describe("setPlayerData", () => {
       ScorerSkill: 3,
     };
     setPlayerData(player);
-    expect(player.WageWizard.baseSalary).toBe(2750);
+    expect(player.WageWizard.baseSalary).toBe(2500);
     expect(player.WageWizard.specialWeekly).toBe(500);
     expect(player.WageWizard.specialSeasonly).toBe(8000);
     expect(player.WageWizard.abroadWeekly).toBe(0);
+  });
+
+  it("keeps the fixed base salary on the abroad path as well", () => {
+    const player = {
+      Age: 25,
+      Salary: "5000",
+      Special: true,
+      Abroad: true,
+      KeeperSkill: 1,
+      SetPiecesSkill: 5,
+      DefenderSkill: 10,
+      PlaymakerSkill: 8,
+      PassingSkill: 6,
+      WingerSkill: 4,
+      ScorerSkill: 3,
+    };
+    setPlayerData(player);
+    expect(player.WageWizard.baseSalary).toBe(3000);
+    expect(player.WageWizard.abroadWeekly).toBe(1000);
+    expect(player.WageWizard.specialWeekly).toBe(500);
   });
 
   it("shows zero special bonus when not special", () => {
