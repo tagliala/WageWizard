@@ -80,7 +80,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-c
       </tr>';
 }
 ?>
-<?php $WageWizard_version = "26.3.12" ?>
+<?php $WageWizard_version = "26.5.17" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -395,6 +395,13 @@ foreach ($lang_array as $key => $val) {
                     </tr>
                   </tbody>
                   <tbody>
+                    <tr>
+                      <td></td>
+                      <td><?= localize("Base Salary") ?></td>
+                      <td></td>
+                      <td id="WageWizard_Player_Min_1_BaseSalary" class="wage-cell"></td>
+                      <td id="WageWizard_Player_Max_1_BaseSalary" class="wage-cell"></td>
+                    </tr>
                     <?php skillRow(1, 'KeeperSkill') ?>
                     <?php skillRow(1, 'DefenderSkill') ?>
                     <?php skillRow(1, 'PlaymakerSkill') ?>

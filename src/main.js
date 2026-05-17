@@ -305,6 +305,10 @@ function setTableFields(player, id) {
   if (specialCheckbox) specialCheckbox.checked = player.Special;
   const abroadCheckbox = document.getElementById(`WageWizard_Player_${id}_Abroad`);
   if (abroadCheckbox) abroadCheckbox.checked = player.Abroad;
+  const baseMinEl = document.getElementById(`WageWizard_Player_Min_${id}_BaseSalary`);
+  if (baseMinEl) baseMinEl.textContent = salaryToString(player.WageWizard.baseSalary);
+  const baseMaxEl = document.getElementById(`WageWizard_Player_Max_${id}_BaseSalary`);
+  if (baseMaxEl) baseMaxEl.textContent = salaryToString(player.WageWizard.baseSalary);
 
   for (const skill of WageWizard.HATTRICK_SKILLS) {
     if (skill === "SetPiecesSkill") continue;
