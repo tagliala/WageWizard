@@ -116,8 +116,9 @@ function setMinAndMaxSalary(player) {
     min += player.WageWizard.Skills[skill].min;
     max += player.WageWizard.Skills[skill].max;
   }
-  let baseSalary = player.Special ? 1.1 * BASE_SALARY : BASE_SALARY;
-  baseSalary = player.Abroad ? 1.2 * baseSalary : baseSalary;
+  // Specialty only affects the skill-derived wage portion; the fixed base salary
+  // only receives the abroad bonus. Ref: https://www.hattrick.org/Forum/Read.aspx?t=17629498&v=4&a=1&n=237
+  const baseSalary = player.Abroad ? 1.2 * BASE_SALARY : BASE_SALARY;
   player.WageWizard.baseSalary = baseSalary;
   player.WageWizard.min =
     baseSalary + min * player.WageWizard.Skills.SetPiecesSkill.min;
