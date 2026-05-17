@@ -152,6 +152,7 @@ describe("setPlayerData", () => {
     expect(player.WageWizard.rate).toBe(1);
     expect(player.WageWizard.discount).toBe(0);
     expect(player.WageWizard.primary).toBe("DefenderSkill");
+    expect(player.WageWizard.baseSalary).toBe(2500);
     expect(player.WageWizard.min).toBeGreaterThan(0);
     expect(player.WageWizard.max).toBeGreaterThan(player.WageWizard.min);
   });
@@ -188,6 +189,7 @@ describe("setPlayerData", () => {
       ScorerSkill: 3,
     };
     setPlayerData(player);
+    expect(player.WageWizard.baseSalary).toBe(3000);
     expect(player.WageWizard.abroadWeekly).toBe(1000);
     expect(player.WageWizard.abroadSeasonly).toBe(16000);
   });
@@ -207,6 +209,7 @@ describe("setPlayerData", () => {
       ScorerSkill: 3,
     };
     setPlayerData(player);
+    expect(player.WageWizard.baseSalary).toBe(2750);
     expect(player.WageWizard.specialWeekly).toBe(500);
     expect(player.WageWizard.specialSeasonly).toBe(8000);
     expect(player.WageWizard.abroadWeekly).toBe(0);

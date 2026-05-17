@@ -116,12 +116,13 @@ function setMinAndMaxSalary(player) {
     min += player.WageWizard.Skills[skill].min;
     max += player.WageWizard.Skills[skill].max;
   }
-  let base_salary = player.Special ? 1.1 * BASE_SALARY : BASE_SALARY;
-  base_salary = player.Abroad ? 1.2 * base_salary : base_salary;
+  let baseSalary = player.Special ? 1.1 * BASE_SALARY : BASE_SALARY;
+  baseSalary = player.Abroad ? 1.2 * baseSalary : baseSalary;
+  player.WageWizard.baseSalary = baseSalary;
   player.WageWizard.min =
-    base_salary + min * player.WageWizard.Skills.SetPiecesSkill.min;
+    baseSalary + min * player.WageWizard.Skills.SetPiecesSkill.min;
   player.WageWizard.max =
-    base_salary + max * player.WageWizard.Skills.SetPiecesSkill.max;
+    baseSalary + max * player.WageWizard.Skills.SetPiecesSkill.max;
 }
 
 function applySecondaryDiscounts(player) {

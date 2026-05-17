@@ -1,5 +1,8 @@
 # Changelog
 
+## 26.5.17
+* Add base salary row
+
 ## 26.3.12
 * Better support of multiple teams
 
