@@ -15,7 +15,7 @@ include 'localization.php';
 ?>
 <?php
 
-function optionSkills($start = 0, $stop = 20, $select = 6)
+function optionSkills($start = 0, $stop = 20, $select = 1)
 {
     global $localizedSkills;
 
@@ -45,7 +45,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     return $result;
 }
 
-function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-cell', $start = 0, $stop = 20, $select = 6)
+function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-cell', $start = 0, $stop = 20, $select = 1)
 {
     $localizedSkill = localize($skill);
     $localizedPlayer = localize("Player $player");
@@ -80,7 +80,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-c
       </tr>';
 }
 ?>
-<?php $WageWizard_version = "26.5.17" ?>
+<?php $WageWizard_version = "27.0.0" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -466,7 +466,7 @@ foreach ($lang_array as $key => $val) {
             <!-- Extra -->
             <div class="tab-pane" id="tabExtra" role="tabpanel">
               <h3 class="legend-like"><?= localize("Age Discount Calculation"); ?></h3>
-              <form action="javascript:{}" method="post" class="d-flex flex-wrap align-items-center gap-2">
+              <form action="javascript:{}" method="post" class="d-flex flex-wrap align-items-center gap-2 mb-3">
                 <div class="control-group d-flex align-items-center gap-2">
                   <label for="ageDiscountCalculation" class="text-nowrap">
                     <?= localize("Age"); ?>:
@@ -491,6 +491,14 @@ foreach ($lang_array as $key => $val) {
                   <input type="text" value="" class="form-control form-control-sm w-auto" id="ageDiscountCalculationDiscountedSalary" name="ageDiscountCalculationDiscountedSalary" disabled>
                 </div>
               </form>
+
+              <h3 class="legend-like"><?= localize("Minimum Wage Table"); ?></h3>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm table-striped w-auto table--minimum-wage" id="minimumWageTable">
+                  <thead></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
 
             <!-- Debug -->
@@ -564,8 +572,21 @@ foreach ($lang_array as $key => $val) {
           echo "false";
       } ?>;
 <?php
+    $minimumWageTableLabels = [
+        'skillLevel' => localize('Skill Level'),
+        'skills' => [
+            'KeeperSkill' => localize('KeeperSkill'),
+            'DefenderSkill' => localize('DefenderSkill'),
+            'PlaymakerSkill' => localize('PlaymakerSkill'),
+            'PassingSkill' => localize('PassingSkill'),
+            'WingerSkill' => localize('WingerSkill'),
+            'ScorerSkill' => localize('ScorerSkill'),
+        ],
+        'levels' => array_values($localizedSkills),
+    ];
 echo localizeJavascript();
 ?>
+      WageWizard.MinimumWageTableLabels = <?= json_encode($minimumWageTableLabels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     </script>
   </body>
 </html>

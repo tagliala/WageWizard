@@ -1,6 +1,7 @@
 import WageWizard from "./wagewizard.js";
 import "./formulae.js";
 import "./league_details.js";
+import { MINIMUM_WAGE_TABLE } from "./minimum-wage-table.js";
 
 WageWizard.CONFIG = WageWizard.CONFIG || {};
 
@@ -192,6 +193,11 @@ function salaryToString(salary) {
   return number_format(getWageInUserCurrency(salary), 0, "", " ") + " " + WageWizard.LeagueDetails.Country.CurrencyName;
 }
 
+function minimumWageToString(wage) {
+  if (wage == null) return "";
+  return salaryToString(wage * 10);
+}
+
 function rateToString(rate, precision) {
   if (precision == null) precision = 0;
   return number_format(rate * 100, 2) + "%";
@@ -214,6 +220,51 @@ function fillDataField(element, target) {
       element.textContent = rateToString(target, 2);
       break;
   }
+}
+
+function renderMinimumWageTable() {
+  const table = document.getElementById("minimumWageTable");
+  if (!table || WageWizard.LeagueDetails?.Country == null) return;
+  const labels = WageWizard.MinimumWageTableLabels;
+  if (labels == null) return;
+
+  const thead = table.tHead ?? table.createTHead();
+  const tbody = table.tBodies[0] ?? table.createTBody();
+  thead.textContent = "";
+  tbody.textContent = "";
+
+  const headerRow = document.createElement("tr");
+  const skillLevelHeader = document.createElement("th");
+  skillLevelHeader.textContent = labels.skillLevel;
+  headerRow.appendChild(skillLevelHeader);
+
+  for (const skill of MINIMUM_WAGE_TABLE.skills) {
+    const skillHeader = document.createElement("th");
+    skillHeader.textContent = labels.skills?.[skill] ?? skill;
+    headerRow.appendChild(skillHeader);
+  }
+  thead.appendChild(headerRow);
+
+  const fragment = document.createDocumentFragment();
+  for (const row of MINIMUM_WAGE_TABLE.rows) {
+    const tr = document.createElement("tr");
+    const rowHeader = document.createElement("th");
+    rowHeader.scope = "row";
+    const levelLabel = labels.levels?.[row.level] ?? String(row.level);
+    rowHeader.textContent = `${levelLabel} (${row.level})`;
+    tr.appendChild(rowHeader);
+
+    for (const wage of row.wages) {
+      const cell = document.createElement("td");
+      cell.className = "wage-cell";
+      cell.textContent = minimumWageToString(wage);
+      tr.appendChild(cell);
+    }
+
+    fragment.appendChild(tr);
+  }
+
+  tbody.appendChild(fragment);
 }
 
 // -- Table updates --
@@ -402,6 +453,7 @@ function updateCHPPPlayerFields() {
   if (leagueSelect && Team.LeagueID) {
     leagueSelect.value = Team.LeagueID;
     WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[Team.LeagueID];
+    renderMinimumWageTable();
   }
   const PlayersData = Team.PlayersData;
   if (PlayersData == null) return;
@@ -487,6 +539,7 @@ function createCountryDropbox() {
     (l) => `<option value='${l.id}'${l.id === leagueId ? " selected" : ""}>${l.name}</option>`
   ).join("");
   WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[leagueId];
+  renderMinimumWageTable();
 }
 
 // -- Player from form --
@@ -742,6 +795,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (leagueSelect) {
     leagueSelect.addEventListener("change", () => {
       WageWizard.LeagueDetails = WageWizard.LEAGUE_DETAILS[leagueSelect.value];
+      renderMinimumWageTable();
     });
   }
 

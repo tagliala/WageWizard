@@ -388,7 +388,9 @@ ul.nav.nav-tabs {
 td.wage-percent,
 td.wage-cell {
   font-weight: $font-weight-bold;
+  font-variant-numeric: tabular-nums;
   text-align: right;
+  white-space: nowrap;
 }
 
 th.superheader {
@@ -401,6 +403,12 @@ th.superheader {
 
 .table-total {
   height: 40px;
+}
+
+.table--minimum-wage {
+  td.wage-cell {
+    font-weight: $font-weight-base;
+  }
 }
 
 // ============================================================

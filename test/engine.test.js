@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import "../src/formulae.js";
+import { KEEPER_FORMULA, MINIMUM_WAGE_TABLE } from "../src/minimum-wage-table.js";
 import {
   getRate,
   setPlayerData,
@@ -102,6 +103,11 @@ describe("getSetPiecesMultipliers", () => {
 // ---------- getKeeperComponents ----------
 
 describe("getKeeperComponents", () => {
+  it("reuses the keeper column from the minimum wage table data", () => {
+    expect(KEEPER_FORMULA).toEqual(MINIMUM_WAGE_TABLE.rows.map((row) => row.wages[0]));
+    expect(window.WageWizard.KEEPER_FORMULA).toEqual(KEEPER_FORMULA);
+  });
+
   it("returns expected values for level 1", () => {
     const [lo, hi] = getKeeperComponents(1);
     expect(lo).toBe(250 * 10 - 2500);
