@@ -1,89 +1,87 @@
-[Wage Wizard](http://lizardopoli.altervista.org/wagewizard/)
-=================
+# Wage Wizard
 
-Wage Wizard is the ultimate tool for salary management on Hattrick
+Wage Wizard is a Hattrick salary calculator and squad wage management tool.
 
-[Hattrick](http://www.hattrick.org) is the original online football manager game, and it's free to play. Here you get to create your own club, build the team of your dreams, and compete against hundreds of thousands of real people from all over the globe. 
+[Hattrick](https://www.hattrick.org) is the original online football manager game, where you build and manage your own club and compete against other players around the world.
 
+## Project status
 
+The application is a PHP frontend with modern bundled assets generated from the files in `src/`. The runtime entry point is `index.php`, which expects built files at `dist/wagewizard.min.js` and `dist/wagewizard.min.css`.
 
-Bug tracker
------------
+## Local development
 
-Have a bug? Please create an issue here on GitHub! Also, when filing please make sure you're familiar with [necolas's guidelines](https://github.com/necolas/issue-guidelines). thanks!
+### Requirements
+
+- PHP 7.3 or newer
+- Composer
+- pnpm
+
+### Setup
+
+1. Install PHP dependencies: `composer install`
+2. Install frontend dependencies: `pnpm install`
+3. Copy the example app config: `cp config.php.example config.php`
+4. Copy the CHPP config: `cp chpp/config.php.example chpp/config.php`
+5. If you want CHPP integration, fill in the CHPP application values in `config.php` and the consumer keys in `chpp/config.php`.
+6. Build the frontend assets: `pnpm build`
+7. Start a local PHP server from the repository root: `php -S 127.0.0.1:8000`
+
+If you only need the calculator without CHPP access, the CHPP-related values can stay empty.
+
+### Useful commands
+
+- `pnpm build` builds the production JavaScript and CSS bundles.
+- `pnpm run build:dev` builds unminified development bundles.
+- `pnpm run watch` rebuilds frontend assets when `src/` changes.
+- `pnpm test` runs the Vitest suite.
+- `pnpm lint` runs JavaScript, SCSS, PHP, and translation linting.
+- `composer lint` runs the PHP CS Fixer dry-run check.
+- `composer fix` applies PHP CS Fixer fixes.
+
+## Bug tracker
+
+Please report bugs in the GitHub issue tracker:
 
 https://github.com/tagliala/WageWizard/issues
 
+## Internationalization
 
+The translation guide lives in the wiki:
 
-Developers
-----------
+[Internationalization-I18n-guide](https://github.com/tagliala/WageWizard/wiki/Internationalization-I18n-guide)
 
-TODO
+Translation files can also be checked locally with `pnpm run lint:translations` and normalized with `pnpm run fix:translations`.
 
+## Contributing
 
-Internationalization (i18n)
----------------------------
+Please open pull requests against the `develop` branch.
 
-Please check out our wiki: [Internationalization-I18n-guide](https://github.com/tagliala/WageWizard/wiki/Internationalization-I18n-guide)
+Before sending a change, run the relevant checks for the files you touched.
 
-
-
-Contributing
-------------
-
-Please make all pull requests against develop branch.
-
-
-
-Authors
--------
+## Authors
 
 **Geremia Taglialatela**
 
-+ http://github.com/tagliala
+- http://github.com/tagliala
 
+## License
 
+Wage Wizard is licensed under the BSD 2-Clause License. See `LICENSE` for the full text.
 
-Copyright and license
----------------------
+Third-party libraries and assets included in the repository keep their own licenses in their respective source distributions. The old hand-maintained dependency list has been removed from this README because it was drifting out of date.
 
-**WageWizard** is licensed under the BSD 2-Clause License
+## Thanks
 
-Twitter Bootstrap is licensed under the Apache License, Version 2.0
+Special thanks to [Mark James](http://www.famfamfam.com/) for the [FAMFAMFAM flag icons](http://www.famfamfam.com/lab/icons/flags/).
 
-Clippy is licensed under the MIT License
+### Translators
 
-jquery is licensed under the MIT License
+- Lizardopoli (5246225) - English
+- Lizardopoli (5246225) - Italiano
 
-jquery-validation is licensed under the MIT License
+### Statistics
 
-jQuery throttle / debounce is licensed under the MIT License
+- bigpapy (7967145)
+- Shinobi-fisc (7328722)
 
-flot is licensed under the MIT License
-
-PHT is licensed under the PHP License, version 3.0
-
-Font Awesome is licensed under CC BY 3.0 License
-
-This product includes PHP, freely available from <http://www.php.net/>
-
-
-
-Thanks
----------------------
-
-Special thanks to [Mark James](http://www.famfamfam.com/) for [FAMFAMFAM flag icons](http://www.famfamfam.com/lab/icons/flags/)
-
-
-#### Translators
-* Lizardopoli (5246225) - English
-* Lizardopoli (5246225) - Italiano
-
-
-#### Statistics
-* bigpapy (7967145)
-* Shinobi-fisc (7328722)
-
-
-#### Testers
+### Testers
