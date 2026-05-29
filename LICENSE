@@ -21,22 +21,6 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Clippy is licensed under the MIT License
-
-flot is licensed under the MIT License
-
-FontAwesome is licensed under the MIT License
-
-FontAwesome font is licensed under the SIL Open Font License
-
-FontAwesome pictograms are licensed under the CC BY 3.0 License
-
-jquery is licensed under the MIT License
-
-jquery-validation is licensed under the MIT License
-
-jQuery throttle / debounce is licensed under the MIT License
-
-PHT is licensed under the PHP License, version 3.0
-
-Twitter Bootstrap is licensed under the Apache License, Version 2.0
+This repository also contains third-party libraries and assets distributed under
+their own licenses. Refer to the relevant vendored files, embedded notices, and
+upstream package metadata for those license terms.
