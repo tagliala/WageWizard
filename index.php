@@ -80,7 +80,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-c
       </tr>';
 }
 ?>
-<?php $WageWizard_version = "27.0.0" ?>
+<?php $WageWizard_version = "28.0.0" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -198,6 +198,32 @@ foreach ($lang_array as $key => $val) {
 
         <!-- First Column Start -->
         <div class="col-lg-3 side-panel" id="side-panel">
+
+          <!-- WageWizard Options Start -->
+          <div class="accordion mb-3" id="accordion-options">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOptions" aria-expanded="true" aria-controls="collapseOptions">
+                  <?= icon('gear') ?>
+                  <span class="ms-2"><?= localize("Options") ?></span>
+                </button>
+              </h2>
+              <div id="collapseOptions" class="accordion-collapse collapse show" data-bs-parent="#accordion-options">
+                <div class="accordion-body">
+                  <div class="wagewizard-button-panel" id="WageWizard_Options_Formula">
+                    <label class="form-label small text-body-secondary mb-1"><?= localize("Wage Formula") ?></label>
+                    <div class="btn-group d-flex" role="group" aria-label="<?= localize("Wage Formula") ?>">
+                      <input type="radio" class="btn-check" name="WageWizard_Formula" id="WageWizard_Formula_legacy" value="legacy" autocomplete="off">
+                      <label class="btn btn-sm btn-outline-secondary flex-grow-1" for="WageWizard_Formula_legacy"><?= localize("Classic") ?></label>
+                      <input type="radio" class="btn-check" name="WageWizard_Formula" id="WageWizard_Formula_refined" value="refined" autocomplete="off" checked>
+                      <label class="btn btn-sm btn-outline-secondary flex-grow-1" for="WageWizard_Formula_refined"><?= localize("Refined") ?></label>
+                    </div>
+                    <p class="small text-body-secondary m-0 mt-2"><?= localize("FORMULA_HELP", false) ?></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- WageWizard Options End -->
 
           <!-- WageWizard CHPP Start -->
           <div class="accordion mb-3<?php if (!$tryAjax) {
