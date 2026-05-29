@@ -1,5 +1,10 @@
 # Changelog
 
+## 27.0.0
+* Add minimum salary table
+* Switch to SemVer
+* Use disastrous as default skill
+
 ## 26.5.17
 * Add base salary row
 * Fix specialty bonus so it only applies to the skill-derived wage, not the fixed base salary (ref: https://www.hattrick.org/Forum/Read.aspx?t=17629498&v=4&a=1&n=237)

@@ -1,3 +1,4 @@
+import { KEEPER_FORMULA } from "./minimum-wage-table.js";
 import WageWizard from "./wagewizard.js";
 
 WageWizard.HATTRICK_SKILLS = [
@@ -12,10 +13,7 @@ WageWizard.HATTRICK_SKILLS = [
 
 WageWizard.DISCOUNT_RATE = 0.5;
 
-WageWizard.KEEPER_FORMULA = [
-  250, 270, 350, 450, 610, 830, 1150, 1610, 2250, 3190, 4550, 6450, 9190,
-  12930, 18130, 24270, 31720, 41150, 53840, 68750,
-];
+WageWizard.KEEPER_FORMULA = KEEPER_FORMULA;
 
 WageWizard.FORMULAE = {
   DefenderSkill: { a: 0.0007107782, b: 6.4631407136, d: 0.7908 },
