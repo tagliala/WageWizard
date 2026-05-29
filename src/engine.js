@@ -92,15 +92,23 @@ function getSalaryComponents(skill, level) {
   if (level < 1) {
     return [0, 0];
   }
-  let salary_component_low = formula.a * Math.pow(level - 1, formula.b);
-  let salary_component_high = formula.a * Math.pow(level - 0.01, formula.b);
-  if (salary_component_low > 20000) {
+  // Onset (c) and compression threshold (T) default to the legacy values
+  // (c = 1, T = 20000) so older formula sets keep working unchanged.
+  const onset = formula.c ?? 1;
+  const threshold = formula.T ?? 20000;
+  const lowBase = level - onset;
+  const highBase = level - onset + 0.99;
+  let salary_component_low =
+    lowBase <= 0 ? 0 : formula.a * Math.pow(lowBase, formula.b);
+  let salary_component_high =
+    highBase <= 0 ? 0 : formula.a * Math.pow(highBase, formula.b);
+  if (salary_component_low > threshold) {
     salary_component_low =
-      20000 + (salary_component_low - 20000) * formula.d;
+      threshold + (salary_component_low - threshold) * formula.d;
   }
-  if (salary_component_high > 20000) {
+  if (salary_component_high > threshold) {
     salary_component_high =
-      20000 + (salary_component_high - 20000) * formula.d;
+      threshold + (salary_component_high - threshold) * formula.d;
   }
   return [salary_component_low * 10, salary_component_high * 10];
 }

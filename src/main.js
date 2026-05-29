@@ -104,6 +104,31 @@ function isVerboseModeEnabled() {
   return el ? el.checked : false;
 }
 
+// -- Wage formula switch --
+
+function getStoredFormula() {
+  const match = document.cookie.match(/(?:^|;\s*)formula=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function storeFormula(name) {
+  document.cookie = `formula=${encodeURIComponent(name)};path=/;max-age=31536000;SameSite=Lax`;
+}
+
+function applyFormulaChange(name) {
+  const resolved = WageWizard.setFormula(name);
+  storeFormula(resolved);
+  if (WageWizard.Teams && WageWizard.Teams.length) {
+    WageWizard.Engine.start();
+    fillTeamWageTables();
+    for (const select of document.querySelectorAll("select[id^=CHPP_Player_]")) {
+      const id = select.id.replace("CHPP_Player_", "");
+      setPlayerFormFields(id);
+    }
+  }
+  refreshTable(1);
+}
+
 // -- CHPP mode toggle --
 
 function enableCHPPMode() {
@@ -751,6 +776,19 @@ document.getElementById("themeToggle").addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   checkIframe();
+
+  // Restore stored wage formula and wire the switcher
+  const storedFormula = getStoredFormula();
+  if (storedFormula) {
+    const resolved = WageWizard.setFormula(storedFormula);
+    const radio = document.getElementById(`WageWizard_Formula_${resolved}`);
+    if (radio) radio.checked = true;
+  }
+  for (const radio of document.querySelectorAll("input[name=WageWizard_Formula]")) {
+    radio.addEventListener("change", () => {
+      if (radio.checked) applyFormulaChange(radio.value);
+    });
+  }
 
   // Get Link button
   const getLinkBtn = document.getElementById("getLink");
