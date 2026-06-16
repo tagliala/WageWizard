@@ -69,7 +69,7 @@ formulas differ.
 For a given skill at integer level $L$, the raw component is a **power curve**:
 
 $$
-\text{component}(L) = a \cdot (L - c)^{\,b}
+	ext{component}(L) = a \cdot (L - c)^{b}
 $$
 
 | Symbol | Meaning |
@@ -85,8 +85,8 @@ Higher skills become very expensive, so above a threshold $T$ the curve is
 $$
 \text{component} =
 \begin{cases}
-a\,(L-c)^{b} & \text{if } a\,(L-c)^{b} \le T \\
-T + \big(a\,(L-c)^{b} - T\big)\cdot d & \text{otherwise}
+a (L-c)^{b} & \text{if } a (L-c)^{b} \le T \\
+T + \big(a (L-c)^{b} - T\big)\cdot d & \text{otherwise}
 \end{cases}
 $$
 
@@ -107,7 +107,7 @@ the same growth curve** – they only differ in how expensive they are. So it sh
 one shape across every skill and only varies the per-skill scale $a$:
 
 $$
-b \approx 5.98,\quad c \approx 1.82,\quad d \approx 0.818,\quad T \approx 21\,412\ \text{EUR}
+b \approx 5.98,\quad c \approx 1.82,\quad d \approx 0.818,\quad T \approx 21,412\ \text{EUR}
 $$
 
 | Skill | Scale $a$ (Refined) |
@@ -129,7 +129,7 @@ percent down to roughly one percent. The reproducible fit lives in
 Estimating the Defending component at level 10 with the Refined formula:
 
 $$
-a\,(L-c)^{b} = 0.003608 \times (10 - 1.82)^{5.98} \approx 0.003608 \times 8.18^{5.98}
+a (L-c)^{b} = 0.003608 \times (10 - 1.82)^{5.98} \approx 0.003608 \times 8.18^{5.98}
 $$
 
 The base $8.18$ raised to $\approx 5.98$ is large but still well below the
