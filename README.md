@@ -69,12 +69,12 @@ formulas differ.
 For a given skill at integer level $L$, the raw component is a **power curve**:
 
 $$
-	ext{component}(L) = a \cdot (L - c)^{b}
+\text{component}(L) = a \cdot (L - c)^{b}
 $$
 
 | Symbol | Meaning |
 | :----: | ------- |
-| $L$ | the skill level (1 = *non-existent*, 2 = *disastrous*, …) |
+| $L$ | the skill level (0 = *non-existent*, 1 = *disastrous*, …) |
 | $a$ | a per-skill **scale** – how "expensive" that skill is |
 | $b$ | the **growth exponent** – how steeply wages rise with level |
 | $c$ | the **onset** – the level at which the skill starts costing money |
