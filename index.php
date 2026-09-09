@@ -80,7 +80,7 @@ function skillRow($player, $skill, $couldBePrimarySkill = true, $class = 'wage-c
       </tr>';
 }
 ?>
-<?php $WageWizard_version = "28.0.1" ?>
+<?php $WageWizard_version = trim((string) file_get_contents(__DIR__ . '/VERSION')); ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
