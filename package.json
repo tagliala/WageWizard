@@ -1,6 +1,6 @@
 {
   "name": "wagewizard",
-  "version": "14.02.28",
+  "version": "28.0.1",
   "description": "Hattrick's salary calculator tool",
   "private": true,
   "scripts": {

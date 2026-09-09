@@ -1,5 +1,8 @@
 # Changelog
 
+## 28.0.1
+* Add automated deploy to Altervista on release
+
 ## 28.0.0
 * Add refined wage formula (shared growth curve fitted to the community-maintained minimum-wage table), set as the new default
 * Add Options panel in the sidebar to switch between Classic and Refined formulas, with the choice persisted in a cookie
