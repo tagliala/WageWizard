@@ -1,5 +1,10 @@
 # Changelog
 
+## 29.0.0
+* Encrypt CHPP authorization tokens stored in cookies (AES-256-CBC + HMAC)
+* Cookie expiration reduced to 6 months
+* Add configurable `COOKIE_SECURE` flag
+
 ## 28.0.1
 * Add automated deploy to Altervista on release
 
