@@ -1,5 +1,10 @@
 # Changelog
 
+## 29.0.1
+* Update PHT to 3.17, which no longer calls functions deprecated in PHP 8.5
+* Stop suppressing E_DEPRECATED in the CHPP endpoints
+* Add a PHP smoke test that fails on any notice, warning or deprecation
+
 ## 29.0.0
 * Encrypt CHPP authorization tokens stored in cookies (AES-256-CBC + HMAC)
 * Cookie expiration reduced to 6 months
